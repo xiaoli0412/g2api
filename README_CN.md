@@ -23,12 +23,30 @@
 
 ## 快速开始
 
+### 命令行模式
+
 ```bash
 pip install httpx
-python gemini_web2api.py
+python -m gemini_web2api
 ```
 
 服务启动在 `http://localhost:8081/v1`.
+
+### GUI模式（推荐）
+
+```bash
+pip install -r requirements.txt
+python gui_app.py
+```
+
+GUI模式提供Windows 11风格的现代化界面，支持：
+- 服务器启动/停止控制
+- 配置管理（代理、API密钥等）
+- Cookie管理（自动提取、浏览器登录）
+- 流式输出配置
+- 联网搜索设置
+- 系统托盘最小化
+- 中英文切换
 
 ## 客户端配置
 
@@ -82,6 +100,7 @@ gemini
 | `gemini-3.5-flash-thinking` | 深度思考, 最长输出 | **~2万字** |
 | `gemini-3.5-flash-thinking-lite` | 自适应思考深度 | ~1.5万字 |
 | `gemini-3.1-pro` | Pro (需 cookie 才能真正路由) | ~1.2万字 |
+| `gemini-3.1-pro-enhanced` | Pro 增强输出 (实验性) | ~1.2万字 |
 | `gemini-auto` | 自动选择模型 | 不定 |
 | `gemini-flash-lite` | 轻量快速 | ~1万字 |
 
@@ -100,7 +119,7 @@ gemini-3.5-flash-thinking@think=4   # 最浅
 匿名访问对所有模型有效, 但 `gemini-3.1-pro` 在无认证时会路由到 Flash. 要获得真正的 Pro 路由, 需要 **Gemini Advanced (付费订阅)** 账号的 cookie:
 
 ```bash
-python gemini_web2api.py --cookie-file cookie.txt
+python -m gemini_web2api --cookie-file cookie.txt
 ```
 
 ### 如何获取 Cookie
@@ -157,7 +176,7 @@ Pro 路由需要 **Gemini Advanced** (付费订阅). 免费 Google 账号的 coo
   "retry_attempts": 3,
   "retry_delay_sec": 2,
   "request_timeout_sec": 180,
-  "gemini_bl": "boq_assistant-bard-web-server_20260525.09_p0",
+  "gemini_bl": "boq_assistant-bard-web-server_20260603.11_p0",
   "auth_user": null,
   "xsrf_token": null,
   "api_keys": ["sk-your-key"],
@@ -198,7 +217,7 @@ docker run -d --name gemini-web2api -p 8081:8081 -v ./config.json:/app/config.js
 
 **方式 1: 命令行参数**
 ```bash
-python gemini_web2api.py --proxy http://127.0.0.1:7890
+python -m gemini_web2api --proxy http://127.0.0.1:7890
 ```
 
 **方式 2: config.json**
@@ -209,7 +228,7 @@ python gemini_web2api.py --proxy http://127.0.0.1:7890
 **方式 3: 环境变量** (自动检测)
 ```bash
 set HTTPS_PROXY=http://127.0.0.1:7890
-python gemini_web2api.py
+python -m gemini_web2api
 ```
 
 支持 Clash, V2Ray, Shadowsocks 等任何 HTTP 代理.
@@ -225,6 +244,7 @@ python gemini_web2api.py
 
 - Python 3.8+
 - `httpx` (`pip install httpx`) — 用于流式请求
+- `PyQt5` (`pip install PyQt5`) — 用于GUI模式
 - 需要能访问 `gemini.google.com` (部分地区需代理)
 
 ## 工作原理

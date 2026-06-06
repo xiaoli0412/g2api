@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Web2API - Dashboard</title>
+<style>
+:root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #242836;
+    --border: #2d3244;
+    --text: #e4e7ec;
+    --text2: #8b92a8;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --blue: #3b82f6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+.header h1 { font-size: 18px; font-weight: 600; }
+.header h1 span { color: var(--accent2); }
+.header-right { display: flex; gap: 12px; align-items: center; font-size: 13px; color: var(--text2); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.status-dot.ok { background: var(--green); }
+.status-dot.error { background: var(--red); }
+.status-dot.warning { background: var(--yellow); }
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.stat-card .label { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.stat-card .value { font-size: 28px; font-weight: 700; }
+.stat-card .value.accent { color: var(--accent2); }
+.stat-card .value.green { color: var(--green); }
+.stat-card .value.red { color: var(--red); }
+.stat-card .value.blue { color: var(--blue); }
+.tabs { display: flex; gap: 2px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 4px; margin-bottom: 20px; width: fit-content; }
+.tab { padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text2); transition: all 0.2s; border: none; background: none; }
+.tab.active { background: var(--accent); color: white; }
+.tab:hover:not(.active) { background: var(--surface2); color: var(--text); }
+.panel { display: none; }
+.panel.active { display: block; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; }
+.card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.card-header h2 { font-size: 15px; font-weight: 600; }
+.card-body { padding: 16px 20px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 10px 12px; color: var(--text2); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 1px solid var(--border); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface2); }
+.badge { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.badge-ok { background: rgba(34,197,94,0.15); color: var(--green); }
+.badge-error { background: rgba(239,68,68,0.15); color: var(--red); }
+.badge-info { background: rgba(59,130,246,0.15); color: var(--blue); }
+.badge-warning { background: rgba(245,158,11,0.15); color: var(--yellow); }
+.log-entry { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; display: flex; gap: 12px; }
+.log-entry:last-child { border-bottom: none; }
+.log-time { color: var(--text2); min-width: 80px; font-family: monospace; font-size: 12px; }
+.log-level { min-width: 50px; font-weight: 600; font-size: 11px; text-transform: uppercase; }
+.log-level.info { color: var(--blue); }
+.log-level.error { color: var(--red); }
+.log-level.warning { color: var(--yellow); }
+.log-msg { flex: 1; word-break: break-all; }
+.cookie-panel { display: flex; gap: 20px; flex-wrap: wrap; }
+.cookie-info { flex: 1; min-width: 300px; }
+.cookie-actions { flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px; }
+.btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent2); }
+.btn-danger { background: var(--red); color: white; }
+.btn-danger:hover { background: #dc2626; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.info-row:last-child { border-bottom: none; }
+.info-row .label { color: var(--text2); }
+.chart-bar { display: flex; align-items: flex-end; gap: 3px; height: 80px; margin-top: 10px; }
+.chart-bar .bar { flex: 1; background: var(--accent); border-radius: 3px 3px 0 0; min-width: 8px; position: relative; transition: height 0.3s; }
+.chart-bar .bar:hover { background: var(--accent2); }
+.chart-bar .bar .tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 10; }
+.chart-bar .bar:hover .tooltip { display: block; }
+.refresh-btn { background: none; border: 1px solid var(--border); color: var(--text2); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+.refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+.token-meter { height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin-top: 6px; }
+.token-meter .fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+.empty { text-align: center; padding: 40px; color: var(--text2); font-size: 14px; }
+@media (max-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .container { padding: 12px; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+    <h1><span>Gemini</span> Web2API Dashboard</h1>
+    <div class="header-right">
+        <span id="uptime">Uptime: --</span>
+        <span><span class="status-dot" id="statusDot"></span> <span id="statusText">Loading...</span></span>
+    </div>
+</div>
+
+<div class="container">
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="logs">Logs</button>
+        <button class="tab" data-tab="requests">Requests</button>
+        <button class="tab" data-tab="models">Model Stats</button>
+        <button class="tab" data-tab="hourly">Hourly</button>
+        <button class="tab" data-tab="cookies">Cookie Manager</button>
+    </div>
+
+    <div class="panel active" id="panel-logs">
+        <div class="card">
+            <div class="card-header">
+                <h2>Recent Logs</h2>
+                <button class="refresh-btn" onclick="loadData()">Refresh</button>
+            </div>
+            <div class="card-body" id="logsContainer" style="max-height:500px;overflow-y:auto;"></div>
+        </div>
+    </div>
+
+    <div class="panel" id="panel-requests">
+        <div class="card">
+            <div class="card-header">
+                <h2>Recent Requests</h2>
+                <button class="refresh-btn" onclick="loadData()">Refresh</button>
+            </div>
+            <div class="card-body" style="overflow-x:auto;">
+                <table>
+                    <thead><tr><th>Time</th><th>Model</th><th>Prompt</th><th>Completion</th><th>Total</th><th>Status</th></tr></thead>
+                    <tbody id="requestsBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="panel-models">
+        <div class="card">
+            <div class="card-header"><h2>Model Statistics</h2></div>
+            <div class="card-body" style="overflow-x:auto;">
+                <table>
+                    <thead><tr><th>Model</th><th>Requests</th><th>Prompt Tokens</th><th>Completion Tokens</th><th>Total Tokens</th><th>Errors</th></tr></thead>
+                    <tbody id="modelsBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="panel-hourly">
+        <div class="card">
+            <div class="card-header"><h2>Hourly Statistics (Last 24h)</h2></div>
+            <div class="card-body">
+                <div class="chart-bar" id="hourlyChart"></div>
+                <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--text2);" id="hourlyLabels"></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h2>Daily Statistics (Last 30d)</h2></div>
+            <div class="card-body">
+                <div class="chart-bar" id="dailyChart"></div>
+                <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--text2);" id="dailyLabels"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="panel-cookies">
+        <div class="card">
+            <div class="card-header"><h2>Cookie Manager</h2></div>
+            <div class="card-body">
+                <div class="cookie-panel">
+                    <div class="cookie-info">
+                        <div class="info-row"><span class="label">Source Browser</span><span id="cookieBrowser">Edge</span></div>
+                        <div class="info-row"><span class="label">Auto Refresh</span><span id="cookieAutoRefresh">--</span></div>
+                        <div class="info-row"><span class="label">Refresh Interval</span><span id="cookieInterval">12h</span></div>
+                        <div class="info-row"><span class="label">Last Refresh</span><span id="cookieLast">--</span></div>
+                        <div class="info-row"><span class="label">Next Refresh</span><span id="cookieNext">--</span></div>
+                        <div class="info-row"><span class="label">Status</span><span id="cookieStatus">--</span></div>
+                        <div class="info-row"><span class="label">Cookie Valid</span><span id="cookieValid">--</span></div>
+                        <div class="info-row"><span class="label">Error</span><span id="cookieError" style="color:var(--red);">--</span></div>
+                    </div>
+                    <div class="cookie-actions">
+                        <button class="btn btn-primary" onclick="manualRefresh()">Refresh Now</button>
+                        <button class="btn btn-primary" id="toggleAutoBtn" onclick="toggleAutoRefresh()">Start Auto Refresh</button>
+                        <div style="margin-top:10px;">
+                            <label style="font-size:12px;color:var(--text2);">Interval (hours):</label>
+                            <input type="number" id="intervalInput" value="12" min="1" max="72" style="width:60px;padding:4px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;color:var(--text);margin-left:6px;">
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:20px;padding:16px;background:var(--surface2);border-radius:8px;font-size:13px;">
+                    <strong>How to use Edge Cookie extraction:</strong>
+                    <ul style="margin-top:8px;padding-left:20px;color:var(--text2);line-height:1.8;">
+                        <li><b>Method 1 (DB):</b> Close Edge browser, then click "Refresh Now" - reads directly from Edge cookie database</li>
+                        <li><b>Method 2 (CDP):</b> Start Edge with <code style="background:var(--surface);padding:2px 6px;border-radius:3px;">msedge --remote-debugging-port=9222</code>, log into gemini.google.com, then click "Refresh Now"</li>
+                        <li><b>Method 3 (Admin):</b> Run this service as Administrator, then click "Refresh Now" (uses browser_cookie3)</li>
+                        <li><b>Auto Refresh:</b> Set interval and click "Start Auto Refresh" to automatically refresh cookies periodically</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const API = '';
+let autoRefreshEnabled = false;
+
+function fmt(n) {
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    return n.toString();
+}
+
+function renderStats(data) {
+    const s = data.summary;
+    document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card"><div class="label">Total Requests</div><div class="value accent">${fmt(s.total_requests)}</div></div>
+        <div class="stat-card"><div class="label">Prompt Tokens</div><div class="value blue">${fmt(s.total_prompt_tokens)}</div></div>
+        <div class="stat-card"><div class="label">Completion Tokens</div><div class="value green">${fmt(s.total_completion_tokens)}</div></div>
+        <div class="stat-card"><div class="label">Total Tokens</div><div class="value">${fmt(s.total_tokens)}</div></div>
+        <div class="stat-card"><div class="label">Errors</div><div class="value ${s.total_errors > 0 ? 'red' : 'green'}">${s.total_errors}</div></div>
+        <div class="stat-card"><div class="label">Avg Tokens/Req</div><div class="value">${s.avg_tokens_per_request}</div></div>
+    `;
+    document.getElementById('uptime').textContent = 'Uptime: ' + data.uptime;
+    document.getElementById('statusDot').className = 'status-dot ok';
+    document.getElementById('statusText').textContent = 'Running';
+}
+
+function renderLogs(logs) {
+    const c = document.getElementById('logsContainer');
+    if (!logs.length) { c.innerHTML = '<div class="empty">No logs yet</div>'; return; }
+    c.innerHTML = logs.map(l => `
+        <div class="log-entry">
+            <span class="log-time">${l.time_str.split(' ')[1]}</span>
+            <span class="log-level ${l.level}">${l.level}</span>
+            <span class="log-msg">${escHtml(l.message)}</span>
+        </div>
+    `).join('');
+}
+
+function renderRequests(reqs) {
+    const b = document.getElementById('requestsBody');
+    if (!reqs.length) { b.innerHTML = '<tr><td colspan="6" class="empty">No requests yet</td></tr>'; return; }
+    b.innerHTML = reqs.map(r => `
+        <tr>
+            <td>${r.time_str}</td>
+            <td>${r.model}</td>
+            <td>${fmt(r.prompt_tokens)}</td>
+            <td>${fmt(r.completion_tokens)}</td>
+            <td>${fmt(r.total_tokens)}</td>
+            <td><span class="badge badge-${r.status === 'ok' ? 'ok' : 'error'}">${r.status}</span></td>
+        </tr>
+    `).join('');
+}
+
+function renderModels(stats) {
+    const b = document.getElementById('modelsBody');
+    const entries = Object.entries(stats);
+    if (!entries.length) { b.innerHTML = '<tr><td colspan="6" class="empty">No data yet</td></tr>'; return; }
+    b.innerHTML = entries.map(([name, s]) => `
+        <tr>
+            <td><strong>${name}</strong></td>
+            <td>${fmt(s.requests)}</td>
+            <td>${fmt(s.prompt_tokens)}</td>
+            <td>${fmt(s.completion_tokens)}</td>
+            <td>${fmt(s.total_tokens)}</td>
+            <td>${s.errors > 0 ? '<span class="badge badge-error">' + s.errors + '</span>' : '<span class="badge badge-ok">0</span>'}</td>
+        </tr>
+    `).join('');
+}
+
+function renderChart(containerId, labelsId, items, valueKey, labelKey) {
+    const container = document.getElementById(containerId);
+    const labels = document.getElementById(labelsId);
+    if (!items.length) { container.innerHTML = '<div class="empty">No data</div>'; return; }
+    const maxVal = Math.max(...items.map(i => i[valueKey]), 1);
+    container.innerHTML = items.map(i => {
+        const h = Math.max(4, (i[valueKey] / maxVal) * 100);
+        return `<div class="bar" style="height:${h}%"><div class="tooltip">${i[labelKey]}: ${fmt(i[valueKey])}</div></div>`;
+    }).join('');
+    const labelArr = items.map(i => {
+        const lbl = i[labelKey];
+        return lbl.length > 5 ? lbl.slice(-2) : lbl;
+    });
+    labels.innerHTML = labelArr.map(l => `<span>${l}</span>`).join('');
+}
+
+function renderCookies(status) {
+    document.getElementById('cookieBrowser').textContent = status.source_browser || 'Edge';
+    document.getElementById('cookieAutoRefresh').textContent = status.auto_refresh_enabled ? 'Enabled' : 'Disabled';
+    document.getElementById('cookieInterval').textContent = (status.refresh_interval_hours || 12) + 'h';
+    document.getElementById('cookieLast').textContent = status.last_refresh_str || 'Never';
+    document.getElementById('cookieNext').textContent = status.next_refresh_str || 'N/A';
+    document.getElementById('cookieStatus').textContent = status.status || 'idle';
+    document.getElementById('cookieValid').textContent = status.cookie_valid ? 'Yes' : 'No';
+    document.getElementById('cookieError').textContent = status.error || 'None';
+    autoRefreshEnabled = status.auto_refresh_enabled;
+    document.getElementById('toggleAutoBtn').textContent = autoRefreshEnabled ? 'Stop Auto Refresh' : 'Start Auto Refresh';
+}
+
+function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function loadData() {
+    try {
+        const [dashRes, cookieRes] = await Promise.all([
+            fetch(API + '/api/dashboard'),
+            fetch(API + '/api/cookie/status')
+        ]);
+        const data = await dashRes.json();
+        const cookieData = await cookieRes.json();
+        renderStats(data);
+        renderLogs(data.recent_logs);
+        renderRequests(data.recent_requests);
+        renderModels(data.model_stats);
+        renderChart('hourlyChart', 'hourlyLabels', data.hourly_stats, 'tokens', 'hour');
+        renderChart('dailyChart', 'dailyLabels', data.daily_stats, 'tokens', 'day');
+        renderCookies(cookieData);
+    } catch (e) {
+        document.getElementById('statusDot').className = 'status-dot error';
+        document.getElementById('statusText').textContent = 'Error loading data';
+    }
+}
+
+async function manualRefresh() {
+    try {
+        const res = await fetch(API + '/api/cookie/refresh', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) alert('Cookie refreshed successfully!');
+        else alert('Failed: ' + (data.error || 'Unknown error'));
+        loadData();
+    } catch (e) {
+        alert('Error: ' + e.message);
+    }
+}
+
+async function toggleAutoRefresh() {
+    const interval = parseInt(document.getElementById('intervalInput').value) || 12;
+    const endpoint = autoRefreshEnabled ? '/api/cookie/stop' : '/api/cookie/start';
+    try {
+        const res = await fetch(API + endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ interval_hours: interval })
+        });
+        const data = await res.json();
+        loadData();
+    } catch (e) {
+        alert('Error: ' + e.message);
+    }
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+});
+
+loadData();
+setInterval(loadData, 10000);
+</script>
+</body>
+</html>

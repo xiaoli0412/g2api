@@ -1,1 +1,6 @@
 httpx>=0.25
+tiktoken>=0.7
+browser-cookie3>=0.19
+pystray>=0.19
+Pillow>=10.0
+PyQt5>=5.15
