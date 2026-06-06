@@ -370,8 +370,9 @@ class GeminiApp(ctk.CTk):
                          text_color="white" if k == name else TEXT_SEC)
 
     def _label(self, parent, key, font=("Segoe UI Semibold", 18), **kw):
-        return ctk.CTkLabel(parent, text=self.t.get(key, key), font=font,
-                            text_color=TEXT_PRIMARY, **kw)
+        if "text_color" not in kw:
+            kw["text_color"] = TEXT_PRIMARY
+        return ctk.CTkLabel(parent, text=self.t.get(key, key), font=font, **kw)
 
     def _card(self, parent):
         card = ctk.CTkFrame(parent, fg_color=BG_CARD, corner_radius=12)
