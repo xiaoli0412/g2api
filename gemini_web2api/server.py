@@ -138,11 +138,16 @@ class GeminiHandler(BaseHTTPRequestHandler):
         if req is None:
             self.send_json({"error": {"message": "invalid JSON"}}, 400)
             return
-        model_name, model_id, think_mode, err, extra_fields = resolve_model(
+        model_name, model_id, think_mode, err, extra_fields, search_mode = resolve_model(
             req.get("model", CONFIG["default_model"]))
         if err:
             self.send_json({"error": {"message": err}}, 400)
             return
+
+        # Enable search if search_mode is True
+        if search_mode:
+            extra_fields = extra_fields or {}
+            extra_fields["search"] = True
 
         tools = req.get("tools")
         tool_choice = req.get("tool_choice", "auto")
@@ -208,11 +213,16 @@ class GeminiHandler(BaseHTTPRequestHandler):
         if req is None:
             self.send_json({"error": {"message": "invalid JSON"}}, 400)
             return
-        model_name, model_id, think_mode, err, extra_fields = resolve_model(
+        model_name, model_id, think_mode, err, extra_fields, search_mode = resolve_model(
             req.get("model", CONFIG["default_model"]))
         if err:
             self.send_json({"error": {"message": err}}, 400)
             return
+
+        # Enable search if search_mode is True
+        if search_mode:
+            extra_fields = extra_fields or {}
+            extra_fields["search"] = True
 
         input_items = req.get("input", [])
         tools = req.get("tools")
@@ -317,10 +327,15 @@ class GeminiHandler(BaseHTTPRequestHandler):
             return
         m = re.match(r'/v1beta/models/([^:?]+)', self.path)
         model_name = m.group(1) if m else CONFIG["default_model"]
-        model_name, model_id, think_mode, err, extra_fields = resolve_model(model_name)
+        model_name, model_id, think_mode, err, extra_fields, search_mode = resolve_model(model_name)
         if err:
             self.send_json({"error": {"message": err}}, 400)
             return
+
+        # Enable search if search_mode is True
+        if search_mode:
+            extra_fields = extra_fields or {}
+            extra_fields["search"] = True
 
         tool_config = req.get("toolConfig", {})
         fc_mode = tool_config.get("functionCallingConfig", {}).get("mode", "AUTO")

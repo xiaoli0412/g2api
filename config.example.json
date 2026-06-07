@@ -11,7 +11,15 @@
   "api_keys": [
     "sk-gemini"
   ],
-  "cookie_file": null,
+  "cookie_file": "cookie.txt",
   "proxy": null,
-  "log_requests": true
+  "log_requests": true,
+  "cookie_files": [],
+  "cookie_rotation": false,
+  "cookie_rotation_interval": 10,
+  "proxies": [],
+  "proxy_rotation": false,
+  "proxy_rotation_interval": 10,
+  "rate_limit_per_minute": 30,
+  "rate_limit_delay": 2
 }

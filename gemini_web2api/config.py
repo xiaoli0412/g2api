@@ -16,6 +16,17 @@ DEFAULT_CONFIG = {
     "cookie_file": None,
     "proxy": None,
     "api_keys": [],
+    # Cookie rotation settings
+    "cookie_files": [],  # List of cookie files for rotation
+    "cookie_rotation": False,  # Enable cookie rotation
+    "cookie_rotation_interval": 10,  # Requests before rotation
+    # Proxy rotation settings
+    "proxies": [],  # List of proxies for rotation
+    "proxy_rotation": False,  # Enable proxy rotation
+    "proxy_rotation_interval": 10,  # Requests before rotation
+    # Rate limiting
+    "rate_limit_per_minute": 30,  # Max requests per minute per cookie
+    "rate_limit_delay": 2,  # Delay between requests in seconds
 }
 
 CONFIG = dict(DEFAULT_CONFIG)

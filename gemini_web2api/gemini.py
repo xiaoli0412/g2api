@@ -127,9 +127,17 @@ def _build_payload(prompt: str, model_id: int, think_mode: int, file_refs: list 
     inner[61] = []
     inner[68] = 1
     inner[79] = model_id
+
+    # Handle extra fields (including search)
     if extra_fields:
+        search_mode = extra_fields.pop("search", False)
+        if search_mode:
+            # Enable web search - field 30 controls search
+            inner[30] = [5]  # 5 enables search
         for k, v in extra_fields.items():
-            inner[k] = v
+            if isinstance(k, int):
+                inner[k] = v
+
     outer = [None, json.dumps(inner)]
     params = {"f.req": json.dumps(outer)}
     if CONFIG.get("xsrf_token"):
