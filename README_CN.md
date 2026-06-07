@@ -84,6 +84,9 @@ gemini
 | `gemini-3.1-pro` | Pro (需 cookie 才能真正路由) | ~1.2万字 |
 | `gemini-auto` | 自动选择模型 | 不定 |
 | `gemini-flash-lite` | 轻量快速 | ~1万字 |
+| `gemini-3.5-flash-search` | Flash + 联网搜索 | ~1.2万字 |
+| `gemini-3.5-flash-thinking-search` | Thinking + 联网搜索 | **~2万字** |
+| `gemini-3.1-pro-search` | Pro + 联网搜索 | ~1.2万字 |
 
 ### 思考深度
 
@@ -93,6 +96,17 @@ gemini
 gemini-3.5-flash-thinking@think=0   # 最深 (默认)
 gemini-3.5-flash-thinking@think=2   # 中等
 gemini-3.5-flash-thinking@think=4   # 最浅
+```
+
+### 联网搜索
+
+在模型名后追加 `-search` 或 `@search`:
+
+```
+gemini-3.5-flash-search              # Flash + 搜索
+gemini-3.5-flash-thinking-search     # Thinking + 搜索
+gemini-3.1-pro-search                # Pro + 搜索
+gemini-3.5-flash@search              # 同上
 ```
 
 ## 可选: Cookie 配置 (Pro 模型)
@@ -161,13 +175,45 @@ Pro 路由需要 **Gemini Advanced** (付费订阅). 免费 Google 账号的 coo
   "auth_user": null,
   "xsrf_token": null,
   "api_keys": ["sk-your-key"],
-  "cookie_file": null,
+  "cookie_file": "cookie.txt",
   "proxy": null,
-  "log_requests": true
+  "log_requests": true,
+  "cookie_files": ["cookie1.txt", "cookie2.txt"],
+  "cookie_rotation": true,
+  "cookie_rotation_interval": 10,
+  "proxies": ["http://proxy1:8080", "http://proxy2:8080"],
+  "proxy_rotation": true,
+  "proxy_rotation_interval": 10,
+  "rate_limit_per_minute": 30,
+  "rate_limit_delay": 2
 }
 ```
 
 `api_keys` 为空数组 `[]` 时不校验密钥；填入一个或多个密钥后, `/v1/*` 接口需要 `Authorization: Bearer <key>` 或 `x-api-key: <key>`.
+
+### Cookie 轮询
+
+配置多个 cookie 文件，自动轮询使用，避免被封：
+
+```json
+{
+  "cookie_files": ["cookie1.txt", "cookie2.txt", "cookie3.txt"],
+  "cookie_rotation": true,
+  "cookie_rotation_interval": 10
+}
+```
+
+### 代理轮询
+
+配置多个代理，自动轮询使用：
+
+```json
+{
+  "proxies": ["http://proxy1:8080", "http://proxy2:8080", "socks5://proxy3:1080"],
+  "proxy_rotation": true,
+  "proxy_rotation_interval": 10
+}
+```
 
 ## Docker 部署
 
