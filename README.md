@@ -23,30 +23,12 @@ Convert Google Gemini's web interface into an OpenAI-compatible API. Zero cost, 
 
 ## Quick Start
 
-### Command Line Mode
-
 ```bash
 pip install httpx
-python -m gemini_web2api
+python gemini_web2api.py
 ```
 
 Server starts at `http://localhost:8081/v1`.
-
-### GUI Mode (Recommended)
-
-```bash
-pip install -r requirements.txt
-python gui_app.py
-```
-
-GUI mode provides a modern Windows 11 style interface with:
-- Server start/stop control
-- Configuration management (proxy, API keys, etc.)
-- Cookie management (auto-extract, browser login)
-- Streaming output configuration
-- Web search settings
-- System tray minimization
-- Chinese/English language switching
 
 ## Client Configuration
 
@@ -100,7 +82,6 @@ Supports Google native API endpoints:
 | `gemini-3.5-flash-thinking` | Deep thinking, longest output | **~20k chars** |
 | `gemini-3.5-flash-thinking-lite` | Adaptive thinking depth | ~15k chars |
 | `gemini-3.1-pro` | Pro (needs cookie for real routing) | ~12k chars |
-| `gemini-3.1-pro-enhanced` | Pro with enhanced output (experimental) | ~12k chars |
 | `gemini-auto` | Auto model selection | varies |
 | `gemini-flash-lite` | Lightweight fast | ~10k chars |
 
@@ -119,7 +100,7 @@ gemini-3.5-flash-thinking@think=4   # shallowest
 Anonymous access works for all models, but `gemini-3.1-pro` routes to Flash without authentication. To get real Pro routing, you need a **Gemini Advanced (paid subscription)** account cookie:
 
 ```bash
-python -m gemini_web2api --cookie-file cookie.txt
+python gemini_web2api.py --cookie-file cookie.txt
 ```
 
 ### How to get cookies
@@ -176,7 +157,7 @@ Create `config.json` in the same directory:
   "retry_attempts": 3,
   "retry_delay_sec": 2,
   "request_timeout_sec": 180,
-  "gemini_bl": "boq_assistant-bard-web-server_20260603.11_p0",
+  "gemini_bl": "boq_assistant-bard-web-server_20260525.09_p0",
   "auth_user": null,
   "xsrf_token": null,
   "api_keys": ["sk-your-key"],
@@ -211,13 +192,15 @@ docker run -d --name gemini-web2api -p 8081:8081 -v ./config.json:/app/config.js
 
 Set `"cookie_file": "/app/cookie.txt"` in `config.json`.
 
+> **Note**: If you get empty responses (`content: null`) with Docker's default bridge network, switch to host networking: `docker run --network host ...` or add `network_mode: host` in your compose file. This is caused by Gemini's upstream rejecting requests from certain Docker NAT IP ranges.
+
 ## Proxy
 
 If you cannot access `gemini.google.com` directly (connection timeout), configure a proxy:
 
 **Method 1: CLI argument**
 ```bash
-python -m gemini_web2api --proxy http://127.0.0.1:7890
+python gemini_web2api.py --proxy http://127.0.0.1:7890
 ```
 
 **Method 2: config.json**
@@ -228,7 +211,7 @@ python -m gemini_web2api --proxy http://127.0.0.1:7890
 **Method 3: Environment variable** (auto-detected)
 ```bash
 export HTTPS_PROXY=http://127.0.0.1:7890
-python -m gemini_web2api
+python gemini_web2api.py
 ```
 
 Works with Clash, V2Ray, Shadowsocks, or any HTTP proxy.
@@ -261,7 +244,6 @@ resp = client.chat.completions.create(
 
 - Python 3.8+
 - `httpx` (`pip install httpx`) — used for streaming requests
-- `PyQt5` (`pip install PyQt5`) — for GUI mode
 - Network access to `gemini.google.com` (proxy/VPN may be needed in some regions)
 
 ## How It Works

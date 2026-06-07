@@ -3,31 +3,25 @@ import json
 import time
 import uuid
 import re
-import os
-import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 
 from .config import CONFIG
 from .models import MODELS, resolve_model
-from .gemini import generate, generate_stream, log, HAS_HTTPX
+from .gemini import generate, generate_stream, log
 from .tools import messages_to_prompt, parse_tool_calls, google_contents_to_prompt, parse_google_function_calls
-from .multimodal import upload_file, fetch_file_bytes
-from .tokenizer import count_tokens, count_messages_tokens
-from . import stats
-from . import cookie_manager
+from .multimodal import upload_image, fetch_image_bytes
 from . import __version__
-
-_DASHBOARD_HTML_PATH = os.path.join(os.path.dirname(__file__), "dashboard.html")
 
 
 def _usage(prompt: str, text: str) -> dict:
-    p = count_tokens(prompt)
-    c = count_tokens(text or "")
+    p = len(prompt) // 4
+    c = len(text or "") // 4
     return {"prompt_tokens": p, "completion_tokens": c, "total_tokens": p + c}
 
 
-def _upload_files(images: list) -> list:
+def _upload_images(images: list) -> list:
+    """Upload images and return list of file references. Returns None if no images."""
     if not images:
         return None
     file_refs = []
@@ -36,13 +30,13 @@ def _upload_files(images: list) -> list:
             if isinstance(item, tuple) and len(item) == 2:
                 data, mime = item
                 if isinstance(data, str):
-                    data = fetch_file_bytes(data)
+                    data = fetch_image_bytes(data)
                     mime = mime or "image/png"
                 if data:
-                    ref = upload_file(data, "upload", mime or "image/png")
+                    ref = upload_image(data, "image.png", mime or "image/png")
                     file_refs.append(ref)
         except Exception as e:
-            log(f"File upload failed: {e}")
+            log(f"Image upload failed: {e}")
     return file_refs if file_refs else None
 
 
@@ -87,30 +81,12 @@ class GeminiHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "*")
         self.end_headers()
 
-    def _serve_dashboard(self):
-        try:
-            with open(_DASHBOARD_HTML_PATH, "rb") as f:
-                content = f.read()
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(content)))
-            self.end_headers()
-            self.wfile.write(content)
-        except FileNotFoundError:
-            self.send_json({"error": "dashboard.html not found"}, 404)
-
     def do_GET(self):
         try:
             if self.path.startswith("/v1/") and not self._authorized():
                 self.send_json({"error": {"message": "invalid api key"}}, 401)
                 return
-            if self.path == "/dashboard":
-                self._serve_dashboard()
-            elif self.path == "/api/dashboard":
-                self.send_json(stats.get_api_data())
-            elif self.path == "/api/cookie/status":
-                self.send_json(cookie_manager.get_cookie_status())
-            elif self.path == "/v1/models":
+            if self.path == "/v1/models":
                 self.send_json({"object": "list", "data": [
                     {"id": n, "object": "model", "created": 1700000000,
                      "owned_by": "google", "description": c["desc"]}
@@ -123,8 +99,7 @@ class GeminiHandler(BaseHTTPRequestHandler):
                     for n, c in MODELS.items()
                 ]})
             elif self.path == "/":
-                self.send_json({"status": "ok", "version": __version__, "models": list(MODELS.keys()),
-                                "dashboard": "/dashboard"})
+                self.send_json({"status": "ok", "version": __version__, "models": list(MODELS.keys())})
             else:
                 self.send_json({"error": "not found"}, 404)
         except (BrokenPipeError, ConnectionResetError):
@@ -141,42 +116,6 @@ class GeminiHandler(BaseHTTPRequestHandler):
                 self._handle_chat(body)
             elif self.path == "/v1/responses":
                 self._handle_responses(body)
-            elif self.path == "/api/cookie/refresh":
-                self.send_json(cookie_manager.manual_refresh())
-            elif self.path == "/api/cookie/start":
-                req = self._parse_body(body) or {}
-                interval = req.get("interval_hours", 12)
-                cookie_manager.start_auto_refresh(interval)
-                self.send_json({"success": True, "message": f"Auto-refresh started (every {interval}h)"})
-            elif self.path == "/api/cookie/stop":
-                cookie_manager.stop_auto_refresh()
-                self.send_json({"success": True, "message": "Auto-refresh stopped"})
-            elif self.path == "/api/cookie/push":
-                req = self._parse_body(body) or {}
-                cookies = req.get("cookies", "")
-                sapisid = req.get("sapisid", "")
-                if cookies:
-                    cookie_manager.write_cookie_file(cookies, sapisid)
-                    from . import gemini
-                    gemini._cookie_cache.update({"str": "", "sapisid": None, "mtime": 0})
-                    self.send_json({"success": True, "message": "Cookies received and applied"})
-                    log("Cookies pushed from browser extension")
-                else:
-                    self.send_json({"success": False, "error": "No cookies provided"}, 400)
-            elif self.path == "/api/cookie/browser-login":
-                from . import playwright_cookie
-                if not playwright_cookie.is_playwright_available():
-                    self.send_json({"success": False, "error": "playwright not installed"}, 400)
-                else:
-                    def do_login():
-                        result = playwright_cookie.launch_browser_login(port=CONFIG["port"])
-                        if result.get("success"):
-                            cookie_manager.write_cookie_file(result["cookies"], result.get("sapisid", ""))
-                            from . import gemini
-                            gemini._cookie_cache.update({"str": "", "sapisid": None, "mtime": 0})
-                        stats.add_log(f"Browser login: {'success' if result.get('success') else result.get('error', 'failed')}", "info")
-                    threading.Thread(target=do_login, daemon=True).start()
-                    self.send_json({"success": True, "message": "Browser window opening, please log in manually..."})
             elif ":generateContent" in self.path:
                 self._handle_google_generate(body, stream=False)
             elif ":streamGenerateContent" in self.path:
@@ -214,55 +153,27 @@ class GeminiHandler(BaseHTTPRequestHandler):
 
         stream = req.get("stream", False)
         cid = f"chatcmpl-{uuid.uuid4().hex[:12]}"
-        prompt_tokens = count_tokens(prompt)
-        file_refs = _upload_files(images)
-        stream_mode = CONFIG.get("stream_mode", "auto")
 
         if stream and (not tools or tool_choice == "none"):
             try:
                 self._start_sse()
-                full_text = ""
-                use_fake = stream_mode == "fake"
-
-                if not use_fake:
-                    for delta in generate_stream(prompt, model_id, think_mode, file_refs, extra_fields):
-                        full_text += delta
-                        chunk = {"id": cid, "object": "chat.completion.chunk", "created": int(time.time()),
-                                 "model": model_name, "choices": [{"index": 0, "delta": {"content": delta}, "finish_reason": None}]}
-                        self.wfile.write(f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n".encode())
-                        self.wfile.flush()
-                    if not full_text:
-                        pass
-                    elif stream_mode == "auto" and not HAS_HTTPX:
-                        use_fake = True
-
-                if use_fake and full_text:
-                    delay = CONFIG.get("fake_stream_delay_ms", 5) / 1000.0
-                    chunk_size = 8
-                    for i in range(0, len(full_text), chunk_size):
-                        delta_text = full_text[i:i + chunk_size]
-                        chunk = {"id": cid, "object": "chat.completion.chunk", "created": int(time.time()),
-                                 "model": model_name, "choices": [{"index": 0, "delta": {"content": delta_text}, "finish_reason": None}]}
-                        self.wfile.write(f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n".encode())
-                        self.wfile.flush()
-                        if delay > 0:
-                            time.sleep(delay)
-
+                for delta in generate_stream(prompt, model_id, think_mode, _upload_images(images), extra_fields):
+                    chunk = {"id": cid, "object": "chat.completion.chunk", "created": int(time.time()),
+                             "model": model_name, "choices": [{"index": 0, "delta": {"content": delta}, "finish_reason": None}]}
+                    self.wfile.write(f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n".encode())
+                    self.wfile.flush()
                 end = {"id": cid, "object": "chat.completion.chunk", "created": int(time.time()),
                        "model": model_name, "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}]}
                 self.wfile.write(f"data: {json.dumps(end)}\n\n".encode())
                 self.wfile.write(b"data: [DONE]\n\n")
                 self.wfile.flush()
-                completion_tokens = count_tokens(full_text)
-                stats.log_request(model_name, prompt_tokens, completion_tokens, "ok")
             except (BrokenPipeError, ConnectionResetError):
                 pass
             return
 
         try:
-            text = generate(prompt, model_id, think_mode, file_refs, extra_fields)
+            text = generate(prompt, model_id, think_mode, _upload_images(images), extra_fields)
         except Exception as e:
-            stats.log_request(model_name, prompt_tokens, 0, "error", str(e))
             self.send_json({"error": {"message": f"upstream error: {e}"}}, 502)
             return
 
@@ -273,28 +184,12 @@ class GeminiHandler(BaseHTTPRequestHandler):
         if tool_calls:
             msg["tool_calls"] = tool_calls
         finish = "tool_calls" if tool_calls else "stop"
-        completion_tokens = count_tokens(text or "")
 
         if stream:
             self._start_sse()
-            if stream_mode != "true" and text:
-                delay = CONFIG.get("fake_stream_delay_ms", 5) / 1000.0
-                chunk_size = 8
-                for i in range(0, len(text), chunk_size):
-                    delta_text = text[i:i + chunk_size]
-                    chunk = {"id": cid, "object": "chat.completion.chunk", "created": int(time.time()),
-                             "model": model_name, "choices": [{"index": 0, "delta": {"content": delta_text}, "finish_reason": None}]}
-                    self.wfile.write(f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n".encode())
-                    self.wfile.flush()
-                    if delay > 0:
-                        time.sleep(delay)
-            else:
-                chunk = {"id": cid, "object": "chat.completion.chunk", "created": int(time.time()),
-                         "model": model_name, "choices": [{"index": 0, "delta": msg, "finish_reason": finish}]}
-                self.wfile.write(f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n".encode())
-            end = {"id": cid, "object": "chat.completion.chunk", "created": int(time.time()),
-                   "model": model_name, "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}]}
-            self.wfile.write(f"data: {json.dumps(end)}\n\n".encode())
+            chunk = {"id": cid, "object": "chat.completion.chunk", "created": int(time.time()),
+                     "model": model_name, "choices": [{"index": 0, "delta": msg, "finish_reason": finish}]}
+            self.wfile.write(f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n".encode())
             self.wfile.write(b"data: [DONE]\n\n")
             self.wfile.flush()
         else:
@@ -302,10 +197,9 @@ class GeminiHandler(BaseHTTPRequestHandler):
                 "id": cid, "object": "chat.completion", "created": int(time.time()),
                 "model": model_name,
                 "choices": [{"index": 0, "message": msg, "finish_reason": finish}],
-                "usage": {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens,
-                          "total_tokens": prompt_tokens + completion_tokens},
+                "usage": {"prompt_tokens": len(prompt)//4, "completion_tokens": len(text or "")//4,
+                          "total_tokens": (len(prompt)+len(text or ""))//4},
             })
-        stats.log_request(model_name, prompt_tokens, completion_tokens, "ok")
 
     # ─── /v1/responses (Codex CLI) ───────────────────────────────────────────
 
@@ -369,7 +263,7 @@ class GeminiHandler(BaseHTTPRequestHandler):
             return
 
         try:
-            text = generate(prompt, model_id, think_mode, _upload_files(images), extra_fields)
+            text = generate(prompt, model_id, think_mode, _upload_images(images), extra_fields)
         except Exception as e:
             self.send_json({"error": {"message": f"upstream error: {e}"}}, 502)
             return
@@ -406,13 +300,13 @@ class GeminiHandler(BaseHTTPRequestHandler):
                         ev = {"type": "response.output_text.done", "item_id": item["id"], "content_index": ci, "text": cp["text"]}
                         self.wfile.write(f"event: response.output_text.done\ndata: {json.dumps(ev)}\n\n".encode())
             resp_obj = {"id": rid, "object": "response", "status": "completed", "model": model_name, "output": output,
-                        "usage": {"input_tokens": count_tokens(prompt), "output_tokens": count_tokens(text or ""), "total_tokens": count_tokens(prompt) + count_tokens(text or "")}}
+                        "usage": {"input_tokens": len(prompt)//4, "output_tokens": len(text or "")//4, "total_tokens": (len(prompt)+len(text or ""))//4}}
             self.wfile.write(f"event: response.completed\ndata: {json.dumps({'type': 'response.completed', 'response': resp_obj})}\n\n".encode())
             self.wfile.flush()
         else:
             self.send_json({"id": rid, "object": "response", "created_at": int(time.time()), "status": "completed",
                             "model": model_name, "output": output,
-                            "usage": {"input_tokens": count_tokens(prompt), "output_tokens": count_tokens(text or ""), "total_tokens": count_tokens(prompt) + count_tokens(text or "")}})
+                            "usage": {"input_tokens": len(prompt)//4, "output_tokens": len(text or "")//4, "total_tokens": (len(prompt)+len(text or ""))//4}})
 
     # ─── /v1beta/models (Google Gemini CLI) ──────────────────────────────────
 
@@ -436,7 +330,7 @@ class GeminiHandler(BaseHTTPRequestHandler):
             self.send_json({"error": {"message": "empty content"}}, 400)
             return
 
-        file_refs = _upload_files(images)
+        file_refs = _upload_images(images)
         log(f"Google API: model={model_name} stream={stream} tools={has_tools} prompt_len={len(prompt)}")
 
         if stream and not has_tools:
@@ -456,15 +350,14 @@ class GeminiHandler(BaseHTTPRequestHandler):
                 final_chunk = {
                     "candidates": [{"finishReason": "STOP", "index": 0}],
                     "usageMetadata": {
-                        "promptTokenCount": count_tokens(prompt),
-                        "candidatesTokenCount": count_tokens(full_text),
-                        "totalTokenCount": count_tokens(prompt) + count_tokens(full_text),
+                        "promptTokenCount": len(prompt) // 4,
+                        "candidatesTokenCount": len(full_text) // 4,
+                        "totalTokenCount": (len(prompt) + len(full_text)) // 4,
                     },
                     "modelVersion": model_name,
                 }
                 self.wfile.write(f"data: {json.dumps(final_chunk, ensure_ascii=False)}\n\n".encode())
                 self.wfile.flush()
-                stats.log_request(model_name, count_tokens(prompt), count_tokens(full_text), "ok")
             except (BrokenPipeError, ConnectionResetError):
                 pass
             return
@@ -472,7 +365,6 @@ class GeminiHandler(BaseHTTPRequestHandler):
         try:
             text = generate(prompt, model_id, think_mode, file_refs, extra_fields)
         except Exception as e:
-            stats.log_request(model_name, count_tokens(prompt), 0, "error", str(e))
             self.send_json({"error": {"message": f"upstream error: {e}"}}, 502)
             return
 
@@ -498,9 +390,9 @@ class GeminiHandler(BaseHTTPRequestHandler):
             "index": 0,
         }
         usage = {
-            "promptTokenCount": count_tokens(prompt),
-            "candidatesTokenCount": count_tokens(text or ""),
-            "totalTokenCount": count_tokens(prompt) + count_tokens(text or ""),
+            "promptTokenCount": len(prompt) // 4,
+            "candidatesTokenCount": len(text or "") // 4,
+            "totalTokenCount": (len(prompt) + len(text or "")) // 4,
         }
         response_obj = {
             "candidates": [candidate],
@@ -514,7 +406,6 @@ class GeminiHandler(BaseHTTPRequestHandler):
             self.wfile.flush()
         else:
             self.send_json(response_obj)
-        stats.log_request(model_name, count_tokens(prompt), count_tokens(text or ""), "ok")
 
 
 class ThreadedServer(ThreadingMixIn, HTTPServer):

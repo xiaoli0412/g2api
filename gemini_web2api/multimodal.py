@@ -1,4 +1,4 @@
-"""Multimodal: Scotty resumable upload for Gemini file input (images, video, audio, documents)."""
+"""Multimodal: Scotty resumable upload for Gemini image input."""
 import json
 import base64
 import urllib.request
@@ -6,24 +6,9 @@ import urllib.parse
 import time
 import ssl
 import re
-import os
 
 from .config import CONFIG
 from .gemini import load_cookie, make_sapisidhash, _get_ssl_ctx, log
-
-MIME_MAP = {
-    ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
-    ".gif": "image/gif", ".webp": "image/webp", ".bmp": "image/bmp",
-    ".mp4": "video/mp4", ".avi": "video/x-msvideo", ".mov": "video/quicktime",
-    ".webm": "video/webm", ".mkv": "video/x-matroska",
-    ".mp3": "audio/mpeg", ".wav": "audio/wav", ".ogg": "audio/ogg",
-    ".flac": "audio/flac", ".m4a": "audio/mp4", ".aac": "audio/aac",
-    ".pdf": "application/pdf", ".doc": "application/msword",
-    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ".txt": "text/plain", ".csv": "text/csv", ".json": "application/json",
-    ".xml": "application/xml", ".md": "text/markdown",
-    ".py": "text/x-python", ".js": "text/javascript", ".html": "text/html",
-}
 
 
 def _get_page_tokens() -> dict:
@@ -64,12 +49,8 @@ def _cached_page_tokens() -> dict:
     return _page_tokens_cache["tokens"]
 
 
-def upload_file(file_bytes: bytes, filename: str = "file", mime_type: str = None) -> str:
-    """Upload file via Scotty resumable upload. Returns file reference path."""
-    if not mime_type:
-        ext = os.path.splitext(filename)[1].lower()
-        mime_type = MIME_MAP.get(ext, "application/octet-stream")
-
+def upload_image(image_bytes: bytes, filename: str = "image.png", mime_type: str = "image/png") -> str:
+    """Upload image via Scotty resumable upload. Returns file reference path."""
     tokens = _cached_page_tokens()
     push_id = tokens.get("push_id", "feeds/mcudyrk2a4khkz")
     pctx = tokens.get("pctx", "CgcSBWjK7pYx")
@@ -78,11 +59,12 @@ def upload_file(file_bytes: bytes, filename: str = "file", mime_type: str = None
     ctx = _get_ssl_ctx()
     proxy = CONFIG.get("proxy")
 
+    # Step 1: Initiate resumable upload
     start_headers = {
         "Push-ID": push_id,
         "X-Tenant-Id": "bard-storage",
         "X-Client-Pctx": pctx,
-        "X-Goog-Upload-Header-Content-Length": str(len(file_bytes)),
+        "X-Goog-Upload-Header-Content-Length": str(len(image_bytes)),
         "X-Goog-Upload-Header-Content-Type": mime_type,
         "X-Goog-Upload-Protocol": "resumable",
         "X-Goog-Upload-Command": "start",
@@ -112,6 +94,7 @@ def upload_file(file_bytes: bytes, filename: str = "file", mime_type: str = None
 
     log(f"Upload session started: {upload_url[:80]}...")
 
+    # Step 2: Upload file data + finalize
     upload_headers = {
         "X-Goog-Upload-Command": "upload, finalize",
         "X-Goog-Upload-Offset": "0",
@@ -119,7 +102,7 @@ def upload_file(file_bytes: bytes, filename: str = "file", mime_type: str = None
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     }
 
-    req2 = urllib.request.Request(upload_url, data=file_bytes, headers=upload_headers, method="POST")
+    req2 = urllib.request.Request(upload_url, data=image_bytes, headers=upload_headers, method="POST")
     if proxy:
         resp2 = opener.open(req2, timeout=60)
     else:
@@ -129,22 +112,16 @@ def upload_file(file_bytes: bytes, filename: str = "file", mime_type: str = None
     if not file_ref or not file_ref.startswith("/"):
         raise RuntimeError(f"Invalid file reference: {file_ref[:100]}")
 
-    log(f"File uploaded: {filename} ({mime_type}, {len(file_bytes)} bytes) -> {file_ref[:50]}...")
+    log(f"Image uploaded: {filename} -> {file_ref[:50]}...")
     return file_ref
 
 
-upload_image = upload_file
-
-
-def fetch_file_bytes(url: str) -> bytes:
-    """Fetch file from URL."""
+def fetch_image_bytes(url: str) -> bytes:
+    """Fetch image from URL."""
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         resp = urllib.request.urlopen(req, timeout=30)
         return resp.read()
     except Exception as e:
-        log(f"File fetch failed: {e}")
+        log(f"Image fetch failed: {e}")
         return b""
-
-
-fetch_image_bytes = fetch_file_bytes

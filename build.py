@@ -1,4 +1,4 @@
-"""Build script for Gemini2API Desktop - customtkinter version."""
+"""Build script for Gemini2API Desktop."""
 import os
 import sys
 import shutil
@@ -10,7 +10,7 @@ APP_NAME = "Gemini2API"
 
 
 def clean():
-    """清理构建目录"""
+    """Clean build directories."""
     for d in [DIST_DIR, BUILD_DIR]:
         if os.path.exists(d):
             shutil.rmtree(d)
@@ -20,13 +20,13 @@ def clean():
 
 
 def build():
-    """构建EXE"""
+    """Build EXE using single file version."""
     print("=" * 50)
     print("  Gemini2API Desktop Build")
     print("=" * 50)
     print()
 
-    # 检查依赖
+    # Check PyInstaller
     try:
         import PyInstaller
         print(f"[OK] PyInstaller {PyInstaller.__version__}")
@@ -34,6 +34,7 @@ def build():
         print("[...] Installing PyInstaller...")
         subprocess.run([sys.executable, "-m", "pip", "install", "pyinstaller"], check=True)
 
+    # Check customtkinter
     try:
         import customtkinter
         print("[OK] customtkinter installed")
@@ -41,14 +42,14 @@ def build():
         print("[...] Installing customtkinter...")
         subprocess.run([sys.executable, "-m", "pip", "install", "customtkinter"], check=True)
 
-    # 清理
+    # Clean
     clean()
 
     print()
     print("[...] Building EXE...")
     print()
 
-    # 使用PyInstaller构建
+    # Build with PyInstaller
     cmd = [
         sys.executable, "-m", "PyInstaller",
         "--name", APP_NAME,
@@ -66,7 +67,6 @@ def build():
         "--hidden-import", "pystray",
         "--hidden-import", "PIL",
         "--hidden-import", "darkdetect",
-        "--exclude-module", "PyQt5",
         "app.py"
     ]
 
@@ -75,7 +75,7 @@ def build():
         print(f"\n[FAIL] Build failed with exit code {ret.returncode}")
         return False
 
-    # 检查输出
+    # Check output
     app_dir = os.path.join(DIST_DIR, APP_NAME)
     exe_path = os.path.join(app_dir, f"{APP_NAME}.exe")
 
@@ -96,6 +96,12 @@ def build():
         print(f"  Total Size: {total_size:.1f} MB")
         print("=" * 50)
         
+        # Copy config example
+        shutil.copy("config.example.json", app_dir)
+        
+        # Copy single file version
+        shutil.copy("gemini_web2api.py", app_dir)
+        
         return True
     else:
         print(f"\n[FAIL] EXE not found at {exe_path}")
@@ -107,4 +113,6 @@ if __name__ == "__main__":
     if success:
         print("\nTo run the app:")
         print(f"  {DIST_DIR}\\{APP_NAME}\\{APP_NAME}.exe")
+        print("\nOr use single file version:")
+        print(f"  python gemini_web2api.py")
     sys.exit(0 if success else 1)

@@ -20,13 +20,9 @@ from .config import CONFIG
 _ssl_ctx = None
 _cookie_cache = {"str": "", "sapisid": None, "mtime": 0}
 _httpx_client = None
-_bl_cache = {"bl": None, "ts": 0}
-_BL_TTL_SEC = 3600  # refresh discovered BL once per hour
 
 
 def log(msg: str):
-    from .stats import add_log
-    add_log(msg, "info")
     if CONFIG["log_requests"]:
         import sys
         sys.stderr.write(f"[{time.strftime('%H:%M:%S')}] {msg}\n")
@@ -92,18 +88,11 @@ def _account_prefix() -> str:
 def _build_headers() -> dict:
     account_prefix = _account_prefix()
     headers = {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        "Content-Type": "application/x-www-form-urlencoded",
         "Origin": "https://gemini.google.com",
         "Referer": f"https://gemini.google.com{account_prefix}/app",
         "X-Same-Domain": "1",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0",
-        "Dnt": "1",
-        "Sec-Ch-Ua": '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
-        "Sec-Ch-Ua-Arch": '"x86"',
-        "Sec-Ch-Ua-Bitness": '"64"',
-        "Sec-Ch-Ua-Mobile": "?0",
-        "Sec-Ch-Ua-Platform": '"Windows"',
-        "Sec-Ch-Ua-Platform-Version": '"15.0.0"',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     }
     if account_prefix:
         headers["X-Goog-AuthUser"] = str(CONFIG["auth_user"])
@@ -148,45 +137,13 @@ def _build_payload(prompt: str, model_id: int, think_mode: int, file_refs: list 
     return urllib.parse.urlencode(params)
 
 
-def _discover_bl() -> str:
-    """Fetch gemini.google.com/app HTML and extract the current `cfb2h` BL token.
-
-    Strips any ANSI escape sequences Google embeds in the value. Cached for
-    _BL_TTL_SEC to avoid hitting the page on every request. Returns "" on failure.
-    """
-    now = time.time()
-    if _bl_cache["bl"] and now - _bl_cache["ts"] < _BL_TTL_SEC:
-        return _bl_cache["bl"]
-    try:
-        req = urllib.request.Request(
-            "https://gemini.google.com/app",
-            headers={"User-Agent": "Mozilla/5.0"},
-        )
-        html = urllib.request.urlopen(req, timeout=15, context=_get_ssl_ctx()).read().decode("utf-8", errors="replace")
-        m = re.search(r'"cfb2h":"(boq_assistant-bard-web-server_[^"]+)"', html)
-        if m:
-            bl = re.sub(r"\x1b\[[0-9;]*m", "", m.group(1))
-            _bl_cache.update({"bl": bl, "ts": now})
-            log(f"Discovered BL: {bl}")
-            return bl
-    except Exception as e:
-        log(f"BL discovery failed (using configured fallback): {e}")
-    return ""
-
-
-def _resolve_bl() -> str:
-    """Return the active BL token: discovered value if available, else config fallback."""
-    discovered = _discover_bl()
-    return discovered or CONFIG["gemini_bl"]
-
-
 def _get_url() -> str:
     reqid = int(time.time()) % 1000000
     account_prefix = _account_prefix()
     return (
         f"https://gemini.google.com{account_prefix}/_/BardChatUi/data/"
         "assistant.lamda.BardFrontendService/StreamGenerate"
-        f"?bl={_resolve_bl()}&hl=en&_reqid={reqid}&rt=c"
+        f"?bl={CONFIG['gemini_bl']}&hl=en&_reqid={reqid}&rt=c"
     )
 
 
@@ -197,24 +154,6 @@ def clean_text(text: str) -> str:
     )
     text = re.sub(r'http://googleusercontent\.com/card_content/\d+\n?', '', text)
     return text.strip()
-
-
-def extract_image_urls(raw: str) -> list:
-    """Extract image URLs from Gemini response."""
-    urls = []
-    pattern = re.compile(r'https?://[^\s,\\"]+?\.(?:png|jpe?g|gif|webp)')
-    for match in pattern.finditer(raw):
-        url = match.group(0).replace('\\', '')
-        if 'thesprucepets.com' not in url and 'filters:no_upscale()' not in url:
-            urls.append(url)
-    return list(set(urls))
-
-
-def extract_generated_image_urls(raw: str) -> list:
-    """Extract AI-generated image URLs from Gemini response."""
-    pattern = r'https://lh3\.googleusercontent\.com/gg[^\s"]*'
-    urls = [u.replace('\\', '') for u in re.findall(pattern, raw)]
-    return list(set(urls))
 
 
 def _extract_texts_from_line(line: str) -> list:

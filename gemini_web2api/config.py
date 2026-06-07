@@ -8,7 +8,7 @@ DEFAULT_CONFIG = {
     "retry_attempts": 3,
     "retry_delay_sec": 2,
     "request_timeout_sec": 180,
-    "gemini_bl": "boq_assistant-bard-web-server_20260603.11_p0",
+    "gemini_bl": "boq_assistant-bard-web-server_20260525.09_p0",
     "auth_user": None,
     "xsrf_token": None,
     "default_model": "gemini-3.5-flash",
@@ -16,11 +16,6 @@ DEFAULT_CONFIG = {
     "cookie_file": None,
     "proxy": None,
     "api_keys": [],
-    "auto_cookie": False,
-    "auto_refresh_hours": None,
-    "stream_mode": "auto",
-    "fake_stream_delay_ms": 5,
-    "cookie_source": "auto",
 }
 
 CONFIG = dict(DEFAULT_CONFIG)
