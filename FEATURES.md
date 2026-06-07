@@ -24,6 +24,8 @@
 | 代理轮询 | ✅ | 多代理自动轮询 |
 | 速率限制 | ✅ | 可配置请求间隔 |
 | Edge扩展 | ✅ | 自动获取和推送Cookie |
+| 匿名模型 | ✅ | 未登录只显示可用模型 |
+| 多文件上传 | ✅ | 图片/视频/音频/文档 |
 
 ## 启动方式
 
@@ -36,18 +38,35 @@
 
 ## 模型列表
 
+### 匿名可用（无需登录）
+
 | 模型 | 说明 |
 |------|------|
 | gemini-3.5-flash | 快速通用 |
 | gemini-3.5-flash-thinking | 深度思考 |
 | gemini-3.5-flash-thinking-lite | 自适应思考 |
-| gemini-3.1-pro | Pro模型 |
-| gemini-3.1-pro-enhanced | Pro增强 |
 | gemini-auto | 自动选择 |
 | gemini-flash-lite | 轻量快速 |
 | gemini-3.5-flash-search | Flash+搜索 |
 | gemini-3.5-flash-thinking-search | Thinking+搜索 |
+
+### 需要登录
+
+| 模型 | 说明 |
+|------|------|
+| gemini-3.1-pro | Pro模型 |
+| gemini-3.1-pro-enhanced | Pro增强 |
 | gemini-3.1-pro-search | Pro+搜索 |
+
+## 多模态支持
+
+| 类型 | 格式 |
+|------|------|
+| 图片 | png, jpg, jpeg, gif, webp, bmp |
+| 视频 | mp4, avi, mov, webm, mkv |
+| 音频 | mp3, wav, ogg, flac, m4a, aac |
+| 文档 | pdf, doc, docx, txt, csv, json, xml, md |
+| 代码 | py, js, html |
 
 ## 配置选项
 
