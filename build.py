@@ -99,8 +99,9 @@ def build():
         # Copy config example
         shutil.copy("config.example.json", app_dir)
         
-        # Copy single file version
-        shutil.copy("gemini_web2api.py", app_dir)
+        # Copy single file version if exists
+        if os.path.exists("gemini_web2api_standalone.py"):
+            shutil.copy("gemini_web2api_standalone.py", app_dir)
         
         return True
     else:
@@ -113,6 +114,6 @@ if __name__ == "__main__":
     if success:
         print("\nTo run the app:")
         print(f"  {DIST_DIR}\\{APP_NAME}\\{APP_NAME}.exe")
-        print("\nOr use single file version:")
-        print(f"  python gemini_web2api.py")
+        print("\nOr use command line version:")
+        print(f"  python -m gemini_web2api")
     sys.exit(0 if success else 1)
