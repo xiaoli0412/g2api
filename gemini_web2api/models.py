@@ -7,49 +7,73 @@ MODELS = {
     "gemini-3.5-flash": {
         "mode": 1, "think": 4,
         "desc": "Fast general-purpose model",
+        "anon": True,  # Available without login
     },
     "gemini-3.5-flash-thinking": {
         "mode": 2, "think": 0,
         "desc": "Deep thinking mode, longest output (~20k chars)",
+        "anon": True,
     },
     "gemini-3.5-flash-thinking-lite": {
         "mode": 5, "think": 0,
         "desc": "Dynamic thinking with adaptive depth",
+        "anon": True,
     },
     "gemini-3.1-pro": {
         "mode": 3, "think": 4,
         "desc": "Pro model (requires cookie for real routing)",
+        "anon": False,  # Requires login
     },
     "gemini-3.1-pro-enhanced": {
         "mode": 3, "think": 4, "extra": {31: 2, 80: 3},
         "desc": "Pro with enhanced output (experimental)",
+        "anon": False,
     },
     "gemini-auto": {
         "mode": 4, "think": 4,
         "desc": "Auto model selection",
+        "anon": True,
     },
     "gemini-flash-lite": {
         "mode": 6, "think": 4,
         "desc": "Lightweight fast model",
+        "anon": True,
     },
     # Search models (with web search enabled)
     "gemini-3.5-flash-search": {
         "mode": 1, "think": 4, "search": True,
         "desc": "Flash with web search",
+        "anon": True,
     },
     "gemini-3.5-flash-thinking-search": {
         "mode": 2, "think": 0, "search": True,
         "desc": "Thinking with web search",
+        "anon": True,
     },
     "gemini-3.1-pro-search": {
         "mode": 3, "think": 4, "search": True,
         "desc": "Pro with web search",
+        "anon": False,
     },
 }
 
 
+def get_available_models(has_cookie: bool = False) -> dict:
+    """Get available models based on login status.
+    
+    Args:
+        has_cookie: Whether user has valid cookie
+    
+    Returns:
+        dict of available models
+    """
+    if has_cookie:
+        return MODELS
+    return {k: v for k, v in MODELS.items() if v.get("anon", False)}
+
+
 def resolve_model(model_name: str, default: str = "gemini-3.5-flash"):
-    """Resolve model name to (name, mode_id, think_mode, error, extra_fields).
+    """Resolve model name to (name, mode_id, think_mode, error, extra_fields, search_mode).
 
     Supports:
     - @think=N suffix for thinking depth
@@ -68,7 +92,7 @@ def resolve_model(model_name: str, default: str = "gemini-3.5-flash"):
         try:
             think_override = int(think_str)
         except ValueError:
-            return None, None, None, f"Invalid think level: {think_str}", None
+            return None, None, None, f"Invalid think level: {think_str}", None, False
 
     # Parse @search or -search
     if "@search" in model_name:

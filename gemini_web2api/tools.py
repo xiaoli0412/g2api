@@ -7,6 +7,25 @@ import io
 
 MAX_IMAGE_B64_SIZE = 50000  # ~37KB raw image
 
+# Supported MIME types
+MIME_TYPES = {
+    # Images
+    ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+    ".gif": "image/gif", ".webp": "image/webp", ".bmp": "image/bmp",
+    # Videos
+    ".mp4": "video/mp4", ".avi": "video/x-msvideo", ".mov": "video/quicktime",
+    ".webm": "video/webm", ".mkv": "video/x-matroska",
+    # Audio
+    ".mp3": "audio/mpeg", ".wav": "audio/wav", ".ogg": "audio/ogg",
+    ".flac": "audio/flac", ".m4a": "audio/mp4", ".aac": "audio/aac",
+    # Documents
+    ".pdf": "application/pdf", ".doc": "application/msword",
+    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".txt": "text/plain", ".csv": "text/csv", ".json": "application/json",
+    ".xml": "application/xml", ".md": "text/markdown",
+    ".py": "text/x-python", ".js": "text/javascript", ".html": "text/html",
+}
+
 
 def _compress_b64_if_needed(b64: str) -> str:
     """Compress image if base64 is too large for text embedding."""
@@ -55,6 +74,7 @@ def messages_to_prompt(messages: list, tools: list = None, tool_choice=None) -> 
     """Convert OpenAI messages to (prompt_str, images_list).
 
     Returns (prompt, images) where images is a list of (bytes, mime_type) tuples.
+    Supports: text, images, video, audio, files (base64 and URL).
     """
     parts = []
     images = []
@@ -89,9 +109,66 @@ def messages_to_prompt(messages: list, tools: list = None, tool_choice=None) -> 
                 if c.get("type") in ("text", "input_text"):
                     text_parts.append(c.get("text", ""))
                 elif c.get("type") == "image_url":
-                    text_parts.append("[Note: Image input not supported in this API. Please describe the image in text.]")
+                    # Support image URL (base64 or HTTP)
+                    url_data = c.get("image_url", {})
+                    url = url_data.get("url", "") if isinstance(url_data, dict) else str(url_data)
+                    if url.startswith("data:"):
+                        try:
+                            header, b64data = url.split(",", 1)
+                            mime = header.split(":")[1].split(";")[0]
+                            img_bytes = base64.b64decode(b64data)
+                            images.append((img_bytes, mime))
+                            text_parts.append("[Image attached]")
+                        except Exception:
+                            text_parts.append("[Image data parse error]")
+                    else:
+                        images.append((url, None))
+                        text_parts.append("[Image URL attached]")
                 elif c.get("type") == "image":
-                    text_parts.append("[Note: Image input not supported in this API. Please describe the image in text.]")
+                    # Support Anthropic-style image
+                    if c.get("source"):
+                        src = c["source"]
+                        if src.get("type") == "base64":
+                            try:
+                                img_bytes = base64.b64decode(src["data"])
+                                mime = src.get("media_type", "image/png")
+                                images.append((img_bytes, mime))
+                                text_parts.append("[Image attached]")
+                            except Exception:
+                                text_parts.append("[Image data parse error]")
+                    elif c.get("image_url"):
+                        images.append((c["image_url"], None))
+                        text_parts.append("[Image URL attached]")
+                elif c.get("type") in ("file_url", "video_url", "audio_url"):
+                    # Support video, audio, file URLs
+                    url_data = c.get("url", c.get(f"{c['type'].replace('_url', '')}_url", ""))
+                    if isinstance(url_data, dict):
+                        url_data = url_data.get("url", "")
+                    if url_data and isinstance(url_data, str):
+                        if url_data.startswith("data:"):
+                            try:
+                                header, b64data = url_data.split(",", 1)
+                                mime = header.split(":")[1].split(";")[0]
+                                file_bytes = base64.b64decode(b64data)
+                                images.append((file_bytes, mime))
+                                text_parts.append(f"[File attached]")
+                            except Exception:
+                                text_parts.append("[File data parse error]")
+                        else:
+                            images.append((url_data, None))
+                            text_parts.append(f"[File URL attached]")
+                elif c.get("type") == "input_audio":
+                    # Support audio input
+                    audio = c.get("audio", {})
+                    if audio.get("data"):
+                        try:
+                            fmt = audio.get("format", "wav")
+                            mime = f"audio/{fmt}"
+                            audio_bytes = base64.b64decode(audio["data"])
+                            images.append((audio_bytes, mime))
+                            text_parts.append("[Audio attached]")
+                        except Exception:
+                            text_parts.append("[Audio data parse error]")
             content = " ".join(text_parts)
 
         if role == "system":

@@ -20,8 +20,9 @@ def _usage(prompt: str, text: str) -> dict:
     return {"prompt_tokens": p, "completion_tokens": c, "total_tokens": p + c}
 
 
-def _upload_images(images: list) -> list:
-    """Upload images and return list of file references. Returns None if no images."""
+def _upload_files(images: list) -> list:
+    """Upload files (images, video, audio, documents) and return list of file references.
+    Returns None if no files."""
     if not images:
         return None
     file_refs = []
@@ -30,14 +31,19 @@ def _upload_images(images: list) -> list:
             if isinstance(item, tuple) and len(item) == 2:
                 data, mime = item
                 if isinstance(data, str):
-                    data = fetch_image_bytes(data)
-                    mime = mime or "image/png"
+                    # URL - fetch first
+                    data = fetch_file_bytes(data)
+                    mime = mime or "application/octet-stream"
                 if data:
-                    ref = upload_image(data, "image.png", mime or "image/png")
+                    ref = upload_file(data, "upload", mime or "application/octet-stream")
                     file_refs.append(ref)
         except Exception as e:
-            log(f"Image upload failed: {e}")
+            log(f"File upload failed: {e}")
     return file_refs if file_refs else None
+
+
+# Legacy alias
+_upload_images = _upload_files
 
 
 class GeminiHandler(BaseHTTPRequestHandler):
@@ -87,19 +93,38 @@ class GeminiHandler(BaseHTTPRequestHandler):
                 self.send_json({"error": {"message": "invalid api key"}}, 401)
                 return
             if self.path == "/v1/models":
+                # Check if cookie is available
+                from .gemini import load_cookie
+                cookie_str, _ = load_cookie()
+                has_cookie = bool(cookie_str)
+                # Get available models based on login status
+                from .models import get_available_models
+                available = get_available_models(has_cookie)
                 self.send_json({"object": "list", "data": [
                     {"id": n, "object": "model", "created": 1700000000,
                      "owned_by": "google", "description": c["desc"]}
-                    for n, c in MODELS.items()
+                    for n, c in available.items()
                 ]})
             elif self.path.startswith("/v1beta/models"):
+                from .gemini import load_cookie
+                cookie_str, _ = load_cookie()
+                has_cookie = bool(cookie_str)
+                from .models import get_available_models
+                available = get_available_models(has_cookie)
                 self.send_json({"models": [
                     {"name": f"models/{n}", "displayName": n, "description": c["desc"],
                      "supportedGenerationMethods": ["generateContent", "streamGenerateContent"]}
-                    for n, c in MODELS.items()
+                    for n, c in available.items()
                 ]})
             elif self.path == "/":
-                self.send_json({"status": "ok", "version": __version__, "models": list(MODELS.keys())})
+                from .gemini import load_cookie
+                cookie_str, _ = load_cookie()
+                has_cookie = bool(cookie_str)
+                from .models import get_available_models
+                available = get_available_models(has_cookie)
+                self.send_json({"status": "ok", "version": __version__, 
+                               "models": list(available.keys()),
+                               "has_cookie": has_cookie})
             else:
                 self.send_json({"error": "not found"}, 404)
         except (BrokenPipeError, ConnectionResetError):
