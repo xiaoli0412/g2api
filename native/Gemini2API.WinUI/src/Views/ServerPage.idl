@@ -1,0 +1,8 @@
+namespace Gemini2API.Views
+{
+    [default_interface]
+    runtimeclass ServerPage : Microsoft.UI.Xaml.Controls.Page
+    {
+        ServerPage();
+    }
+}

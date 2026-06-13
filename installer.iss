@@ -1,11 +1,11 @@
-; Inno Setup Installer for Gemini2API Desktop
+; Inno Setup Installer for Gemini2API native WinUI desktop shell
 ; Requires Inno Setup 6+ (https://jrsoftware.org/isinfo.php)
 
 #define MyAppName "Gemini2API"
-#define MyAppVersion "2.0.0"
+#define MyAppVersion "2.1.0"
 #define MyAppPublisher "Gemini2API"
 #define MyAppURL "https://github.com/user/gemini2api"
-#define MyAppExeName "Gemini2API.exe"
+#define MyAppExeName "Gemini2API.WinUI.exe"
 
 [Setup]
 AppId={{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
@@ -37,7 +37,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "startupicon"; Description: "Start with Windows"; GroupDescription: "Startup:"; Flags: unchecked
 
 [Files]
-Source: "dist\Gemini2API\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "build\native\x64\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.pdb"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

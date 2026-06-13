@@ -1,18 +1,20 @@
 {
   "manifest_version": 3,
   "name": "Gemini Cookie Pusher",
-  "version": "1.0.0",
-  "description": "Automatically extracts Gemini cookies and pushes to gemini-web2api server",
+  "version": "1.1.0",
+  "description": "Windows 11 Fluent-style Gemini cookie bridge for gemini-web2api",
   "permissions": [
     "cookies",
     "alarms",
     "storage",
-    "activeTab"
+    "activeTab",
+    "webNavigation"
   ],
   "host_permissions": [
     "https://gemini.google.com/*",
-    "http://127.0.0.1:8081/*",
-    "http://localhost:8081/*"
+    "https://*.google.com/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*"
   ],
   "background": {
     "service_worker": "background.js"

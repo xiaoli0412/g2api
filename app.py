@@ -1,4 +1,5 @@
 """Gemini2API Desktop - Win11 Style, i18n, Proxy, Animations."""
+import argparse
 import customtkinter as ctk
 import threading
 import webbrowser
@@ -6,13 +7,13 @@ import json
 import os
 import sys
 import time
-import math
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 APP_NAME = "Gemini2API"
 APP_VERSION = "2.1.0"
+APP_AUTHOR = "xiaoliACG"
 CONFIG_FILE = "config.json"
 COOKIE_FILE = "cookie.txt"
 
@@ -35,7 +36,7 @@ CLOSE_RED = "#E81123"
 LANG = {
     "zh": {
         "home": "首页", "server": "服务器", "cookie": "Cookie",
-        "stream": "流式输出", "search": "联网搜索", "settings": "设置",
+        "stream": "流式输出", "settings": "设置",
         "welcome": "欢迎使用 Gemini2API",
         "subtitle": "Gemini 网页端转 OpenAI 兼容 API 代理",
         "status_run": "状态: 运行中", "status_stop": "状态: 已停止",
@@ -58,9 +59,7 @@ LANG = {
         "open_ext": "打开扩展目录",
         "stream_mode": "流式模式", "stream_auto": "自动（有httpx真流式，否则假流式）",
         "stream_true": "真流式（需要 httpx）", "stream_fake": "假流式（快速逐字输出）",
-        "fake_delay": "假流式延迟(ms)", "search_title": "联网搜索",
-        "search_hint": "使用 @search 后缀或搜索专用模型名",
-        "copy_cmd": "复制测试命令",
+        "fake_delay": "假流式延迟(ms)",
         "app_settings": "应用设置", "minimize_tray": "关闭窗口时最小化到托盘",
         "auto_start": "启动应用时自动启动服务器",
         "open_config": "打开配置文件", "open_logs": "打开日志",
@@ -75,7 +74,7 @@ LANG = {
     },
     "en": {
         "home": "Home", "server": "Server", "cookie": "Cookie",
-        "stream": "Streaming", "search": "Web Search", "settings": "Settings",
+        "stream": "Streaming", "settings": "Settings",
         "welcome": "Welcome to Gemini2API",
         "subtitle": "Gemini Web to OpenAI-compatible API proxy",
         "status_run": "Status: Running", "status_stop": "Status: Stopped",
@@ -98,9 +97,7 @@ LANG = {
         "open_ext": "Open Extension Folder",
         "stream_mode": "Stream Mode", "stream_auto": "Auto (real if httpx available, else fake)",
         "stream_true": "True (real streaming, needs httpx)", "stream_fake": "Fake (fast char-by-char)",
-        "fake_delay": "Fake Delay (ms)", "search_title": "Web Search",
-        "search_hint": "Use @search suffix or search model names",
-        "copy_cmd": "Copy Test Command",
+        "fake_delay": "Fake Delay (ms)",
         "app_settings": "Application", "minimize_tray": "Minimize to tray on close",
         "auto_start": "Auto-start server on app launch",
         "open_config": "Open Config File", "open_logs": "Open Logs",
@@ -124,11 +121,29 @@ def resource_path(relative):
 
 def _create_icon_image():
     from PIL import Image, ImageDraw
-    img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    size = 64
+    scale = 4
+    canvas = size * scale
+    img = Image.new("RGBA", (canvas, canvas), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    draw.rounded_rectangle([2, 2, 62, 62], radius=14, fill="#0078D4")
-    draw.text((18, 10), "G", fill="white")
-    return img
+    cx = cy = canvas / 2
+    outer = canvas * 0.43
+    inner = canvas * 0.145
+    points = [
+        (cx, cy - outer), (cx + inner, cy - inner),
+        (cx + outer, cy), (cx + inner, cy + inner),
+        (cx, cy + outer), (cx - inner, cy + inner),
+        (cx - outer, cy), (cx - inner, cy - inner),
+    ]
+    draw.polygon(points, fill="#8AB4F8")
+    draw.polygon([(cx, cy - outer), (cx + inner, cy - inner), (cx, cy), (cx - inner, cy - inner)], fill="#4285F4")
+    draw.polygon([(cx + outer, cy), (cx + inner, cy + inner), (cx, cy), (cx + inner, cy - inner)], fill="#A259FF")
+    draw.polygon([(cx, cy + outer), (cx - inner, cy + inner), (cx, cy), (cx + inner, cy + inner)], fill="#FBBC04")
+    draw.polygon([(cx - outer, cy), (cx - inner, cy - inner), (cx, cy), (cx - inner, cy + inner)], fill="#34A853")
+    draw.ellipse([canvas * 0.68, canvas * 0.20, canvas * 0.72, canvas * 0.24], fill=(255, 255, 255, 235))
+    draw.ellipse([canvas * 0.27, canvas * 0.75, canvas * 0.30, canvas * 0.78], fill=(255, 255, 255, 220))
+    resample = getattr(getattr(Image, "Resampling", Image), "LANCZOS", Image.LANCZOS)
+    return img.resize((size, size), resample)
 
 
 class ServerThread(threading.Thread):
@@ -143,13 +158,23 @@ class ServerThread(threading.Thread):
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
             from gemini_web2api.config import CONFIG
             from gemini_web2api.server import GeminiHandler, ThreadedServer
+            from gemini_web2api.admin import init_admin
             from gemini_web2api import cookie_manager
             CONFIG.update(self.config)
+            init_admin()
+
+            # 初始化代理池
+            if CONFIG.get("proxy_pool_enabled"):
+                from gemini_web2api.proxy_builtin import init_pool_from_config
+                pool = init_pool_from_config(CONFIG)
+                print(f"Proxy pool initialized: {pool.total_count} nodes")
+
             if self.config.get("auto_cookie"):
                 cookie_str, sapisid = cookie_manager.extract_cookies()
                 if cookie_str:
                     cookie_manager.write_cookie_file(cookie_str, sapisid, COOKIE_FILE)
                     CONFIG["cookie_file"] = COOKIE_FILE
+                    init_admin()
             if self.config.get("auto_refresh_hours"):
                 cookie_manager.start_auto_refresh(int(self.config["auto_refresh_hours"]))
             port = CONFIG["port"]
@@ -178,7 +203,7 @@ class AnimatedFrame(ctk.CTkFrame):
 
     def _set_alpha(self, alpha):
         try:
-            fg = self.cget("fg_color")
+            _ = self.cget("fg_color")
         except Exception:
             pass
 
@@ -188,9 +213,9 @@ class GeminiApp(ctk.CTk):
         super().__init__()
         self.lang_code = "zh"
         self.t = LANG["zh"]
-        self.title(f"{APP_NAME} v{APP_VERSION}")
-        self.geometry("960x660")
-        self.minsize(860, 600)
+        self.title(f"{APP_NAME} v{APP_VERSION} · {APP_AUTHOR}")
+        self.geometry("1180x760")
+        self.minsize(980, 660)
         self.configure(fg_color=BG_DARK)
         self.server_thread = None
         self.tray_icon = None
@@ -241,7 +266,6 @@ class GeminiApp(ctk.CTk):
     def _start_tray(self):
         try:
             import pystray
-            from PIL import Image
             image = _create_icon_image()
             menu = pystray.Menu(
                 pystray.MenuItem(lambda item: self.t["home"] if hasattr(self, 't') else "Show", self._tray_show, default=True),
@@ -287,7 +311,7 @@ class GeminiApp(ctk.CTk):
         os._exit(0)
 
     def _build_sidebar(self):
-        self.sidebar = ctk.CTkFrame(self, width=200, corner_radius=0, fg_color=BG_MICA)
+        self.sidebar = ctk.CTkFrame(self, width=280, corner_radius=0, fg_color=BG_MICA)
         self.sidebar.pack(side="left", fill="y")
         self.sidebar.pack_propagate(False)
 
@@ -297,9 +321,11 @@ class GeminiApp(ctk.CTk):
                      text_color=TEXT_ACCENT).pack(anchor="w")
         ctk.CTkLabel(top, text=f"v{APP_VERSION}", font=("Segoe UI", 10),
                      text_color=TEXT_SEC).pack(anchor="w")
+        ctk.CTkLabel(top, text=f"Windows 11 Fluent · {APP_AUTHOR}", font=("Segoe UI", 10),
+                     text_color=TEXT_SEC).pack(anchor="w", pady=(2, 0))
 
         self.nav_btns = {}
-        for key in ["home", "server", "cookie", "stream", "search", "settings"]:
+        for key in ["home", "server", "cookie", "stream", "settings"]:
             btn = ctk.CTkButton(
                 self.sidebar, text=self.t.get(key, key), anchor="w",
                 font=("Segoe UI", 13), height=36, corner_radius=8,
@@ -314,8 +340,13 @@ class GeminiApp(ctk.CTk):
         bottom = ctk.CTkFrame(self.sidebar, fg_color="transparent")
         bottom.pack(fill="x", padx=16, pady=(0, 16))
         self.status_lbl = ctk.CTkLabel(bottom, text="● " + self.t.get("status_stop", "Stopped"),
-                                        font=("Segoe UI", 11), text_color=ERROR)
+                                         font=("Segoe UI", 11), text_color=ERROR)
         self.status_lbl.pack(anchor="w")
+        self.context_btn = ctk.CTkButton(bottom, text="右键菜单", font=("Segoe UI", 11),
+                                         height=28, corner_radius=6, fg_color=BG_CARD,
+                                         hover_color=BG_HOVER, text_color=TEXT_SEC,
+                                         command=self._show_context_menu)
+        self.context_btn.pack(fill="x", pady=(8, 0))
         lang_btn = ctk.CTkButton(bottom, text="中文 / EN", font=("Segoe UI", 11),
                                   height=28, corner_radius=6, fg_color=BG_CARD,
                                   hover_color=BG_HOVER, text_color=TEXT_SEC,
@@ -336,14 +367,13 @@ class GeminiApp(ctk.CTk):
         for name, frame in self.pages.items():
             frame.destroy()
         self.pages = {}
-        for name in ["home", "server", "cookie", "stream", "search", "settings"]:
+        for name in ["home", "server", "cookie", "stream", "settings"]:
             frame = ctk.CTkFrame(self.content, fg_color=BG_DARK, corner_radius=0)
             self.pages[name] = frame
         self._build_home_page()
         self._build_server_page()
         self._build_cookie_page()
         self._build_stream_page()
-        self._build_search_page()
         self._build_settings_page()
         self._show_page("home")
 
@@ -351,14 +381,13 @@ class GeminiApp(ctk.CTk):
         self.content = ctk.CTkFrame(self, fg_color=BG_DARK, corner_radius=0)
         self.content.pack(side="right", fill="both", expand=True)
         self.pages = {}
-        for name in ["home", "server", "cookie", "stream", "search", "settings"]:
+        for name in ["home", "server", "cookie", "stream", "settings"]:
             frame = ctk.CTkFrame(self.content, fg_color=BG_DARK, corner_radius=0)
             self.pages[name] = frame
         self._build_home_page()
         self._build_server_page()
         self._build_cookie_page()
         self._build_stream_page()
-        self._build_search_page()
         self._build_settings_page()
 
     def _show_page(self, name):
@@ -381,7 +410,7 @@ class GeminiApp(ctk.CTk):
         inner.pack(fill="x", padx=18, pady=16)
         return inner
 
-    def _input(self, parent, key, value, options=None):
+    def _input(self, parent, key, value, options=None, hint=None):
         row = ctk.CTkFrame(parent, fg_color="transparent")
         row.pack(fill="x", pady=(0, 8))
         ctk.CTkLabel(row, text=self.t.get(key, key), font=("Segoe UI", 12),
@@ -393,9 +422,12 @@ class GeminiApp(ctk.CTk):
                               fg_color=BG_INPUT, button_color=ACCENT,
                               corner_radius=8).pack(side="left", padx=(8, 0))
         else:
-            ctk.CTkEntry(row, textvariable=var, font=("Segoe UI", 12),
-                         width=300, fg_color=BG_INPUT, border_color=BORDER,
-                         corner_radius=8, text_color=TEXT_PRIMARY).pack(side="left", padx=(8, 0))
+            entry = ctk.CTkEntry(row, textvariable=var, font=("Segoe UI", 12),
+                                 width=300, fg_color=BG_INPUT, border_color=BORDER,
+                                 corner_radius=8, text_color=TEXT_PRIMARY)
+            if hint:
+                entry.configure(placeholder_text=hint)
+            entry.pack(side="left", padx=(8, 0))
         return var
 
     def _btn(self, parent, key, command, color=ACCENT, width=140):
@@ -464,7 +496,27 @@ class GeminiApp(ctk.CTk):
             self.config.get("default_model", "gemini-3.5-flash"),
             options=["gemini-3.5-flash", "gemini-3.5-flash-thinking",
                      "gemini-3.1-pro", "gemini-auto", "gemini-flash-lite"])
-        self._btn(card3, "save", self._save_server_config).pack(anchor="w", pady=(8, 0))
+
+        card4 = self._card(f)
+        self._label(card4, "proxy_pool", font=("Segoe UI Semibold", 14)).pack(anchor="w", pady=(0, 8))
+        self.proxy_pool_var = ctk.BooleanVar(value=self.config.get("proxy_pool_enabled", False))
+        ctk.CTkCheckBox(card4, text="启用代理池", variable=self.proxy_pool_var,
+                        font=("Segoe UI", 12), text_color=TEXT_SEC, fg_color=ACCENT,
+                        hover_color=ACCENT_HOVER).pack(anchor="w", pady=(0, 4))
+        self.proxy_rotation_var = ctk.BooleanVar(value=self.config.get("proxy_rotation", False))
+        ctk.CTkCheckBox(card4, text="启用代理轮换", variable=self.proxy_rotation_var,
+                        font=("Segoe UI", 12), text_color=TEXT_SEC, fg_color=ACCENT,
+                        hover_color=ACCENT_HOVER).pack(anchor="w", pady=(0, 8))
+        self.proxy_strategy_var = self._input(card4, "proxy_strategy",
+            self.config.get("proxy_pool_strategy", "round_robin"),
+            options=["round_robin", "random", "fastest", "least_connections", "ip_hash"])
+        self.proxy_subs_var = self._input(card4, "proxy_subs",
+            ",".join(self.config.get("proxy_subscriptions", [])),
+            hint="订阅URL,逗号分隔")
+        self.proxy_list_var = self._input(card4, "proxy_list",
+            ",".join(self.config.get("proxies", [])),
+            hint="代理地址,逗号分隔")
+        self._btn(card4, "save", self._save_server_config).pack(anchor="w", pady=(8, 0))
 
     def _save_server_config(self):
         self.config["port"] = int(self.port_var.get())
@@ -483,6 +535,13 @@ class GeminiApp(ctk.CTk):
         self.config["default_model"] = self.default_model_var.get()
         keys = self.apikeys_var.get().strip()
         self.config["api_keys"] = [k.strip() for k in keys.split(",") if k.strip()] if keys else []
+        self.config["proxy_pool_enabled"] = self.proxy_pool_var.get()
+        self.config["proxy_rotation"] = self.proxy_rotation_var.get()
+        self.config["proxy_pool_strategy"] = self.proxy_strategy_var.get()
+        subs = self.proxy_subs_var.get().strip()
+        self.config["proxy_subscriptions"] = [s.strip() for s in subs.split(",") if s.strip()] if subs else []
+        plist = self.proxy_list_var.get().strip()
+        self.config["proxies"] = [p.strip() for p in plist.split(",") if p.strip()] if plist else []
         self._save_config()
         self._toast(self.t["saved"])
 
@@ -537,7 +596,8 @@ class GeminiApp(ctk.CTk):
                     text=f"{'OK' if r.get('success') else 'FAIL'}: {r.get('status','')}",
                     text_color=SUCCESS if r.get("success") else ERROR))
             except Exception as e:
-                self.after(0, lambda: self.cookie_status.configure(text=str(e), text_color=ERROR))
+                msg = str(e)
+                self.after(0, lambda msg=msg: self.cookie_status.configure(text=msg, text_color=ERROR))
         threading.Thread(target=do, daemon=True).start()
         self.cookie_status.configure(text=self.t["refreshing"], text_color=TEXT_SEC)
 
@@ -559,7 +619,8 @@ class GeminiApp(ctk.CTk):
                 else:
                     self.after(0, lambda: self._toast(self.t["login_fail"]))
             except Exception as e:
-                self.after(0, lambda: self._toast(str(e)))
+                msg = str(e)
+                self.after(0, lambda msg=msg: self._toast(msg))
         threading.Thread(target=do, daemon=True).start()
 
     def _build_stream_page(self):
@@ -590,32 +651,39 @@ class GeminiApp(ctk.CTk):
         self._save_config()
         self._toast(self.t["saved"])
 
-    def _build_search_page(self):
-        f = self.pages["search"]
-        self._label(f, "search", font=("Segoe UI Semibold", 18)).pack(anchor="w", pady=(0, 12))
+    def _show_context_menu(self):
+        try:
+            menu = ctk.CTkToplevel(self)
+            menu.overrideredirect(True)
+            menu.attributes("-topmost", True)
+            menu.geometry(f"220x132+{self.winfo_x() + 82}+{self.winfo_y() + 120}")
+            menu.configure(fg_color=BG_CARD)
+            ctk.CTkLabel(menu, text="快捷菜单", font=("Segoe UI Semibold", 14),
+                         text_color=TEXT_PRIMARY).pack(anchor="w", padx=16, pady=(14, 10))
 
-        card = self._card(f)
-        self._label(card, "search_title", font=("Segoe UI Semibold", 14)).pack(anchor="w", pady=(0, 8))
-        ctk.CTkLabel(card, text=self.t.get("search_hint", ""), font=("Segoe UI", 11),
-                     text_color=TEXT_SEC).pack(anchor="w", pady=(0, 8))
-        examples = [
-            "  gemini-3.5-flash-search",
-            "  gemini-3.5-flash-thinking-search",
-            "  gemini-3.1-pro-search",
-            "  gemini-3.5-flash@search",
-            "  gemini-3.5-flash-thinking@search@think=2",
-        ]
-        for ex in examples:
-            ctk.CTkLabel(card, text=ex, font=("Consolas", 11),
-                         text_color=TEXT_ACCENT, anchor="w").pack(anchor="w", pady=1)
-        self._btn(card, "copy_cmd", self._copy_search, width=180).pack(anchor="w", pady=(10, 0))
+            def close_menu():
+                try:
+                    menu.destroy()
+                except Exception:
+                    pass
 
-    def _copy_search(self):
-        port = self.config.get("port", 8081)
-        cmd = f'curl http://localhost:{port}/v1/chat/completions -H "Content-Type: application/json" -d \'{{"model":"gemini-3.5-flash@search","messages":[{{"role":"user","content":"today news"}}]}}\''
-        self.clipboard_clear()
-        self.clipboard_append(cmd)
-        self._toast("Copied!")
+            actions = [
+                ("打开面板", self._open_dashboard),
+                ("打开配置", self._open_config),
+            ]
+            for text, action in actions:
+                ctk.CTkButton(
+                    menu, text=text, fg_color="transparent", hover_color=BG_HOVER,
+                    text_color=TEXT_SEC, anchor="w", height=28,
+                    command=lambda a=action: (a(), close_menu()),
+                ).pack(fill="x", padx=10, pady=2)
+
+            ctk.CTkButton(menu, text="关闭", fg_color="transparent", hover_color=BG_HOVER,
+                          text_color=TEXT_SEC, anchor="w", height=28,
+                          command=close_menu).pack(fill="x", padx=10, pady=(2, 8))
+            menu.after(3500, close_menu)
+        except Exception:
+            pass
 
     def _build_settings_page(self):
         f = self.pages["settings"]
@@ -639,10 +707,21 @@ class GeminiApp(ctk.CTk):
 
         card2 = self._card(f)
         self._label(card2, "about", font=("Segoe UI Semibold", 14)).pack(anchor="w", pady=(0, 8))
-        for line in [f"{APP_NAME} v{APP_VERSION}", "Gemini Web -> OpenAI API",
-                     "Flash / Pro / Thinking / Search / Streaming", "MIT License"]:
+        about_lines = [
+            f"{APP_NAME} v{APP_VERSION}",
+            f"作者: {APP_AUTHOR}",
+            "Gemini Web -> OpenAI API",
+            "Flash / Pro / Thinking / Streaming",
+            "Windows 11 Fluent Design",
+            "MIT License",
+        ]
+        for line in about_lines:
             ctk.CTkLabel(card2, text=line, font=("Segoe UI", 11),
                          text_color=TEXT_SEC).pack(anchor="w", pady=1)
+        ctk.CTkLabel(card2, text=f"CLI: python app.py --cli", font=("Segoe UI", 11),
+                     text_color=TEXT_ACCENT).pack(anchor="w", pady=(6, 1))
+        ctk.CTkLabel(card2, text="EXE: build\\native\\x64\\Release\\Gemini2API.WinUI.exe",
+                     font=("Segoe UI", 11), text_color=TEXT_ACCENT).pack(anchor="w", pady=(2, 1))
 
     def _save_settings(self):
         self.config["minimize_to_tray"] = self.tray_var.get()
@@ -713,6 +792,47 @@ class GeminiApp(ctk.CTk):
 
 
 def main():
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--cli", action="store_true", help="Run in CLI mode (no GUI)")
+    parser.add_argument("--port", type=int, default=None, help="Override port")
+    parser.add_argument("--host", default=None, help="Override host")
+    args, _ = parser.parse_known_args()
+    if args.cli:
+        print(f"{APP_NAME} v{APP_VERSION} by {APP_AUTHOR}")
+        print("Windows 11 Fluent CLI mode")
+        print("-" * 40)
+        config = {
+            "port": 8081, "host": "0.0.0.0",
+            "default_model": "gemini-3.5-flash",
+            "proxy": None, "proxy_type": "none", "api_keys": [],
+            "cookie_file": COOKIE_FILE, "auto_cookie": False,
+            "auto_refresh_hours": None, "stream_mode": "auto",
+            "fake_stream_delay_ms": 5, "log_requests": True,
+        }
+        try:
+            with open(CONFIG_FILE) as f:
+                config.update(json.load(f))
+        except Exception:
+            pass
+        if args.port:
+            config["port"] = args.port
+        if args.host:
+            config["host"] = args.host
+        print(f"Port: {config['port']}")
+        print(f"Host: {config['host']}")
+        print(f"Dashboard: http://localhost:{config['port']}/dashboard")
+        print("-" * 40)
+        print("Starting server... (Ctrl+C to stop)")
+        server_thread = ServerThread(config)
+        server_thread.start()
+        try:
+            while server_thread.running:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            print("\nStopping server...")
+            server_thread.stop()
+            print("Stopped.")
+        return
     app = GeminiApp()
     app.mainloop()
 

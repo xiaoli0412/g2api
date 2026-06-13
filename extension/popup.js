@@ -2,10 +2,15 @@ const statusEl = document.getElementById("status");
 const lastTimeEl = document.getElementById("lastTime");
 const cookieCountEl = document.getElementById("cookieCount");
 const serverUrlEl = document.getElementById("serverUrl");
+const pushIntervalEl = document.getElementById("pushInterval");
+const pushCountEl = document.getElementById("pushCount");
+const serverDiagEl = document.getElementById("serverDiag");
 const pushBtn = document.getElementById("pushBtn");
 const refreshBtn = document.getElementById("refreshBtn");
+const loginGuideBtn = document.getElementById("loginGuideBtn");
+const loginGuide = document.getElementById("loginGuide");
 
-const REQUIRED_COOKIES = ["SID", "HSID", "SSID", "APISID", "SAPISID", "__Secure-1PSID"];
+const REQUIRED_COOKIES = ["SID", "HSID", "SSID", "APISID", "SAPISID", "__Secure-1PSID", "__Secure-3PSID"];
 
 const STATUS_MAP = {
   ok: { text: "Connected", cls: "status-ok" },
@@ -45,19 +50,50 @@ async function checkCookies() {
   });
 }
 
+function setLoading(el, loading) {
+  if (!el) return;
+  if (loading) {
+    el.dataset.origText = el.textContent;
+    el.innerHTML = '<span class="spinner"></span> Loading...';
+    el.disabled = true;
+  } else {
+    el.textContent = el.dataset.origText || el.textContent;
+    el.disabled = false;
+  }
+}
+
 async function refresh() {
-  // Get server status
-  chrome.runtime.sendMessage({ action: "getStatus" }, async (data) => {
+    chrome.runtime.sendMessage({ action: "getStatus" }, async (data) => {
     if (data) {
       const info = STATUS_MAP[data.lastStatus] || STATUS_MAP.unknown;
       statusEl.textContent = info.text;
       statusEl.className = "value " + info.cls;
       lastTimeEl.textContent = formatTime(data.lastTime);
-      serverUrlEl.value = data.serverUrl || "http://127.0.0.1:8081";
+      if (serverUrlEl) serverUrlEl.value = data.serverUrl || "http://127.0.0.1:8081";
+      if (pushCountEl) pushCountEl.textContent = data.pushCount || 0;
+      if (serverDiagEl) {
+        const diag = data.lastDiagnostics || {};
+        if (diag.web_ui_likely_complete) {
+          serverDiagEl.textContent = "Web UI ready";
+          serverDiagEl.className = "value status-ok";
+        } else if (diag.api_streamgenerate_ready) {
+          serverDiagEl.textContent = "API ready";
+          serverDiagEl.className = "value status-warn";
+        } else if (data.lastServerError) {
+          serverDiagEl.textContent = "Server error";
+          serverDiagEl.className = "value status-err";
+        } else {
+          serverDiagEl.textContent = "--";
+          serverDiagEl.className = "value status-off";
+        }
+      }
     }
   });
 
-  // Check cookies
+  chrome.storage.local.get("pushInterval", (data) => {
+    if (pushIntervalEl && data.pushInterval) pushIntervalEl.value = data.pushInterval;
+  });
+
   const cookies = await checkCookies();
   let found = 0;
   
@@ -80,32 +116,59 @@ async function refresh() {
 }
 
 pushBtn.addEventListener("click", async () => {
-  pushBtn.innerHTML = '<span class="spinner"></span> Pushing...';
-  pushBtn.disabled = true;
-  
-  chrome.runtime.sendMessage({ action: "pushNow" }, async (result) => {
-    pushBtn.textContent = "Push Cookies Now";
-    pushBtn.disabled = false;
-    await refresh();
-  });
+  setLoading(pushBtn, true);
+  try {
+    const result = await new Promise((resolve) => {
+      chrome.runtime.sendMessage({ action: "pushNow" }, resolve);
+    });
+    if (result && result.success) {
+      pushBtn.textContent = "Pushed!";
+      setTimeout(() => { pushBtn.textContent = "Push Cookies Now"; }, 2000);
+    }
+  } catch (e) {
+    console.error("Push failed:", e);
+  }
+  setLoading(pushBtn, false);
+  await refresh();
 });
 
 refreshBtn.addEventListener("click", async () => {
-  refreshBtn.textContent = "Checking...";
-  refreshBtn.disabled = true;
-  
+  setLoading(refreshBtn, true);
   await refresh();
-  
+  setLoading(refreshBtn, false);
   refreshBtn.textContent = "Check Cookies";
-  refreshBtn.disabled = false;
 });
 
-serverUrlEl.addEventListener("change", () => {
-  chrome.storage.local.set({ serverUrl: serverUrlEl.value });
+if (loginGuideBtn && loginGuide) {
+  loginGuideBtn.addEventListener("click", () => {
+    const visible = loginGuide.style.display !== "none";
+    loginGuide.style.display = visible ? "none" : "block";
+    loginGuideBtn.textContent = visible ? "How to Login" : "Hide Guide";
+  });
+}
+
+if (serverUrlEl) {
+  serverUrlEl.addEventListener("change", () => {
+    chrome.storage.local.set({ serverUrl: serverUrlEl.value });
+  });
+}
+
+if (pushIntervalEl) {
+  pushIntervalEl.addEventListener("change", () => {
+    const interval = parseInt(pushIntervalEl.value) || 10;
+    chrome.runtime.sendMessage({ action: "setInterval", interval });
+  });
+}
+
+document.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "r") {
+    e.preventDefault();
+    refresh();
+  }
+  if (e.key === "p" && !e.ctrlKey && !e.metaKey && e.target.tagName !== "INPUT") {
+    pushBtn.click();
+  }
 });
 
-// Initial load
 refresh();
-
-// Auto-refresh every 10 seconds
 setInterval(refresh, 10000);

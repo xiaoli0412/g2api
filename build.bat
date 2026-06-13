@@ -1,31 +1,16 @@
 @echo off
+setlocal
 echo ============================================
-echo   Gemini2API Desktop - Build Script
+echo   Gemini2API Native WinUI + Rust Supervisor Build
 echo ============================================
 echo.
 
-echo [1/3] Checking Python...
-python --version >nul 2>&1
-if errorlevel 1 (
-    echo [FAIL] Python not found. Install Python 3.9+
-    pause
-    exit /b 1
-)
-echo [OK] Python found
-
-echo.
-echo [2/3] Installing dependencies...
-pip install pyinstaller customtkinter pystray Pillow httpx tiktoken browser-cookie3 2>nul
-if errorlevel 1 (
-    echo [WARN] Some packages failed to install
-)
-
-echo.
-echo [3/3] Building EXE...
-python build.py
+cd /d "%~dp0"
+rem build.py orchestrates native\scripts\build-winui.ps1 and native\scripts\build-supervisor.ps1.
+python "%~dp0build.py"
 if errorlevel 1 (
     echo.
-    echo [FAIL] Build failed
+    echo [FAIL] Native WinUI + Rust supervisor build failed
     pause
     exit /b 1
 )
@@ -33,10 +18,9 @@ if errorlevel 1 (
 echo.
 echo ============================================
 echo   BUILD COMPLETE
-echo   Output: dist\Gemini2API\Gemini2API.exe
+echo   Output: build\native\x64\Release\Gemini2API.WinUI.exe
+echo   Helper: build\native\x64\Release\gemini2api-supervisor.exe
+echo   Run:    run-gui.bat
 echo ============================================
-echo.
-echo To create installer, install Inno Setup and run:
-echo   iscc installer.iss
 echo.
 pause

@@ -2,7 +2,7 @@
 
 ## 功能说明
 
-自动从 gemini.google.com 获取 Cookie 并推送到 gemini-web2api 服务器。
+自动从 gemini.google.com 获取 Cookie 并推送到 gemini-web2api 服务器。界面已对齐 Windows 11 Fluent 风格，作者标注为 xiaoliACG。
 
 ## 安装步骤
 

@@ -183,12 +183,12 @@ def main():
     
     features = [
         ("核心API服务", "python -m gemini_web2api"),
-        ("GUI界面", "python gui_app.py"),
-        ("中英文切换", "GUI侧边栏底部"),
-        ("代理配置", "config.json 或 GUI设置"),
+        ("Windows原生界面", "run-gui.bat -> C++/WinUI 3"),
+        ("中英文切换", "原生标题栏右侧语言按钮"),
+        ("代理配置", "config.json / Web管理台 / 原生壳设置"),
         ("Cookie获取", "Edge插件 / 浏览器登录 / 手动"),
         ("流式输出", "真流式(httpx) / 假流式(快速吐字)"),
-        ("联网搜索", "@search后缀"),
+        ("联网搜索", "-search后缀"),
         ("多模态输入", "图片/视频/音频/文档"),
         ("工具调用", "Function Calling"),
         ("Token计算", "tiktoken (类似ollama)"),

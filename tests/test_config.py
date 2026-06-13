@@ -1,5 +1,5 @@
 """Tests for gemini_web2api.config and __init__ re-exports."""
-from gemini_web2api import __version__, CONFIG, MODELS, resolve_model, load_config, DEFAULT_CONFIG
+from gemini_web2api import __version__, CONFIG, MODELS, resolve_model, DEFAULT_CONFIG
 
 
 def test_version_is_string():
@@ -29,6 +29,6 @@ def test_models_exported_from_package():
 
 def test_resolve_model_exported_from_package():
     assert callable(resolve_model)
-    name, mode, think, err, extra = resolve_model("gemini-3.5-flash")
+    name, mode, think, err, extra, search = resolve_model("gemini-3.5-flash")
     assert err is None
     assert mode == 1

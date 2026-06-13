@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7F8DDB9E-9B4D-47B7-8B46-7785C56C47B4}</ProjectGuid>
+    <ProjectName>Gemini2API.WinUI</ProjectName>
+    <RootNamespace>Gemini2API</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <XamlLanguage>CppWinRT</XamlLanguage>
+    <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.19041.0</WindowsTargetPlatformMinVersion>
+    <WindowsPackageType>None</WindowsPackageType>
+    <AppContainerApplication>false</AppContainerApplication>
+    <CppWinRTOptimized>true</CppWinRTOptimized>
+    <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
+    <CppWinRTGenerateWindowsMetadata>true</CppWinRTGenerateWindowsMetadata>
+    <WebView2UseWinRT>true</WebView2UseWinRT>
+    <WebView2LoaderPreference>None</WebView2LoaderPreference>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NativePackagesDir Condition="'$(SolutionDir)' != '' and '$(SolutionDir)' != '*Undefined*'">$(SolutionDir)packages\</NativePackagesDir>
+    <NativePackagesDir Condition="'$(NativePackagesDir)' == ''">$(MSBuildProjectDirectory)\packages\</NativePackagesDir>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(NativePackagesDir)Microsoft.WindowsAppSDK.2.1.3\build\native\Microsoft.WindowsAppSDK.props" Condition="Exists('$(NativePackagesDir)Microsoft.WindowsAppSDK.2.1.3\build\native\Microsoft.WindowsAppSDK.props')" />
+    <Import Project="$(NativePackagesDir)Microsoft.WindowsAppSDK.WinUI.2.1.0\buildTransitive\native\Microsoft.WindowsAppSDK.WinUI.props" Condition="Exists('$(NativePackagesDir)Microsoft.WindowsAppSDK.WinUI.2.1.0\buildTransitive\native\Microsoft.WindowsAppSDK.WinUI.props')" />
+    <Import Project="$(NativePackagesDir)Microsoft.Windows.CppWinRT.3.0.260520.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(NativePackagesDir)Microsoft.Windows.CppWinRT.3.0.260520.1\build\native\Microsoft.Windows.CppWinRT.props')" />
+  </ImportGroup>
+
+  <PropertyGroup>
+    <OutDir>$(MSBuildProjectDirectory)\..\..\build\native\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(MSBuildProjectDirectory)\..\..\build\native\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level4</WarningLevel>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\src\;$(NativePackagesDir)Microsoft.WindowsAppSDK.Foundation.2.0.21\include\;$(NativePackagesDir)Microsoft.WindowsAppSDK.Runtime.2.1.3\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/utf-8 /permissive- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>$(NativePackagesDir)Microsoft.WindowsAppSDK.Foundation.2.0.21\lib\native\$(Platform)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>winhttp.lib;Microsoft.WindowsAppRuntime.Bootstrap.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Foundation">
+      <HintPath>$(NativePackagesDir)Microsoft.WindowsAppSDK.InteractiveExperiences.2.0.13\metadata\10.0.17763.0\Microsoft.Foundation.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
+    <Reference Include="Microsoft.Graphics">
+      <HintPath>$(NativePackagesDir)Microsoft.WindowsAppSDK.InteractiveExperiences.2.0.13\metadata\10.0.17763.0\Microsoft.Graphics.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
+    <Reference Include="Microsoft.UI">
+      <HintPath>$(NativePackagesDir)Microsoft.WindowsAppSDK.InteractiveExperiences.2.0.13\metadata\10.0.17763.0\Microsoft.UI.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
+    <Reference Include="Microsoft.UI.Text">
+      <HintPath>$(NativePackagesDir)Microsoft.WindowsAppSDK.WinUI.2.1.0\metadata\Microsoft.UI.Text.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
+    <Reference Include="Microsoft.Windows.ApplicationModel.Resources">
+      <HintPath>$(NativePackagesDir)Microsoft.WindowsAppSDK.Foundation.2.0.21\metadata\Microsoft.Windows.ApplicationModel.Resources.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
+    <Reference Include="Microsoft.UI.Xaml">
+      <HintPath>$(NativePackagesDir)Microsoft.WindowsAppSDK.WinUI.2.1.0\metadata\Microsoft.UI.Xaml.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>$(NativePackagesDir)Microsoft.Web.WebView2.1.0.3967.48\lib\Microsoft.Web.WebView2.Core.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+      <Implementation>Microsoft.Web.WebView2.Core.dll</Implementation>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Manifest Include="src\app.manifest" />
+    <Content Include="Assets\gemini-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="src\App.xaml" />
+    <None Include="src\MainWindow.xaml" />
+    <None Include="src\Styles\NativeTheme.xaml" />
+    <None Include="src\Views\HomePage.xaml" />
+    <None Include="src\Views\ServerPage.xaml" />
+    <None Include="src\Views\CookiesPage.xaml" />
+    <None Include="src\Views\StreamingPage.xaml" />
+    <None Include="src\Views\ModelsPage.xaml" />
+    <None Include="src\Views\LogsPage.xaml" />
+    <None Include="src\Views\SettingsPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Midl Include="src\App.idl" />
+    <Midl Include="src\MainWindow.idl" />
+    <Midl Include="src\Views\HomePage.idl" />
+    <Midl Include="src\Views\ServerPage.idl" />
+    <Midl Include="src\Views\CookiesPage.idl" />
+    <Midl Include="src\Views\StreamingPage.idl" />
+    <Midl Include="src\Views\ModelsPage.idl" />
+    <Midl Include="src\Views\LogsPage.idl" />
+    <Midl Include="src\Views\SettingsPage.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\App.xaml.h" />
+    <ClInclude Include="src\MainWindow.xaml.h" />
+    <ClInclude Include="src\NativeLog.h" />
+    <ClInclude Include="src\BackendClient.h" />
+    <ClInclude Include="src\BackendProcess.h" />
+    <ClInclude Include="src\Views\HomePage.xaml.h" />
+    <ClInclude Include="src\Views\PageContent.h" />
+    <ClInclude Include="src\Views\ServerPage.xaml.h" />
+    <ClInclude Include="src\Views\CookiesPage.xaml.h" />
+    <ClInclude Include="src\Views\StreamingPage.xaml.h" />
+    <ClInclude Include="src\Views\ModelsPage.xaml.h" />
+    <ClInclude Include="src\Views\LogsPage.xaml.h" />
+    <ClInclude Include="src\Views\SettingsPage.xaml.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\App.xaml.cpp" />
+    <ClCompile Include="src\MainWindow.xaml.cpp" />
+    <ClCompile Include="src\BackendClient.cpp" />
+    <ClCompile Include="src\BackendProcess.cpp" />
+    <ClCompile Include="src\Views\HomePage.xaml.cpp" />
+    <ClCompile Include="src\Views\ServerPage.xaml.cpp" />
+    <ClCompile Include="src\Views\CookiesPage.xaml.cpp" />
+    <ClCompile Include="src\Views\StreamingPage.xaml.cpp" />
+    <ClCompile Include="src\Views\ModelsPage.xaml.cpp" />
+    <ClCompile Include="src\Views\LogsPage.xaml.cpp" />
+    <ClCompile Include="src\Views\SettingsPage.xaml.cpp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <Target Name="CopyWindowsAppSdkBootstrap" AfterTargets="Build">
+    <Copy
+      SourceFiles="$(NativePackagesDir)Microsoft.WindowsAppSDK.Foundation.2.0.21\runtimes\win-x64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll"
+      DestinationFolder="$(OutDir)"
+      SkipUnchangedFiles="true"
+      Condition="'$(Platform)' == 'x64' and Exists('$(NativePackagesDir)Microsoft.WindowsAppSDK.Foundation.2.0.21\runtimes\win-x64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll')" />
+  </Target>
+
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet packages that are missing. Restore packages before building.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(NativePackagesDir)Microsoft.WindowsAppSDK.2.1.3\build\native\Microsoft.WindowsAppSDK.props')" Text="$(ErrorText)" />
+    <Error Condition="!Exists('$(NativePackagesDir)Microsoft.WindowsAppSDK.2.1.3\build\native\Microsoft.WindowsAppSDK.targets')" Text="$(ErrorText)" />
+    <Error Condition="!Exists('$(NativePackagesDir)Microsoft.WindowsAppSDK.WinUI.2.1.0\buildTransitive\native\Microsoft.WindowsAppSDK.WinUI.props')" Text="$(ErrorText)" />
+    <Error Condition="!Exists('$(NativePackagesDir)Microsoft.WindowsAppSDK.WinUI.2.1.0\buildTransitive\native\Microsoft.WindowsAppSDK.WinUI.targets')" Text="$(ErrorText)" />
+    <Error Condition="!Exists('$(NativePackagesDir)Microsoft.Web.WebView2.1.0.3967.48\build\native\Microsoft.Web.WebView2.targets')" Text="$(ErrorText)" />
+    <Error Condition="!Exists('$(NativePackagesDir)Microsoft.Windows.CppWinRT.3.0.260520.1\build\native\Microsoft.Windows.CppWinRT.props')" Text="$(ErrorText)" />
+    <Error Condition="!Exists('$(NativePackagesDir)Microsoft.Windows.CppWinRT.3.0.260520.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$(ErrorText)" />
+  </Target>
+
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(NativePackagesDir)Microsoft.WindowsAppSDK.2.1.3\build\native\Microsoft.WindowsAppSDK.targets" Condition="Exists('$(NativePackagesDir)Microsoft.WindowsAppSDK.2.1.3\build\native\Microsoft.WindowsAppSDK.targets')" />
+    <Import Project="$(NativePackagesDir)Microsoft.WindowsAppSDK.WinUI.2.1.0\buildTransitive\native\Microsoft.WindowsAppSDK.WinUI.targets" Condition="Exists('$(NativePackagesDir)Microsoft.WindowsAppSDK.WinUI.2.1.0\buildTransitive\native\Microsoft.WindowsAppSDK.WinUI.targets')" />
+    <Import Project="$(NativePackagesDir)Microsoft.Web.WebView2.1.0.3967.48\build\native\Microsoft.Web.WebView2.targets" Condition="Exists('$(NativePackagesDir)Microsoft.Web.WebView2.1.0.3967.48\build\native\Microsoft.Web.WebView2.targets')" />
+    <Import Project="$(NativePackagesDir)Microsoft.Windows.CppWinRT.3.0.260520.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(NativePackagesDir)Microsoft.Windows.CppWinRT.3.0.260520.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
+  </ImportGroup>
+</Project>

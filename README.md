@@ -6,7 +6,9 @@
 
 [中文文档](README_CN.md)
 
-Convert Google Gemini's web interface into an OpenAI-compatible API. Zero cost, cross-platform, single file.
+Quick index: see `START_HERE.md`
+
+Convert Google Gemini's web interface into an OpenAI-compatible API. Zero cost, cross-platform, single file. Desktop shell and UI refresh by xiaoliACG.
 
 ## Features
 
@@ -14,7 +16,7 @@ Convert Google Gemini's web interface into an OpenAI-compatible API. Zero cost, 
 - **OpenAI Compatible**: Drop-in replacement for `/v1/chat/completions` and `/v1/models`
 - **Tool Calling**: Full function calling support (OpenAI format)
 - **Multiple Models**: Flash, Flash Thinking (20k+ char output), Pro, Auto, Lite
-- **Thinking Depth**: Adjustable via `@think=N` suffix (0=deepest, 4=shallowest)
+- **Thinking Depth**: Adjustable via `-think=N` suffix (0=deepest, 4=shallowest)
 - **Web Search**: Built-in internet access (Gemini's native search)
 - **Cross-Platform**: Pure Python, single optional dependency (`httpx` for streaming)
 - **Streaming**: SSE streaming support via `httpx`
@@ -24,11 +26,87 @@ Convert Google Gemini's web interface into an OpenAI-compatible API. Zero cost, 
 ## Quick Start
 
 ```bash
-pip install httpx
-python gemini_web2api.py
+pip install -r requirements.txt
+python -m gemini_web2api
 ```
 
+Windows desktop shell (native C++/WinUI 3):
+
+```bash
+run-gui.bat
+```
+
+The launcher builds `build/native/x64/Release/Gemini2API.WinUI.exe` when it is missing, then starts the native shell. The Python UI files remain only as legacy fallbacks; the normal app surface is WinUI.
+
+CLI shell mode:
+
+```bash
+python app.py --cli
+```
+
+Legacy PyQt files are kept only as an emergency compatibility fallback. Use `run-gui.bat` for the Windows desktop app.
+
 Server starts at `http://localhost:8081/v1`.
+Dashboard: `http://localhost:8081/dashboard`
+
+Root launcher scripts:
+
+- `run-api.bat`
+- `run-gui.bat` - native C++/WinUI desktop shell
+- `run-gui-pyqt.bat` - emergency legacy fallback only
+- `run-docker.bat`
+- `open-dashboard.bat`
+- `build.bat`
+
+## Live Verification
+
+Run a real network smoke test against Gemini Web with the validation prompt `Who are you`:
+
+```bash
+python -m gemini_web2api.live_verify --start-server --port 8099 --cookie-file cookie.txt --source-probe
+```
+
+If your real Gemini Web URL uses an account prefix such as `https://gemini.google.com/u/1/app`, pass the same account index:
+
+```bash
+python -m gemini_web2api.live_verify --start-server --port 8099 --cookie-file cookie.txt --auth-user 1 --source-probe
+```
+
+To include experimental Gemini Web tool aliases such as image, video, music/TTS, photos, notebooks, and deep-research models:
+
+```bash
+python -m gemini_web2api.live_verify --start-server --port 8099 --cookie-file cookie.txt --auth-user 1 --skip-multimodal --include-web-tools
+```
+
+To verify the real browser UI state with the same cookie file:
+
+```bash
+python -m gemini_web2api.browser_probe --cookie-file cookie.txt --auth-user 1 --out output/browser_probe/report.json
+```
+
+The report is written under `output/` and separates `pass`, `fail`, and `limited` results. Use `--strict` to fail on hard failures, or `--strict-limited` if experimental/limited features such as multimodal handoff must also fail the run. The capability matrix is also available at:
+
+```bash
+curl http://localhost:8081/api/capabilities
+```
+
+To analyze a browser HAR as auxiliary evidence without leaking cookies or prompts:
+
+```bash
+python -m gemini_web2api.har_analyze browser.har --out output/har_analysis.json
+```
+
+To specifically probe Gemini Web file-reference payload variants in the real upstream environment:
+
+```bash
+python -m gemini_web2api.multimodal_probe --cookie-file cookie.txt --auth-user 1 --out output/multimodal_probe.json
+```
+
+To fetch the current logged-in Gemini Web page and JavaScript assets with GET-only requests and record exposed feature keywords:
+
+```bash
+python -m gemini_web2api.web_probe --cookie-file cookie.txt --auth-user 1 --out output/web_probe.json
+```
 
 ## Client Configuration
 
@@ -84,15 +162,49 @@ Supports Google native API endpoints:
 | `gemini-3.1-pro` | Pro (needs cookie for real routing) | ~12k chars |
 | `gemini-auto` | Auto model selection | varies |
 | `gemini-flash-lite` | Lightweight fast | ~10k chars |
+| `gemini-3.1-flash-lite` / `3.1-flash-lite` | Gemini Web UI Flash-Lite alias | ~10k chars |
+
+### Gemini Web Tool Aliases
+
+These aliases follow names observed in Gemini Web source/HAR. They are callable by model name or suffix, but a feature is only fully supported when live verification returns a real artifact/result.
+
+| Feature | Model names / suffixes | Status |
+|---------|------------------------|--------|
+| Create images | `nano-banana-2`, `nano-banana-pro`, `gemini-2.5-flash-image`, `gemini-2.5-flash-image-preview`, `gemini-3.1-flash-image-preview`, `gemini-3-pro-image-preview-11-2025`, `imagen-3.0-generate-001`, `imagen-3.0-generate-002`, `imagen-4.0-generate-001`, or suffix `-image` / `-images` / `-create-image` | experimental |
+| Create videos | `omni`, `veo-2.0-generate-001`, or suffix `-video` / `-videos` / `-create-video` | experimental |
+| Deep research | `gemini-deep-research`, or suffix `-deep-research` / `-research` | experimental |
+| Canvas artifacts | `gemini-canvas`, or suffix `-canvas` | supported as code/HTML artifact extraction |
+| Music / TTS | `lyria-3`, `gemini-2.5-flash-preview-tts`, or suffixes `-music`, `-tts`, `-speech`, `-audio` | limited |
+| Photos / Library / Notebooks | `gemini-photos`, `google-photos`, `gemini-library`, `gemini-notebook`, `notebooklm`, or suffixes `-photo`, `-photos`, `-library`, `-notebook` | limited |
+
+Source-discovered text/pro aliases are also registered: `gemini-2.5-flash-preview-04-17`, `gemini-2.5-flash-preview-05-20`, `gemini-2.5-flash-preview-09-2025`, `gemini-3-flash-preview`, and `gemini-advanced`.
+
+OpenAI-style media routes are available too:
+
+- `POST /v1/images/generations` with `{ "model": "nano-banana-2", "prompt": "..." }`
+- `POST /v1/videos/generations` with `{ "model": "omni", "prompt": "..." }`
+- `POST /v1/audio/speech` with `{ "model": "gemini-2.5-flash-preview-tts", "input": "..." }`
+
+These routes return `data` only when Gemini Web returns a real media artifact. Otherwise they return the upstream text plus `web_feature.runtime_status = "limited"`.
 
 ### Thinking Depth
 
-Append `@think=N` to any model name:
+Append `-think=N` to any thinking/search model name:
 
 ```
-gemini-3.5-flash-thinking@think=0   # deepest (default)
-gemini-3.5-flash-thinking@think=2   # medium
-gemini-3.5-flash-thinking@think=4   # shallowest
+gemini-3.5-flash-thinking-think=0   # deepest (default)
+gemini-3.5-flash-thinking-think=2   # medium
+gemini-3.5-flash-thinking-think=4   # shallowest
+gemini-3.5-flash-thinking-standard  # Gemini Web UI Standard level
+gemini-3.5-flash-thinking-extended  # Gemini Web UI Extended level
+```
+
+Search uses the `-search` suffix:
+
+```
+gemini-3.5-flash-search
+gemini-3.5-flash-thinking-search
+gemini-3.1-pro-search
 ```
 
 ## Optional: Cookie for Pro
@@ -100,7 +212,7 @@ gemini-3.5-flash-thinking@think=4   # shallowest
 Anonymous access works for all models, but `gemini-3.1-pro` routes to Flash without authentication. To get real Pro routing, you need a **Gemini Advanced (paid subscription)** account cookie:
 
 ```bash
-python gemini_web2api.py --cookie-file cookie.txt
+python -m gemini_web2api --cookie-file cookie.txt
 ```
 
 ### How to get cookies
@@ -119,7 +231,13 @@ Or use the JSON format:
 {"cookie": "SID=xxx; HSID=xxx; SSID=xxx; APISID=xxx; SAPISID=xxx; __Secure-1PSID=xxx", "sapisid": "your_sapisid_value"}
 ```
 
-**Alternative (browser extension)**: Use any "Export Cookies" extension to export cookies for `gemini.google.com` in Netscape format, then convert to the single-line format above.
+**Alternative (browser extension)**: You may use a single-line `Cookie` header, the JSON format above, or a browser-exported tabular cookie file. The loader keeps Gemini-relevant `google.com` / `gemini.google.com` cookies and extracts `SAPISID` automatically.
+
+For full Gemini Web UI/tool behavior, not just backend text calls, your export should usually include `__Secure-1PSID` or `__Secure-3PSID` from the same logged-in browser session. You can check this without printing values:
+
+```bash
+python -m gemini_web2api.cookie_diag cookie.txt
+```
 
 ### Authenticated account path and XSRF token
 
@@ -145,6 +263,18 @@ Example:
 If authenticated requests return HTTP 400 with an `xsrf` error, refresh Gemini Web, update `xsrf_token`, and make sure `auth_user` matches the `/u/<index>/` part of the browser URL.
 
 Pro routing requires **Gemini Advanced** (paid subscription). A free Google account cookie will authenticate but silently fall back to Flash.
+
+To compare Gemini Web source in anonymous vs authenticated mode:
+
+```bash
+python -m gemini_web2api.source_probe --cookie-file cookie.txt --out gemini_source_probe
+```
+
+If you are already signed in locally, you can try browser cookies:
+
+```bash
+python -m gemini_web2api.source_probe --browser-cookie --out gemini_source_probe
+```
 
 ## Configuration
 
@@ -184,6 +314,12 @@ cp config.example.json config.json
 docker compose up -d
 ```
 
+For the local compose file in this repo:
+
+```bash
+docker compose -f docker-compose.local.yml up -d
+```
+
 To mount a cookie file:
 
 ```bash
@@ -200,7 +336,7 @@ If you cannot access `gemini.google.com` directly (connection timeout), configur
 
 **Method 1: CLI argument**
 ```bash
-python gemini_web2api.py --proxy http://127.0.0.1:7890
+python -m gemini_web2api --proxy http://127.0.0.1:7890
 ```
 
 **Method 2: config.json**
@@ -211,7 +347,7 @@ python gemini_web2api.py --proxy http://127.0.0.1:7890
 **Method 3: Environment variable** (auto-detected)
 ```bash
 export HTTPS_PROXY=http://127.0.0.1:7890
-python gemini_web2api.py
+python -m gemini_web2api
 ```
 
 Works with Clash, V2Ray, Shadowsocks, or any HTTP proxy.
@@ -235,7 +371,8 @@ resp = client.chat.completions.create(
 
 ## Limitations
 
-- **No image/multimodal input**: Gemini's image upload requires a proprietary streaming RPC protocol (WIZ/ProcessFile) that cannot be replicated in a standard HTTP proxy. Image inputs in messages will be ignored with a note.
+- **Experimental image/multimodal input**: The server can upload small files to Gemini Web's content-push service, but the final private Web `StreamGenerate` handoff may still be rejected by Google with `BardErrorInfo [1003]` even when a cookie is present. For stable file prompting, use Google's official Gemini API Files API with an API key.
+- **Gemini Web tools are account/UI dependent**: Image/video/music/photos/notebook aliases are callable model names, but they may return `limited` unless the same browser login session has full Web UI cookies such as `__Secure-1PSID` or `__Secure-3PSID` and the upstream tool flow returns a real artifact.
 - **Not real Pro/Ultra**: Without a paid subscription cookie, `gemini-3.1-pro` routes to the same Flash model. The "Pro" label is a UI preference, not a backend model switch.
 - **Single-turn only**: Each request is an independent conversation. Multi-turn context is simulated by including previous messages in the prompt.
 - **Rate limits**: Google may throttle high-frequency requests. The server retries automatically but sustained heavy use may be blocked.

@@ -1,150 +1,85 @@
-"""Cookie管理页面"""
-from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
-    QPushButton, QFrame, QCheckBox, QLineEdit
-)
-from PyQt5.QtCore import Qt
+"""Cookie management page."""
 
-from ..styles import COLORS, LAYOUT
+import threading
+
+from gui.components import FluentButton, FluentToggle
+from .page_utils import Page
 
 
-class CookiePage(QWidget):
-    """Cookie管理页面"""
-    
+class CookiePage(Page):
     def __init__(self, parent=None):
-        super().__init__(parent)
-        self.main_window = parent
+        super().__init__(parent, "cookie")
         self._create_ui()
-    
+
     def _create_ui(self):
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(LAYOUT['content_margin'], LAYOUT['content_margin'], 
-                                  LAYOUT['content_margin'], LAYOUT['content_margin'])
-        layout.setSpacing(16)
-        
-        title = QLabel("Cookie管理")
-        title.setStyleSheet(f"color: {COLORS['text_primary']}; font-size: 20px; font-weight: bold;")
-        layout.addWidget(title)
-        
-        # Cookie来源卡片
-        source_card = self._create_card("Cookie来源")
-        self.auto_cookie_check = QCheckBox("启动时自动提取Cookie")
-        self.auto_cookie_check.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 12px;")
-        source_card.layout().addWidget(self.auto_cookie_check)
-        layout.addWidget(source_card)
-        
-        # 自动刷新卡片
-        refresh_card = self._create_card("自动刷新")
-        row = QHBoxLayout()
-        lbl = QLabel("刷新间隔(小时)")
-        lbl.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 12px;")
-        row.addWidget(lbl)
-        self.refresh_input = QLineEdit("12")
-        self.refresh_input.setStyleSheet(f"""
-            QLineEdit {{
-                background-color: {COLORS['input_bg']};
-                color: {COLORS['text_primary']};
-                border: 1px solid {COLORS['border']};
-                border-radius: 6px;
-                padding: 8px 12px;
-                font-size: 12px;
-            }}
-        """)
-        row.addWidget(self.refresh_input)
-        refresh_card.layout().addLayout(row)
-        layout.addWidget(refresh_card)
-        
-        # Edge扩展卡片
-        ext_card = self._create_card("Edge扩展")
-        desc = QLabel("安装Edge扩展实现自动推送Cookie")
-        desc.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 12px;")
-        ext_card.layout().addWidget(desc)
-        
-        open_ext_btn = QPushButton("打开扩展目录")
-        open_ext_btn.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {COLORS['card_bg']};
-                color: {COLORS['text_secondary']};
-                border: 1px solid {COLORS['border']};
-                padding: 8px 16px;
-                border-radius: 6px;
-                font-size: 12px;
-            }}
-            QPushButton:hover {{
-                background-color: {COLORS['hover_bg']};
-                color: {COLORS['text_primary']};
-            }}
-        """)
-        ext_card.layout().addWidget(open_ext_btn, alignment=Qt.AlignLeft)
-        layout.addWidget(ext_card)
-        
-        # 操作按钮卡片
-        action_card = self._create_card("操作")
-        btn_layout = QHBoxLayout()
-        
-        refresh_btn = QPushButton("立即刷新")
-        refresh_btn.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {COLORS['primary']};
-                color: {COLORS['on_primary']};
-                padding: 10px 20px;
-                border-radius: 6px;
-                font-weight: bold;
-            }}
-            QPushButton:hover {{ background-color: {COLORS['primary_hover']}; }}
-        """)
-        btn_layout.addWidget(refresh_btn)
-        
-        login_btn = QPushButton("浏览器登录")
-        login_btn.setStyleSheet(f"""
-            QPushButton {{
-                background-color: #7C3AED;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 6px;
-                font-weight: bold;
-            }}
-            QPushButton:hover {{ background-color: #6D28D9; }}
-        """)
-        btn_layout.addWidget(login_btn)
-        
-        save_btn = QPushButton("保存")
-        save_btn.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {COLORS['success']};
-                color: white;
-                padding: 10px 20px;
-                border-radius: 6px;
-                font-weight: bold;
-            }}
-            QPushButton:hover {{ background-color: #6DB88A; }}
-        """)
-        btn_layout.addWidget(save_btn)
-        
-        action_card.layout().addLayout(btn_layout)
-        
-        # 状态标签
-        self.status_label = QLabel("")
-        self.status_label.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 12px;")
-        action_card.layout().addWidget(self.status_label)
-        
-        layout.addWidget(action_card)
-        layout.addStretch()
-    
-    def _create_card(self, title):
-        card = QFrame()
-        card.setStyleSheet(f"""
-            QFrame {{
-                background-color: {COLORS['card_bg']};
-                border-radius: {LAYOUT['card_border_radius']}px;
-                padding: 16px;
-            }}
-        """)
-        layout = QVBoxLayout(card)
-        layout.setSpacing(12)
-        
-        label = QLabel(title)
-        label.setStyleSheet(f"color: {COLORS['text_primary']}; font-size: 15px; font-weight: bold;")
-        layout.addWidget(label)
-        
-        return card
+        cfg = self.main_window.config
+        self.title("cookie")
+        source = self.card("cookie_source")
+        self.source_combo = self.combo_row(source, "cookie_source", ["auto", "playwright"], cfg.get("cookie_source", "auto"))
+        self.auto_toggle = FluentToggle(cfg.get("auto_cookie", False))
+        row = self.row(source, "auto_extract")
+        row.addWidget(self.auto_toggle)
+        row.addStretch()
+
+        refresh = self.card("auto_refresh")
+        self.interval_input = self.input_row(refresh, "interval", cfg.get("auto_refresh_hours") or "")
+
+        ext = self.card("edge_ext")
+        self.helper(self.t("edge_ext_desc"), ext.layout)
+        open_btn = FluentButton(self.t("open_ext"))
+        open_btn.clicked.connect(self.main_window._open_extension)
+        ext.layout.addWidget(open_btn)
+
+        actions = self.card("actions")
+        refresh_btn = FluentButton(self.t("refresh_now"))
+        login_btn = FluentButton(self.t("browser_login"))
+        save_btn = FluentButton(self.t("save"))
+        refresh_btn.clicked.connect(self._refresh_cookie)
+        login_btn.clicked.connect(self._browser_login)
+        save_btn.clicked.connect(self._save_config)
+        actions.layout.addWidget(refresh_btn)
+        actions.layout.addWidget(login_btn)
+        actions.layout.addWidget(save_btn)
+        self.status = self.helper("", actions.layout)
+        self.root.addStretch()
+
+    def _save_config(self):
+        cfg = self.main_window.config
+        cfg["cookie_source"] = self.source_combo.currentText()
+        cfg["auto_cookie"] = self.auto_toggle.isChecked()
+        value = self.interval_input.text().strip()
+        cfg["auto_refresh_hours"] = int(value) if value else None
+        self.main_window.save_config()
+        self.main_window.toast(self.t("saved"))
+
+    def _refresh_cookie(self):
+        self.status.setText(self.t("refreshing"))
+        def run():
+            try:
+                from gemini_web2api.cookie_manager import manual_refresh
+                result = manual_refresh()
+                text = f"{'OK' if result.get('success') else 'FAIL'}: {result.get('status', '')}"
+            except Exception as exc:
+                text = str(exc)
+            self.main_window.post_ui(lambda: self.status.setText(text))
+        threading.Thread(target=run, daemon=True).start()
+
+    def _browser_login(self):
+        def run():
+            try:
+                from gemini_web2api import playwright_cookie
+                from gemini_web2api.cookie_manager import write_cookie_file
+                if not playwright_cookie.is_playwright_available():
+                    self.main_window.post_ui(lambda: self.main_window.toast(self.t("playwright_missing")))
+                    return
+                self.main_window.post_ui(lambda: self.main_window.toast(self.t("opening_browser")))
+                result = playwright_cookie.launch_browser_login()
+                if result.get("success"):
+                    write_cookie_file(result["cookies"], result.get("sapisid", ""), "cookie.txt")
+                    self.main_window.post_ui(lambda: self.main_window.toast(self.t("login_ok")))
+                else:
+                    self.main_window.post_ui(lambda: self.main_window.toast(self.t("login_fail")))
+            except Exception as exc:
+                msg = str(exc)
+                self.main_window.post_ui(lambda msg=msg: self.main_window.toast(msg))
+        threading.Thread(target=run, daemon=True).start()

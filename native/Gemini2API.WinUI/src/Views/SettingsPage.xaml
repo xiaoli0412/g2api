@@ -1,0 +1,73 @@
+<Page
+    x:Class="Gemini2API.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="Transparent">
+
+    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
+        <Border Padding="24,20,24,24">
+            <StackPanel MaxWidth="980" Spacing="16">
+                <StackPanel Spacing="4">
+                    <TextBlock Style="{StaticResource PageTitleTextStyle}" Text="Settings" />
+                    <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="App behavior, window material, and optional personalization layer." />
+                </StackPanel>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <StackPanel Spacing="14">
+                        <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Window material" />
+                        <Grid ColumnSpacing="16" RowSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Main backdrop" />
+                            <ComboBox Grid.Column="1" SelectedIndex="0">
+                                <ComboBoxItem Content="Mica" />
+                                <ComboBoxItem Content="Acrylic" />
+                                <ComboBoxItem Content="Solid dark" />
+                            </ComboBox>
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Acrylic transient surfaces" />
+                            <ToggleSwitch Grid.Row="1" Grid.Column="1" OffContent="Off" OnContent="On" IsOn="True" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <StackPanel Spacing="14">
+                        <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Personal background" />
+                        <Grid ColumnSpacing="16" RowSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Background image layer" />
+                            <ToggleSwitch Grid.Column="1" OffContent="Disabled" OnContent="Enabled" />
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Image path" />
+                            <TextBox Grid.Row="1" Grid.Column="1" PlaceholderText="Choose a local image" />
+                            <TextBlock Grid.Row="2" VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Opacity" />
+                            <Slider Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="30" Value="18" />
+                        </Grid>
+                        <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="This layer is optional and disabled by default. It is for user-selected images only, not decorative gradients." />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="About" />
+                        <TextBlock Style="{StaticResource BodyTextStyle}" Text="Gemini2API Native Windows Shell" />
+                        <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="C++/WinUI 3 shell with a Rust supervisor path and the existing Python backend preserved behind a local HTTP contract." />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</Page>

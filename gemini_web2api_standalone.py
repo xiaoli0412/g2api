@@ -506,10 +506,17 @@ class GeminiHandler(BaseHTTPRequestHandler):
         if "@think=" in model_name:
             model_name, think_str = model_name.rsplit("@think=", 1)
             think_override = int(think_str)
+        elif "-think=" in model_name:
+            model_name, think_str = model_name.rsplit("-think=", 1)
+            think_override = int(think_str)
+        if "@search" in model_name:
+            model_name = model_name.replace("@search", "").replace("--", "-").strip("-")
+        elif model_name.endswith("-search"):
+            model_name = model_name[:-7]
         cfg = MODELS.get(model_name)
         if not cfg:
             return None, None, None, f"Unknown model: {model_name}"
-        return model_name, cfg["mode"], (think_override if think_override is not None else cfg["think"]), None
+        return model_name, cfg["mode"], (think_override if think_override is not None else cfg["think"]), None, dict(cfg.get("extra", {})) if cfg.get("extra") else {}, bool(cfg.get("search"))
 
     def _call_gemini(self, prompt, model_id, think_mode, tools):
         raw = gemini_stream_generate(prompt, model_id, think_mode)

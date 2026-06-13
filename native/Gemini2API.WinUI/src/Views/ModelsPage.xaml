@@ -1,0 +1,59 @@
+<Page
+    x:Class="Gemini2API.Views.ModelsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="Transparent">
+
+    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
+        <Border Padding="24,20,24,24">
+            <StackPanel MaxWidth="1080" Spacing="16">
+                <StackPanel Spacing="4">
+                    <TextBlock Style="{StaticResource PageTitleTextStyle}" Text="Models" />
+                    <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="Browse model aliases and copy OpenAI-compatible test commands." />
+                </StackPanel>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <StackPanel Spacing="12">
+                        <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Available models" />
+                        <Border Style="{StaticResource TableHeaderBorderStyle}">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="140" />
+                                    <ColumnDefinition Width="180" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Style="{StaticResource ColumnHeaderTextStyle}" Text="Model" />
+                                <TextBlock Grid.Column="1" Style="{StaticResource ColumnHeaderTextStyle}" Text="Backend" />
+                                <TextBlock Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderTextStyle}" Text="Context" />
+                                <TextBlock Grid.Column="3" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderTextStyle}" Text="Action" />
+                            </Grid>
+                        </Border>
+                        <ListView SelectionMode="Single">
+                            <ListViewItem>
+                                <Grid MinHeight="40" ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="180" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <Image Width="16" Height="16" Source="ms-appx:///Assets/gemini-icon.png" Stretch="Uniform" />
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="gemini-3.5-flash" />
+                                            <TextBlock Style="{StaticResource SecondaryTextStyle}" FontSize="11" Text="/v1/chat/completions compatible" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource SecondaryTextStyle}" Text="Gemini" />
+                                    <TextBlock Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource BodyTextStyle}" Text="Dynamic" />
+                                    <Button Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Copy curl" />
+                                </Grid>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</Page>

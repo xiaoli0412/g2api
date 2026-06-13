@@ -1,0 +1,111 @@
+<Page
+    x:Class="Gemini2API.Views.CookiesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="Transparent">
+
+    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
+        <Border Padding="24,20,24,24">
+            <StackPanel MaxWidth="1080" Spacing="16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource PageTitleTextStyle}" Text="Cookies" />
+                        <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="Manage cookie sources, refresh state, and browser login helpers." />
+                    </StackPanel>
+                    <CommandBar Grid.Column="1" Background="Transparent" DefaultLabelPosition="Right">
+                        <AppBarButton Label="Refresh">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72C;" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                        <AppBarButton Label="Browser login">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE774;" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                    </CommandBar>
+                </Grid>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Spacing="4">
+                            <TextBlock Style="{StaticResource SettingTitleTextStyle}" Text="Auto refresh" />
+                            <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="Refresh cookie state through /api/cookie/refresh when the backend is reachable." />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" OffContent="Off" OnContent="On" />
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <StackPanel Spacing="12">
+                        <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Cookie pool" />
+                        <Border Style="{StaticResource TableHeaderBorderStyle}">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="140" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Style="{StaticResource ColumnHeaderTextStyle}" Text="Name" />
+                                <TextBlock Grid.Column="1" Style="{StaticResource ColumnHeaderTextStyle}" Text="Source" />
+                                <TextBlock Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderTextStyle}" Text="Status" />
+                                <TextBlock Grid.Column="3" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderTextStyle}" Text="Updated" />
+                            </Grid>
+                        </Border>
+                        <ListView SelectionMode="Extended">
+                            <ListViewItem>
+                                <ListViewItem.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Refresh cookie">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72C;" />
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutItem Text="Copy source">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8C8;" />
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutSeparator />
+                                        <MenuFlyoutItem Text="Delete" Foreground="{ThemeResource AppDangerBrush}">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;" />
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                    </MenuFlyout>
+                                </ListViewItem.ContextFlyout>
+                                <Grid MinHeight="40" ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="140" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <FontIcon FontFamily="Segoe Fluent Icons" FontSize="16" Glyph="&#xE8D7;" />
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="Primary browser cookie" />
+                                            <TextBlock Style="{StaticResource SecondaryTextStyle}" FontSize="11" Text="Local profile import" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource SecondaryTextStyle}" Text="Chrome" />
+                                    <TextBlock Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource BodyTextStyle}" Text="Ready" />
+                                    <TextBlock Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource SecondaryTextStyle}" Text="Not checked" />
+                                </Grid>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</Page>

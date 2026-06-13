@@ -1,0 +1,100 @@
+<Page
+    x:Class="Gemini2API.Views.ServerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    Background="Transparent">
+
+    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
+        <Border Padding="24,20,24,24">
+            <StackPanel MaxWidth="980" Spacing="16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource PageTitleTextStyle}" Text="Server" />
+                        <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="Network, API, proxy, and startup configuration." />
+                    </StackPanel>
+                    <CommandBar Grid.Column="1" Background="Transparent" DefaultLabelPosition="Right">
+                        <AppBarButton Label="Save">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                        <AppBarButton Label="Reload">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72C;" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                    </CommandBar>
+                </Grid>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <StackPanel Spacing="14">
+                        <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Endpoint" />
+                        <Grid ColumnSpacing="16" RowSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Host" />
+                            <TextBox Grid.Column="1" Text="127.0.0.1" />
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Port" />
+                            <muxc:NumberBox Grid.Row="1" Grid.Column="1" Minimum="1" Maximum="65535" SpinButtonPlacementMode="Compact" Value="18081" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <StackPanel Spacing="14">
+                        <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="API" />
+                        <Grid ColumnSpacing="16" RowSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Default model" />
+                            <ComboBox Grid.Column="1" SelectedIndex="0">
+                                <ComboBoxItem Content="gemini-3.5-flash" />
+                                <ComboBoxItem Content="gemini-3.5-pro" />
+                                <ComboBoxItem Content="custom alias" />
+                            </ComboBox>
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Request logging" />
+                            <ToggleSwitch Grid.Row="1" Grid.Column="1" OffContent="Off" OnContent="On" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <StackPanel Spacing="14">
+                        <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Proxy" />
+                        <Grid ColumnSpacing="16" RowSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Proxy URL" />
+                            <TextBox Grid.Column="1" PlaceholderText="http://127.0.0.1:7890" />
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Proxy pool" />
+                            <ToggleSwitch Grid.Row="1" Grid.Column="1" OffContent="Disabled" OnContent="Enabled" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</Page>

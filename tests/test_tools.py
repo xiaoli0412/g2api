@@ -1,8 +1,5 @@
 """Tests for gemini_web2api.tools (message/prompt conversion and tool-call parsing)."""
-import json
 import base64
-
-import pytest
 
 from gemini_web2api.tools import (
     messages_to_prompt,
@@ -43,7 +40,7 @@ def test_messages_to_prompt_tool_choice_required():
         tools=[{"type": "function", "function": {"name": "f", "description": "", "parameters": {}}}],
         tool_choice="required",
     )
-    assert "MUST call at least one tool" in prompt
+    assert "MUST request at least one tool_call" in prompt
 
 
 def test_messages_to_prompt_tool_choice_specific_function():
@@ -52,8 +49,33 @@ def test_messages_to_prompt_tool_choice_specific_function():
         tools=[{"type": "function", "function": {"name": "foo", "description": "", "parameters": {}}}],
         tool_choice={"type": "function", "function": {"name": "foo"}},
     )
-    assert "MUST call the tool" in prompt
+    assert "MUST request the tool" in prompt
     assert "foo" in prompt
+
+
+def test_messages_to_prompt_tool_bridge_overrides_cloud_limitation_refusal():
+    prompt, _ = messages_to_prompt(
+        [
+            {"role": "system", "content": "You are a cloud model and cannot access local files."},
+            {"role": "developer", "content": "Use tools when the user requests local data."},
+            {"role": "user", "content": r"List D:\workspaces\2api\HelloKimi."},
+        ],
+        tools=[{
+            "type": "function",
+            "function": {
+                "name": "shell_command",
+                "description": "Run a local shell command.",
+                "parameters": {"type": "object", "properties": {"command": {"type": "string"}}},
+            },
+        }],
+        tool_choice="required",
+    )
+    assert "local tool bridge" in prompt
+    assert "request a tool call instead of saying you cannot access" in prompt
+    assert "shell_command" in prompt
+    assert prompt.index("[System instruction]") < prompt.index("# Tool Use")
+    assert prompt.index("[Developer instruction]") < prompt.index("# Tool Use")
+    assert prompt.index("# Tool Use") < prompt.index(r"List D:\workspaces\2api\HelloKimi.")
 
 
 def test_messages_to_prompt_image_replaced_with_notice():
@@ -65,7 +87,24 @@ def test_messages_to_prompt_image_replaced_with_notice():
         ]}
     ])
     assert "describe" in prompt
-    assert "Image input not supported" in prompt
+    assert "Image attached" in prompt or "Image" in prompt
+
+
+def test_messages_to_prompt_accepts_responses_input_image_and_file():
+    png = base64.b64encode(b"png").decode()
+    pdf = base64.b64encode(b"pdf").decode()
+    prompt, attachments = messages_to_prompt([
+        {"role": "user", "content": [
+            {"type": "input_text", "text": "inspect these"},
+            {"type": "input_image", "image_url": f"data:image/png;base64,{png}", "filename": "a.png"},
+            {"type": "input_file", "filename": "b.pdf", "file_data": f"data:application/pdf;base64,{pdf}"},
+        ]}
+    ])
+
+    assert "inspect these" in prompt
+    assert len(attachments) == 2
+    assert attachments[0] == (b"png", "image/png", "a.png")
+    assert attachments[1] == (b"pdf", "application/pdf", "b.pdf")
 
 
 def test_parse_tool_calls_basic():

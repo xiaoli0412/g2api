@@ -12,8 +12,20 @@
     "sk-gemini"
   ],
   "cookie_file": "cookie.txt",
+  "proxy_enabled": true,
   "proxy": null,
   "log_requests": true,
+  "capture_request_bodies": true,
+  "capture_response_bodies": true,
+  "log_body_limit_chars": 65536,
+  "log_upstream_raw": false,
+  "dashboard_local_bypass": true,
+  "expose_experimental_models": false,
+  "expose_web_feature_models": true,
+  "stream_mode": "auto",
+  "fake_stream_delay_ms": 10,
+  "stream_chunk_chars": 1,
+  "upload_retry_attempts": 3,
   "cookie_files": [],
   "cookie_rotation": false,
   "cookie_rotation_interval": 10,
@@ -21,5 +33,20 @@
   "proxy_rotation": false,
   "proxy_rotation_interval": 10,
   "rate_limit_per_minute": 30,
-  "rate_limit_delay": 2
+  "rate_limit_delay": 2,
+  
+  "proxy_pool_enabled": false,
+  "proxy_subscriptions": [
+    "https://your-subscription-url.com/sub",
+    "https://another-subscription.com/clash"
+  ],
+  "proxy_pool_strategy": "round_robin",
+  "proxy_pool_health_check": true,
+  "proxy_pool_health_check_interval": 300,
+  "proxy_pool_max_failures": 3,
+  "proxy_pool_port_range_start": 10000,
+  "proxy_pool_port_range_end": 20000,
+  "proxy_pool_auto_update": true,
+  "proxy_pool_update_interval": 3600,
+  "proxy_pool_isolate_by_process": true
 }

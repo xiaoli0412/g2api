@@ -7,7 +7,12 @@ __pycache__/
 *.egg
 build/
 dist/
+output/native-visual/
+output/web-visual/
 .eggs/
+native/.tools/
+native/Gemini2API.WinUI/packages/
+native/supervisor-rs/target/
 
 .env
 .env.*
@@ -41,3 +46,12 @@ start.ps1
 run*.ps1
 run*.bat
 .trae/
+
+# Build artifacts & temp files
+.codex_*.pid
+proxy_cache.json
+output/
+qt_vendor/
+gui_err*.txt
+gui_out*.txt
+*.pid

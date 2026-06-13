@@ -1,122 +1,109 @@
-"""设置页面"""
-from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
-    QPushButton, QFrame, QCheckBox
-)
-from PyQt5.QtCore import Qt
+"""Application settings page."""
 
-from ..styles import COLORS, LAYOUT
+import os
+
+from PyQt5.QtWidgets import QFileDialog, QHBoxLayout, QLabel
+
+from gui.components import FluentButton, FluentToggle
+from gui.styles import COLORS, SPACING, qss_font
+from .page_utils import Page
 
 
-class SettingsPage(QWidget):
-    """设置页面"""
-    
+class SettingsPage(Page):
     def __init__(self, parent=None):
-        super().__init__(parent)
-        self.main_window = parent
+        super().__init__(parent, "settings")
         self._create_ui()
-    
+
     def _create_ui(self):
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(LAYOUT['content_margin'], LAYOUT['content_margin'], 
-                                  LAYOUT['content_margin'], LAYOUT['content_margin'])
-        layout.setSpacing(16)
-        
-        title = QLabel("设置")
-        title.setStyleSheet(f"color: {COLORS['text_primary']}; font-size: 20px; font-weight: bold;")
-        layout.addWidget(title)
-        
-        # 应用设置卡片
-        app_card = self._create_card("应用设置")
-        self.tray_check = QCheckBox("关闭窗口时最小化到托盘")
-        self.tray_check.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 12px;")
-        self.tray_check.setChecked(True)
-        app_card.layout().addWidget(self.tray_check)
-        
-        self.autostart_check = QCheckBox("启动应用时自动启动服务器")
-        self.autostart_check.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 12px;")
-        app_card.layout().addWidget(self.autostart_check)
-        
-        btn_layout = QHBoxLayout()
-        
-        save_btn = QPushButton("保存")
-        save_btn.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {COLORS['primary']};
-                color: {COLORS['on_primary']};
-                padding: 10px 20px;
-                border-radius: 6px;
-                font-weight: bold;
-            }}
-            QPushButton:hover {{ background-color: {COLORS['primary_hover']}; }}
-        """)
-        btn_layout.addWidget(save_btn)
-        
-        config_btn = QPushButton("打开配置文件")
-        config_btn.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {COLORS['card_bg']};
-                color: {COLORS['text_secondary']};
-                border: 1px solid {COLORS['border']};
-                padding: 10px 20px;
-                border-radius: 6px;
-            }}
-            QPushButton:hover {{
-                background-color: {COLORS['hover_bg']};
-                color: {COLORS['text_primary']};
-            }}
-        """)
-        btn_layout.addWidget(config_btn)
-        
-        logs_btn = QPushButton("打开日志")
-        logs_btn.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {COLORS['card_bg']};
-                color: {COLORS['text_secondary']};
-                border: 1px solid {COLORS['border']};
-                padding: 10px 20px;
-                border-radius: 6px;
-            }}
-            QPushButton:hover {{
-                background-color: {COLORS['hover_bg']};
-                color: {COLORS['text_primary']};
-            }}
-        """)
-        btn_layout.addWidget(logs_btn)
-        
-        app_card.layout().addLayout(btn_layout)
-        layout.addWidget(app_card)
-        
-        # 关于卡片
-        about_card = self._create_card("关于")
-        about_lines = [
+        cfg = self.main_window.config
+        self.title("settings")
+
+        appearance = self.card("appearance")
+        self.material_combo = self.combo_row(
+            appearance,
+            "window_material",
+            ["Mica", "Acrylic", "Solid"],
+            str(cfg.get("window_material", "mica")).replace("_", " ").title(),
+        )
+        self.background_input = self.input_row(
+            appearance,
+            "background_image",
+            cfg.get("background_image", ""),
+            self.t("background_hint"),
+        )
+        bg_actions = QHBoxLayout()
+        bg_actions.setSpacing(SPACING["sm"])
+        browse_btn = FluentButton(self.t("browse"))
+        clear_btn = FluentButton(self.t("clear"))
+        browse_btn.clicked.connect(self._browse_background)
+        clear_btn.clicked.connect(self._clear_background)
+        bg_actions.addWidget(browse_btn)
+        bg_actions.addWidget(clear_btn)
+        bg_actions.addStretch()
+        appearance.layout.addLayout(bg_actions)
+        self.dynamic_toggle = FluentToggle(cfg.get("dynamic_background", False))
+        row = self.row(appearance, "dynamic_background")
+        row.addWidget(self.dynamic_toggle)
+        row.addStretch()
+
+        app = self.card("app_settings")
+        self.tray_toggle = FluentToggle(cfg.get("minimize_to_tray", True))
+        row = self.row(app, "minimize_tray")
+        row.addWidget(self.tray_toggle)
+        row.addStretch()
+        self.autostart_toggle = FluentToggle(cfg.get("auto_start_server", False))
+        row = self.row(app, "auto_start")
+        row.addWidget(self.autostart_toggle)
+        row.addStretch()
+        for text, handler, variant in [
+            ("save", self._save_config, "default"),
+            ("language_toggle", self.main_window._toggle_language, "default"),
+            ("open_config", self.main_window._open_config, "default"),
+            ("open_logs", self.main_window._open_dashboard, "default"),
+        ]:
+            btn = FluentButton(self.t(text), variant)
+            btn.clicked.connect(handler)
+            app.layout.addWidget(btn)
+
+        about = self.card("about")
+        for line in [
             "Gemini2API v2.1.0",
+            "Author: xiaoliACG",
             "Gemini Web -> OpenAI API",
-            "Flash / Pro / Thinking / Search / Streaming",
-            "MIT License"
-        ]
-        for line in about_lines:
-            lbl = QLabel(line)
-            lbl.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 12px;")
-            about_card.layout().addWidget(lbl)
-        
-        layout.addWidget(about_card)
-        layout.addStretch()
-    
-    def _create_card(self, title):
-        card = QFrame()
-        card.setStyleSheet(f"""
-            QFrame {{
-                background-color: {COLORS['card_bg']};
-                border-radius: {LAYOUT['card_border_radius']}px;
-                padding: 16px;
-            }}
-        """)
-        layout = QVBoxLayout(card)
-        layout.setSpacing(12)
-        
-        label = QLabel(title)
-        label.setStyleSheet(f"color: {COLORS['text_primary']}; font-size: 15px; font-weight: bold;")
-        layout.addWidget(label)
-        
-        return card
+            "Flash / Pro / Thinking / Streaming",
+            "Windows native desktop shell",
+            "MIT License",
+            "CLI: python app.py --cli",
+            "EXE: build\\native\\x64\\Release\\Gemini2API.WinUI.exe",
+        ]:
+            label = QLabel(line)
+            label.setStyleSheet(f"color: {COLORS['text_secondary']}; {qss_font('body')}")
+            about.layout.addWidget(label)
+        self.root.addStretch()
+
+    def _save_config(self):
+        self.main_window.config["minimize_to_tray"] = self.tray_toggle.isChecked()
+        self.main_window.config["auto_start_server"] = self.autostart_toggle.isChecked()
+        self.main_window.config["window_material"] = self.material_combo.currentText().strip().lower().replace(" ", "_")
+        self.main_window.config["background_image"] = self.background_input.text().strip()
+        self.main_window.config["dynamic_background"] = self.dynamic_toggle.isChecked()
+        self.main_window.save_config()
+        self.main_window.update_window_material()
+        self.main_window.update_background()
+        self.main_window.toast(self.t("saved"))
+
+    def _browse_background(self):
+        start_dir = os.path.dirname(self.background_input.text().strip()) or os.path.expanduser("~")
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            self.t("background_image"),
+            start_dir,
+            "Images (*.png *.jpg *.jpeg *.bmp *.webp)",
+        )
+        if path:
+            self.background_input.setText(path)
+            self._save_config()
+
+    def _clear_background(self):
+        self.background_input.clear()
+        self._save_config()

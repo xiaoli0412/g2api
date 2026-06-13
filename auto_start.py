@@ -13,7 +13,7 @@ def add_startup():
                          r"Software\Microsoft\Windows\CurrentVersion\Run",
                          0, winreg.KEY_SET_VALUE)
     exe = APP_PATH if getattr(sys, 'frozen', False) else f'"{sys.executable}" "{APP_PATH}"'
-    winreg.SetValueEx(key, APP_NAME, 0, winreg.REG_SZ, f'"{APP_PATH}"')
+    winreg.SetValueEx(key, APP_NAME, 0, winreg.REG_SZ, exe)
     winreg.CloseKey(key)
     print(f"Added {APP_NAME} to startup")
 

@@ -21,7 +21,7 @@
 
 FlClash 参考文件：
 
-- `lib/views/proxies/proxies.dart`: 顶部搜索、动作菜单、设置页、provider 入口、测速按钮。
+- `lib/views/proxies/proxies.dart`: 分段筛选、动作菜单、设置页、provider 入口、测速按钮。
 - `lib/views/proxies/tab.dart`: 代理组标签页、当前组、滚动到选中节点、批量延迟测试。
 - `lib/views/proxies/list.dart`: 分组列表、可展开组、粘性组头、按组定位。
 - `lib/views/proxies/card.dart`: 代理卡片、延迟状态、选中态、代理类型与描述。
@@ -43,7 +43,7 @@ Gemini2API 当前相关文件：
 
 1. **融合而非迁移**: 保留现有 UI 栈，只把代理体验从“表单配置”升级成“可观察、可操作的工作台”。
 2. **WinUI 优先，PyQt 与 dashboard 兼容**: 原生 WinUI 是主要体验；PyQt 和 dashboard 提供同等配置入口和基础状态视图。
-3. **FlClash 信息架构，本项目视觉语言**: 借用搜索、分组、卡片、provider、测速、排序等结构；视觉上继续使用 Windows 11 / Fluent / 当前 PyQt 卡片风格。
+3. **FlClash 信息架构，本项目视觉语言**: 借用分组、卡片、provider、测速、排序等结构；筛选使用分段控件，不使用搜索框；视觉上继续使用 Windows 11 / Fluent / 当前项目管理台风格。
 4. **安全出口治理**: 多出口用于负载治理、隔离故障、账号配置绑定和可观测性，不用于绕过封禁或规避限制。
 5. **最小后端重构**: 继续使用 `proxy_builtin.py` 作为代理池核心，只增加账号绑定、并发治理、路由决策和管理 API。
 6. **稳定性优先**: 健康检查结果是路由硬门槛。默认只选择 healthy 且未过期的节点；checking、stale、timeout、cooldown、unhealthy、disabled 节点不参与请求分发。
@@ -84,7 +84,7 @@ PyQt 导航同步新增 `proxy` 页；dashboard 新增或强化 Proxy tab。
 
 - 页面标题: `Proxies` / `代理`
 - 副标题: 出口池、账号绑定、并发治理和健康状态。
-- 搜索框: 按节点名、协议、host、标签、账号绑定过滤。
+- 分段筛选: `All` / `Healthy` / `Checking` / `Cooldown` / `Account-bound`，不使用搜索框。
 - 命令按钮:
   - Refresh status
   - Test selected
@@ -458,7 +458,7 @@ UI 验证：
 - PyQt 代理页默认紧凑列表，可编辑核心配置并展示节点状态。
 - dashboard Proxy tab 可展示同样的摘要、紧凑节点表和基础操作。
 - 小窗口下文本不重叠，长代理名和长 provider URL 截断显示。
-- 几百个节点时 UI 仍能滚动、搜索、筛选和批量检查，不因一次全量测速阻塞。
+- 几百个节点时 UI 仍能滚动、分段筛选和批量检查，不因一次全量测速阻塞。
 
 回归测试：
 
@@ -501,7 +501,7 @@ UI 验证：
 
 ## 验收标准
 
-- 用户能在代理工作台中查看、搜索、测速、禁用和同步代理节点。
+- 用户能在代理工作台中查看、分段筛选、测速、禁用和同步代理节点。
 - 用户能一次导入多个订阅 URL 和多个直连代理链接，并看到按 provider 归属、去重和健康检查后的结果。
 - 系统默认只选择 healthy 且健康状态未过期的代理节点；不可用节点不会参与分发。
 - 健康检查支持导入后检查、后台增量检查、TTL 缓存、有限并发、失败冷却和显式全量检查。

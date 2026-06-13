@@ -1,15 +1,12 @@
 """Multimodal: Scotty resumable upload for Gemini file input (images, video, audio, documents)."""
-import json
-import base64
 import urllib.request
 import urllib.parse
 import time
-import ssl
 import re
 import os
 
 from .config import CONFIG
-from .gemini import load_cookie, make_sapisidhash, _get_ssl_ctx, log
+from .gemini import get_request_cookie, make_sapisidhash, _account_prefix, _get_ssl_ctx, log
 
 MIME_MAP = {
     ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
@@ -30,13 +27,25 @@ def _get_page_tokens() -> dict:
     """Fetch WIZ_global_data tokens from Gemini page (Push-ID, X-Client-Pctx)."""
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Referer": f"https://gemini.google.com{_account_prefix()}/app",
     }
-    cookie_str, sapisid = load_cookie()
+    cookie_str, sapisid = get_request_cookie()
     if cookie_str:
         headers["Cookie"] = cookie_str
+    if sapisid:
+        headers["Authorization"] = make_sapisidhash(sapisid)
+    ctx = _get_ssl_ctx()
+    proxy = CONFIG.get("proxy") if CONFIG.get("proxy_enabled", True) else None
     try:
-        req = urllib.request.Request("https://gemini.google.com/app", headers=headers)
-        resp = urllib.request.urlopen(req, context=_get_ssl_ctx(), timeout=30)
+        req = urllib.request.Request(f"https://gemini.google.com{_account_prefix()}/app", headers=headers)
+        if proxy:
+            opener = urllib.request.build_opener(
+                urllib.request.ProxyHandler({"http": proxy, "https": proxy}),
+                urllib.request.HTTPSHandler(context=ctx)
+            )
+            resp = opener.open(req, timeout=30)
+        else:
+            resp = urllib.request.urlopen(req, context=ctx, timeout=30)
         html = resp.read().decode()
         tokens = {}
         for key, pattern in [
@@ -56,9 +65,9 @@ def _get_page_tokens() -> dict:
 _page_tokens_cache = {"tokens": {}, "ts": 0}
 
 
-def _cached_page_tokens() -> dict:
+def _cached_page_tokens(force: bool = False) -> dict:
     now = time.time()
-    if now - _page_tokens_cache["ts"] > 600:
+    if force or now - _page_tokens_cache["ts"] > 600:
         _page_tokens_cache["tokens"] = _get_page_tokens()
         _page_tokens_cache["ts"] = now
     return _page_tokens_cache["tokens"]
@@ -73,13 +82,28 @@ def upload_file(file_bytes: bytes, filename: str = "file", mime_type: str = None
         ext = os.path.splitext(filename)[1].lower()
         mime_type = MIME_MAP.get(ext, "application/octet-stream")
 
-    tokens = _cached_page_tokens()
+    last_error = None
+    attempts = max(1, int(CONFIG.get("upload_retry_attempts") or CONFIG.get("retry_attempts") or 3))
+    for attempt in range(attempts):
+        try:
+            return _upload_file_once(file_bytes, filename, mime_type, force_tokens=attempt > 0)
+        except Exception as exc:
+            last_error = exc
+            log(f"File upload attempt {attempt + 1}/{attempts} failed: {exc}")
+            if attempt < attempts - 1:
+                time.sleep(min(2 + attempt, 5))
+    raise last_error
+
+
+def _upload_file_once(file_bytes: bytes, filename: str, mime_type: str, force_tokens: bool = False) -> str:
+    tokens = _cached_page_tokens(force=force_tokens)
     push_id = tokens.get("push_id", "feeds/mcudyrk2a4khkz")
     pctx = tokens.get("pctx", "CgcSBWjK7pYx")
 
-    cookie_str, sapisid = load_cookie()
+    cookie_str, sapisid = get_request_cookie()
     ctx = _get_ssl_ctx()
-    proxy = CONFIG.get("proxy")
+    proxy = CONFIG.get("proxy") if CONFIG.get("proxy_enabled", True) else None
+    timeout = max(60, int(CONFIG.get("request_timeout_sec") or 180))
 
     # Step 1: Initiate resumable upload
     start_headers = {
@@ -106,9 +130,9 @@ def upload_file(file_bytes: bytes, filename: str = "file", mime_type: str = None
             urllib.request.ProxyHandler({"http": proxy, "https": proxy}),
             urllib.request.HTTPSHandler(context=ctx)
         )
-        resp = opener.open(req, timeout=30)
+        resp = opener.open(req, timeout=min(timeout, 120))
     else:
-        resp = urllib.request.urlopen(req, context=ctx, timeout=30)
+        resp = urllib.request.urlopen(req, context=ctx, timeout=min(timeout, 120))
 
     upload_url = resp.headers.get("X-Goog-Upload-URL") or resp.headers.get("x-goog-upload-url")
     if not upload_url:
@@ -126,9 +150,9 @@ def upload_file(file_bytes: bytes, filename: str = "file", mime_type: str = None
 
     req2 = urllib.request.Request(upload_url, data=file_bytes, headers=upload_headers, method="POST")
     if proxy:
-        resp2 = opener.open(req2, timeout=60)
+        resp2 = opener.open(req2, timeout=timeout)
     else:
-        resp2 = urllib.request.urlopen(req2, context=ctx, timeout=60)
+        resp2 = urllib.request.urlopen(req2, context=ctx, timeout=timeout)
 
     file_ref = resp2.read().decode().strip()
     if not file_ref or not file_ref.startswith("/"):
@@ -143,10 +167,19 @@ upload_image = upload_file
 
 
 def fetch_file_bytes(url: str) -> bytes:
-    """Fetch file from URL."""
+    """Fetch file from URL, using configured proxy if available."""
+    ctx = _get_ssl_ctx()
+    proxy = CONFIG.get("proxy") if CONFIG.get("proxy_enabled", True) else None
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        resp = urllib.request.urlopen(req, timeout=30)
+        if proxy:
+            opener = urllib.request.build_opener(
+                urllib.request.ProxyHandler({"http": proxy, "https": proxy}),
+                urllib.request.HTTPSHandler(context=ctx)
+            )
+            resp = opener.open(req, timeout=30)
+        else:
+            resp = urllib.request.urlopen(req, context=ctx, timeout=30)
         return resp.read()
     except Exception as e:
         log(f"File fetch failed: {e}")

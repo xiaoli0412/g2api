@@ -2,6 +2,11 @@
 
 ## 项目结构
 
+优先入口:
+
+- `START_HERE_CN.md`: 中文总索引
+- `START_HERE.md`: English entry index
+
 ```
 gemini2api/
 ├── gemini_web2api/              # 多文件版本（主版本）
@@ -26,18 +31,20 @@ gemini2api/
 │   ├── popup.js
 │   ├── README.md
 │   └── icons/
-├── app.py                       # GUI版本（customtkinter）
-├── gui/                         # GUI版本（PyQt5）
+├── native/Gemini2API.WinUI/     # C++/WinUI 3 原生桌面壳
+├── native/supervisor-rs/        # Rust 进程监督器
+├── app.py                       # legacy GUI版本（customtkinter）
+├── gui/                         # legacy GUI版本（PyQt5）
 ├── gemini_web2api_standalone.py # 单文件版本
-├── gui_app.py                   # PyQt5启动入口
+├── gui_app.py                   # legacy PyQt5 fallback 源码
 ├── build.py                     # 构建脚本
 ├── config.json                  # 配置文件
 ├── config.example.json          # 配置示例
 ├── requirements.txt             # 依赖列表
 ├── Dockerfile                   # Docker构建文件
 ├── docker-compose.local.yml     # Docker Compose配置
-└── dist/Gemini2API/             # EXE输出目录
-    └── Gemini2API.exe
+└── build/native/x64/Release/    # 原生 EXE 输出目录
+    └── Gemini2API.WinUI.exe
 ```
 
 ## 启动方式
@@ -45,35 +52,43 @@ gemini2api/
 ### 1. 命令行模式（推荐）
 
 ```bash
-pip install httpx
+pip install -r requirements.txt
 python -m gemini_web2api
 ```
 
-### 2. GUI模式
+### 2. 原生桌面壳模式
 
 ```bash
-pip install httpx customtkinter pystray Pillow
-python app.py
+run-gui.bat
 ```
 
 ### 3. Docker模式
 
 ```bash
-docker build -t gemini-web2api .
-docker run -d -p 8081:8081 -v ./config.json:/app/config.json gemini-web2api
+docker compose -f docker-compose.local.yml up -d
 ```
 
-### 4. EXE模式
+### 4. 原生 EXE 模式
 
 ```
-dist/Gemini2API/Gemini2API.exe
+build/native/x64/Release/Gemini2API.WinUI.exe
 ```
 
 ## 连接信息
 
 - **Base URL**: `http://<IP>:8081/v1`
+- **Dashboard**: `http://localhost:8081/dashboard`
 - **API Key**: config.json中的api_keys值
 - **模型**: gemini-3.5-flash / gemini-3.5-flash-thinking
+
+## 根目录快捷脚本
+
+- `run-api.bat`
+- `run-gui.bat` - 启动 C++/WinUI 3 原生桌面壳
+- `run-gui-pyqt.bat` - 仅作紧急 legacy fallback
+- `run-docker.bat`
+- `open-dashboard.bat`
+- `build.bat`
 
 ## Cookie获取方式
 
@@ -100,10 +115,12 @@ dist/Gemini2API/Gemini2API.exe
 |------|------|------|
 | OpenAI兼容API | ✅ | /v1/chat/completions |
 | 流式输出 | ✅ | 真流式(httpx) + 假流式 |
-| 联网搜索 | ✅ | @search后缀 |
+| 联网搜索 | ✅ | -search后缀 |
 | 多模态输入 | ✅ | 图片/视频/音频/文档 |
 | 工具调用 | ✅ | Function Calling |
 | Token计算 | ✅ | tiktoken |
 | Cookie管理 | ✅ | Edge插件 + 手动 |
 | 代理支持 | ✅ | HTTP/SOCKS5 |
 | Dashboard | ✅ | /dashboard |
+| 代理池配置UI | ✅ | Web + 桌面壳已同步 |
+| 服务设置UI | ✅ | Web 管理面板已同步 |

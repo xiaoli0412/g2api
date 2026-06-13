@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8D460F7C-7C36-4F2D-8E2B-9279C00A8016}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{70F633C1-9B9A-4481-A2D0-5B739D61314D}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx</Extensions>
+    </Filter>
+    <Filter Include="XAML">
+      <UniqueIdentifier>{32B148A9-176F-4923-9F3F-5C3C91B32174}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IDL">
+      <UniqueIdentifier>{FB443710-C9EF-4C5D-9D04-2041896786FE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

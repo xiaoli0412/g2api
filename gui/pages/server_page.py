@@ -1,141 +1,70 @@
-"""服务器配置页面"""
-from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
-    QLineEdit, QPushButton, QFrame, QComboBox
-)
-from PyQt5.QtCore import Qt
+"""Server configuration page."""
 
-from ..styles import COLORS, LAYOUT
+from gemini_web2api.models import MODELS
+from gui.components import FluentButton, FluentToggle
+from .page_utils import Page
 
 
-class ServerPage(QWidget):
-    """服务器配置页面"""
-    
+class ServerPage(Page):
     def __init__(self, parent=None):
-        super().__init__(parent)
-        self.main_window = parent
+        super().__init__(parent, "server")
         self._create_ui()
-    
+
     def _create_ui(self):
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(LAYOUT['content_margin'], LAYOUT['content_margin'], 
-                                  LAYOUT['content_margin'], LAYOUT['content_margin'])
-        layout.setSpacing(16)
-        
-        # 标题
-        title = QLabel("服务器配置")
-        title.setStyleSheet(f"color: {COLORS['text_primary']}; font-size: 20px; font-weight: bold;")
-        layout.addWidget(title)
-        
-        # 网络配置卡片
-        network_card = self._create_card("网络配置")
-        self.port_input = self._add_input(network_card, "端口", "8081")
-        self.host_input = self._add_input(network_card, "主机", "0.0.0.0")
-        layout.addWidget(network_card)
-        
-        # 代理配置卡片
-        proxy_card = self._create_card("代理配置")
-        self.proxy_type_combo = self._add_combo(proxy_card, "代理类型", ["无代理", "HTTP代理", "SOCKS5代理"])
-        self.proxy_input = self._add_input(proxy_card, "代理地址", "", "例: http://127.0.0.1:7890")
-        layout.addWidget(proxy_card)
-        
-        # API配置卡片
-        api_card = self._create_card("API配置")
-        self.api_keys_input = self._add_input(api_card, "API密钥", "", "多个用逗号分隔，留空免密钥")
-        self.default_model_combo = self._add_combo(api_card, "默认模型", [
-            "gemini-3.5-flash", "gemini-3.5-flash-thinking", 
-            "gemini-3.1-pro", "gemini-auto", "gemini-flash-lite"
-        ])
-        layout.addWidget(api_card)
-        
-        # 保存按钮
-        save_btn = QPushButton("保存")
-        save_btn.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {COLORS['primary']};
-                color: {COLORS['on_primary']};
-                padding: 10px 24px;
-                border-radius: 6px;
-                font-weight: bold;
-            }}
-            QPushButton:hover {{ background-color: {COLORS['primary_hover']}; }}
-        """)
-        save_btn.clicked.connect(self._save_config)
-        layout.addWidget(save_btn, alignment=Qt.AlignLeft)
-        
-        layout.addStretch()
-    
-    def _create_card(self, title):
-        card = QFrame()
-        card.setStyleSheet(f"""
-            QFrame {{
-                background-color: {COLORS['card_bg']};
-                border-radius: {LAYOUT['card_border_radius']}px;
-                padding: 16px;
-            }}
-        """)
-        layout = QVBoxLayout(card)
-        layout.setSpacing(12)
-        
-        label = QLabel(title)
-        label.setStyleSheet(f"color: {COLORS['text_primary']}; font-size: 15px; font-weight: bold;")
-        layout.addWidget(label)
-        
-        return card
-    
-    def _add_input(self, parent, label, default="", hint=""):
-        layout = parent.layout()
-        row = QHBoxLayout()
-        
-        lbl = QLabel(label)
-        lbl.setFixedWidth(100)
-        lbl.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 12px;")
-        row.addWidget(lbl)
-        
-        inp = QLineEdit(default)
-        inp.setStyleSheet(f"""
-            QLineEdit {{
-                background-color: {COLORS['input_bg']};
-                color: {COLORS['text_primary']};
-                border: 1px solid {COLORS['border']};
-                border-radius: 6px;
-                padding: 8px 12px;
-                font-size: 12px;
-            }}
-        """)
-        if hint:
-            inp.setPlaceholderText(hint)
-        row.addWidget(inp)
-        
-        layout.addLayout(row)
-        return inp
-    
-    def _add_combo(self, parent, label, options):
-        layout = parent.layout()
-        row = QHBoxLayout()
-        
-        lbl = QLabel(label)
-        lbl.setFixedWidth(100)
-        lbl.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 12px;")
-        row.addWidget(lbl)
-        
-        combo = QComboBox()
-        combo.addItems(options)
-        combo.setStyleSheet(f"""
-            QComboBox {{
-                background-color: {COLORS['input_bg']};
-                color: {COLORS['text_primary']};
-                border: 1px solid {COLORS['border']};
-                border-radius: 6px;
-                padding: 8px 12px;
-                font-size: 12px;
-            }}
-        """)
-        row.addWidget(combo)
-        
-        layout.addLayout(row)
-        return combo
-    
+        self.title("server")
+        cfg = self.main_window.config
+
+        network = self.card("network")
+        self.port_input = self.input_row(network, "port", cfg.get("port", 8081))
+        self.host_input = self.input_row(network, "host", cfg.get("host", "0.0.0.0"))
+
+        proxy = self.card("proxy_config")
+        self.proxy_type = self.combo_row(proxy, "proxy_type", [self.t("no_proxy"), self.t("http_proxy"), self.t("socks5_proxy")])
+        current_proxy = cfg.get("proxy") or ""
+        if current_proxy.startswith("socks"):
+            self.proxy_type.setCurrentText(self.t("socks5_proxy"))
+        elif current_proxy:
+            self.proxy_type.setCurrentText(self.t("http_proxy"))
+        self.proxy_input = self.input_row(proxy, "proxy_addr", current_proxy, self.t("proxy_hint"))
+
+        api = self.card("api_config")
+        self.api_keys_input = self.input_row(api, "api_keys", ",".join(cfg.get("api_keys", [])))
+        self.model_combo = self.combo_row(api, "default_model", sorted(MODELS.keys()), cfg.get("default_model", "gemini-3.5-flash"))
+
+        pool = self.card("proxy_pool")
+        self.pool_toggle = FluentToggle(cfg.get("proxy_pool_enabled", False))
+        self.rotation_toggle = FluentToggle(cfg.get("proxy_rotation", False))
+        for text, toggle in [("enable_proxy_pool", self.pool_toggle), ("enable_proxy_rotation", self.rotation_toggle)]:
+            row = self.row(pool, text)
+            row.addWidget(toggle)
+            row.addStretch()
+        self.strategy_combo = self.combo_row(pool, "proxy_strategy", ["round_robin", "random", "fastest", "least_connections", "ip_hash"], cfg.get("proxy_pool_strategy", "round_robin"))
+        self.subs_edit = self.text_row(pool, "proxy_subs", "\n".join(cfg.get("proxy_subscriptions", [])))
+        self.proxy_list_edit = self.text_row(pool, "proxy_list", "\n".join(cfg.get("proxies", [])))
+        save = FluentButton(self.t("save"))
+        save.clicked.connect(self._save_config)
+        pool.layout.addWidget(save)
+        self.root.addStretch()
+
     def _save_config(self):
-        if self.main_window:
-            self.main_window.status_text.setText("配置已保存")
+        cfg = self.main_window.config
+        cfg["port"] = int(self.port_input.text() or 8081)
+        cfg["host"] = self.host_input.text() or "0.0.0.0"
+        proxy_value = self.proxy_input.text().strip()
+        proxy_type = self.proxy_type.currentText()
+        if not proxy_value or proxy_type == self.t("no_proxy"):
+            cfg["proxy"] = None
+        elif proxy_type == self.t("socks5_proxy"):
+            cfg["proxy"] = proxy_value if proxy_value.startswith("socks5://") else f"socks5://{proxy_value}"
+        else:
+            cfg["proxy"] = proxy_value if proxy_value.startswith("http") else f"http://{proxy_value}"
+        keys = self.api_keys_input.text().strip()
+        cfg["api_keys"] = [k.strip() for k in keys.split(",") if k.strip()] if keys else []
+        cfg["default_model"] = self.model_combo.currentText()
+        cfg["proxy_pool_enabled"] = self.pool_toggle.isChecked()
+        cfg["proxy_rotation"] = self.rotation_toggle.isChecked()
+        cfg["proxy_pool_strategy"] = self.strategy_combo.currentText()
+        cfg["proxy_subscriptions"] = [s.strip() for s in self.subs_edit.toPlainText().splitlines() if s.strip()]
+        cfg["proxies"] = [s.strip() for s in self.proxy_list_edit.toPlainText().splitlines() if s.strip()]
+        self.main_window.save_config()
+        self.main_window.toast(self.t("saved"))

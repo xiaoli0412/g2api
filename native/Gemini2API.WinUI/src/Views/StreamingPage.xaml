@@ -1,0 +1,52 @@
+<Page
+    x:Class="Gemini2API.Views.StreamingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    Background="Transparent">
+
+    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
+        <Border Padding="24,20,24,24">
+            <StackPanel MaxWidth="980" Spacing="16">
+                <StackPanel Spacing="4">
+                    <TextBlock Style="{StaticResource PageTitleTextStyle}" Text="Streaming" />
+                    <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="Configure streaming response behavior and fake stream pacing." />
+                </StackPanel>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Spacing="4">
+                            <TextBlock Style="{StaticResource SettingTitleTextStyle}" Text="Streaming responses" />
+                            <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="Expose stream-compatible OpenAI API responses when the backend supports it." />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" OffContent="Off" OnContent="On" IsOn="True" />
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource SettingsCardBorderStyle}">
+                    <StackPanel Spacing="14">
+                        <TextBlock Style="{StaticResource SectionTitleTextStyle}" Text="Fake stream pacing" />
+                        <Grid ColumnSpacing="16" RowSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Chunk delay" />
+                            <Slider Grid.Column="1" Minimum="0" Maximum="250" Value="40" />
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource SettingTitleTextStyle}" Text="Chunk size" />
+                            <muxc:NumberBox Grid.Row="1" Grid.Column="1" Minimum="1" Maximum="4096" SpinButtonPlacementMode="Compact" Value="128" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</Page>
