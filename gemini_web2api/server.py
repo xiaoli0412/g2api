@@ -559,7 +559,7 @@ def _model_id_from_google_path(path: str) -> str:
 
 
 def _upload_files(images: list) -> list:
-    """Upload files (images, video, audio, documents) and return list of file references.
+    """Upload files (images, video, audio, documents) and return list of (ref, filename) tuples.
     Returns None if no files."""
     if not images:
         return None
@@ -575,7 +575,7 @@ def _upload_files(images: list) -> list:
                     mime = mime or "application/octet-stream"
                 if data:
                     ref = upload_file(data, filename, mime or "application/octet-stream")
-                    file_refs.append(ref)
+                    file_refs.append((ref, filename))
         except Exception as e:
             log(f"File upload failed: {e}")
     return file_refs if file_refs else None

@@ -29,10 +29,9 @@ _httpx_client = None
 _bl_cache = {"bl": None, "ts": 0}
 _xsrf_cache = {"token": None, "ts": 0, "cookie_sig": ""}
 _request_context = threading.local()
-NON_RETRYABLE_BARD_ERROR_CODES = {"1003", "1152", "1155"}
-# Any BardErrorInfo code not explicitly listed as retryable will also skip retry
-# after the first failed attempt (avoids wasting 30+ s on upstream rejections).
-_RETRYABLE_BARD_ERROR_CODES = set()  # empty = all unknown bard codes are non-retryable
+NON_RETRYABLE_BARD_ERROR_CODES = {"1003", "1155"}
+# Codes that may recover after BL cache invalidation + retry (e.g. stale BL token).
+_BL_RETRYABLE_BARD_ERROR_CODES = {"1152"}
 
 
 def is_proxy_enabled() -> bool:
@@ -65,13 +64,8 @@ def _is_non_retryable_bard_error(exc: Exception) -> bool:
     code = _bard_error_code_from_exception(exc)
     if not code:
         return False  # not a bard error at all → let normal retry happen
-    if code in NON_RETRYABLE_BARD_ERROR_CODES:
-        return True
-    # Unknown bard code: treat as non-retryable unless explicitly retryable
-    if code not in _RETRYABLE_BARD_ERROR_CODES:
-        log(f"BardErrorInfo [{code}] not in retryable set; skipping retry")
-        return True
-    return False
+    # Only codes known to be permanent failures skip retry
+    return code in NON_RETRYABLE_BARD_ERROR_CODES
 
 
 def log(msg: str):
@@ -355,7 +349,16 @@ def _resolve_xsrf_token() -> str:
 def _build_payload(prompt: str, model_id: int, think_mode: int, file_refs: list = None, extra_fields: dict = None) -> str:
     inner = [None] * 102
     if file_refs:
-        refs = [[None, None, ref] for ref in file_refs]
+        # Bard-API file reference format: [[[[ref, 1], "filename"], ...]]
+        # file_refs can be either:
+        #   - list of (ref, filename) tuples  (from _upload_files)
+        #   - list of plain ref strings       (legacy callers)
+        refs = []
+        for ref in file_refs:
+            if isinstance(ref, (tuple, list)) and len(ref) >= 2:
+                refs.append([[ref[0], 1], ref[1]])
+            else:
+                refs.append([[str(ref), 1], "upload"])
         inner[0] = [prompt, 0, None, refs, None, None, 0]
     else:
         inner[0] = [prompt, 0, None, None, None, None, 0]
@@ -432,22 +435,21 @@ def _discover_bl() -> str:
 
 
 def _resolve_bl() -> str:
-    """Resolve BL token: config first (matches original behaviour), cache second,
-    discovery last.  Discovery makes an extra HTTP request and may return a token
-    that doesn't match the StreamGenerate RPC version, causing BardErrorInfo."""
-    # 1. Cached value (already validated by a successful request or prior discovery)
+    """Resolve BL token: cache → dynamic discovery → config fallback.
+    Google rotates BL tokens frequently — discovery is essential."""
+    # 1. Cached value
     if _bl_cache["bl"]:
         return _bl_cache["bl"]
-    # 2. Config value (static, known-good — original behaviour)
+    # 2. Dynamic discovery — always try to get the current live token
+    discovered = _discover_bl()
+    if discovered:
+        return discovered
+    # 3. Config fallback (may be stale, but better than nothing)
     config_bl = CONFIG.get("gemini_bl", "")
     if config_bl:
         _bl_cache["bl"] = config_bl
         _bl_cache["ts"] = time.time()
         return config_bl
-    # 3. Dynamic discovery (last resort — may cause BardErrorInfo on version mismatch)
-    discovered = _discover_bl()
-    if discovered:
-        return discovered
     return ""
 
 
@@ -1388,6 +1390,13 @@ def generate_with_metadata(prompt: str, model_id: int, think_mode: int, file_ref
             if _is_non_retryable_bard_error(e):
                 break
 
+            # BardError [1152] etc: invalidate BL cache so next attempt discovers fresh token
+            bard_code = _bard_error_code_from_exception(e)
+            if bard_code and bard_code in _BL_RETRYABLE_BARD_ERROR_CODES:
+                _bl_cache["bl"] = None
+                _bl_cache["ts"] = 0
+                log(f"BardErrorInfo [{bard_code}]: invalidated BL cache for rediscovery")
+
             # 指数退避重试
             if attempt < CONFIG["retry_attempts"] - 1:
                 delay = CONFIG["retry_delay_sec"] * (2 ** attempt)  # 指数退避
@@ -1496,7 +1505,14 @@ def generate_stream(prompt: str, model_id: int, think_mode: int, file_refs: list
             if _is_non_retryable_bard_error(e):
                 break
 
-            if attempt == 0:
+            # BardError [1152] etc: invalidate BL cache so next attempt discovers fresh token
+            bard_code = _bard_error_code_from_exception(e)
+            if bard_code and bard_code in _BL_RETRYABLE_BARD_ERROR_CODES:
+                _bl_cache["bl"] = None
+                _bl_cache["ts"] = 0
+                log(f"BardErrorInfo [{bard_code}]: invalidated BL cache for rediscovery")
+            elif attempt == 0:
+                # General first-attempt BL invalidation (matches original behaviour)
                 _bl_cache["bl"] = None
                 _bl_cache["ts"] = 0
 
