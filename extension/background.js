@@ -9,6 +9,11 @@ async function getServerUrl() {
   return data.serverUrl || DEFAULT_SERVER;
 }
 
+async function getApiKey() {
+  const data = await chrome.storage.local.get("apiKey");
+  return data.apiKey || "";
+}
+
 async function getInterval() {
   const data = await chrome.storage.local.get("pushInterval");
   return data.pushInterval || DEFAULT_INTERVAL;
@@ -65,6 +70,7 @@ async function extractCookies() {
 
 async function pushCookies() {
   const serverUrl = await getServerUrl();
+  const apiKey = await getApiKey();
   const data = await extractCookies();
   
   if (!data) {
@@ -78,9 +84,11 @@ async function pushCookies() {
   }
   
   try {
+    const headers = { "Content-Type": "application/json" };
+    if (apiKey) headers["Authorization"] = "Bearer " + apiKey;
     const resp = await fetch(`${serverUrl}/api/cookie/push`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(data)
     });
     
@@ -165,11 +173,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
   
   if (msg.action === "getStatus") {
-    chrome.storage.local.get(["lastStatus", "lastTime", "serverUrl", "pushCount", "lastServerResponse", "lastServerError", "lastDiagnostics", "lastCookieNames"], (data) => {
+    chrome.storage.local.get(["lastStatus", "lastTime", "serverUrl", "apiKey", "pushCount", "lastServerResponse", "lastServerError", "lastDiagnostics", "lastCookieNames"], (data) => {
       sendResponse({
         lastStatus: data.lastStatus || "unknown",
         lastTime: data.lastTime || null,
         serverUrl: data.serverUrl || DEFAULT_SERVER,
+        apiKey: data.apiKey || "",
         pushCount: data.pushCount || 0,
         lastServerResponse: data.lastServerResponse || "",
         lastServerError: data.lastServerError || "",
@@ -182,6 +191,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   
   if (msg.action === "setServerUrl") {
     chrome.storage.local.set({ serverUrl: msg.url }).then(() => {
+      sendResponse({ success: true });
+    });
+    return true;
+  }
+
+  if (msg.action === "setApiKey") {
+    chrome.storage.local.set({ apiKey: msg.key }).then(() => {
       sendResponse({ success: true });
     });
     return true;

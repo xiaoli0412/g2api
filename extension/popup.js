@@ -2,6 +2,7 @@ const statusEl = document.getElementById("status");
 const lastTimeEl = document.getElementById("lastTime");
 const cookieCountEl = document.getElementById("cookieCount");
 const serverUrlEl = document.getElementById("serverUrl");
+const apiKeyEl = document.getElementById("apiKey");
 const pushIntervalEl = document.getElementById("pushInterval");
 const pushCountEl = document.getElementById("pushCount");
 const serverDiagEl = document.getElementById("serverDiag");
@@ -40,13 +41,19 @@ async function getServerUrl() {
 
 async function checkCookies() {
   return new Promise((resolve) => {
-    chrome.cookies.getAll({ domain: "gemini.google.com" }, (cookies) => {
-      const cookieMap = {};
-      for (const c of cookies) {
-        cookieMap[c.name] = c.value;
-      }
-      resolve(cookieMap);
-    });
+    // Query cookies from ALL Google domains - auth cookies live on .google.com
+    const domains = [".google.com", "google.com", "gemini.google.com"];
+    const cookieMap = {};
+    let pending = domains.length;
+    for (const domain of domains) {
+      chrome.cookies.getAll({ domain }, (cookies) => {
+        for (const c of (cookies || [])) {
+          if (c.value) cookieMap[c.name] = c.value;
+        }
+        pending--;
+        if (pending === 0) resolve(cookieMap);
+      });
+    }
   });
 }
 
@@ -70,6 +77,7 @@ async function refresh() {
       statusEl.className = "value " + info.cls;
       lastTimeEl.textContent = formatTime(data.lastTime);
       if (serverUrlEl) serverUrlEl.value = data.serverUrl || "http://127.0.0.1:8081";
+      if (apiKeyEl) apiKeyEl.value = data.apiKey || "";
       if (pushCountEl) pushCountEl.textContent = data.pushCount || 0;
       if (serverDiagEl) {
         const diag = data.lastDiagnostics || {};
@@ -150,6 +158,12 @@ if (loginGuideBtn && loginGuide) {
 if (serverUrlEl) {
   serverUrlEl.addEventListener("change", () => {
     chrome.storage.local.set({ serverUrl: serverUrlEl.value });
+  });
+}
+
+if (apiKeyEl) {
+  apiKeyEl.addEventListener("change", () => {
+    chrome.runtime.sendMessage({ action: "setApiKey", key: apiKeyEl.value });
   });
 }
 
