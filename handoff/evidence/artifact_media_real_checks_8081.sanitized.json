@@ -1,0 +1,447 @@
+{
+  "created_at": "2026-06-09 15:10:08",
+  "base_url": "http://127.0.0.1:8081",
+  "tests": [
+    {
+      "name": "core_html_artifact",
+      "endpoint": "/v1/chat/completions",
+      "request_body": {
+        "model": "gemini-3.5-flash",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Who are you\n1+1=?\nReturn only one fenced html code block containing a minimal file with text: Gemini artifact download test."
+          }
+        ]
+      },
+      "response_status": 200,
+      "ok": true,
+      "elapsed_ms": 4719.0,
+      "response_preview": "```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Download Test</title>\n</head>\n<body>\n    <p>Gemini artifact download test.</p>\n</body>\n</html>\n```",
+      "web_feature": null,
+      "data_count": null,
+      "images_count": 0,
+      "media_count": 0,
+      "artifacts_count": 2,
+      "files_count": 2,
+      "downloads": [
+        {
+          "url": "http://127.0.0.1:8081/artifacts/1780989013_7a1732de27_generated-html.html",
+          "download_result": {
+            "ok": true,
+            "status": 200,
+            "elapsed_ms": 17.27,
+            "bytes": 172,
+            "content_type": "text/html",
+            "preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Download Test</title>\n</head>\n<body>\n    <"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:8081/artifacts/1780989013_a209ef0b6b_generated-html.html",
+          "download_result": {
+            "ok": true,
+            "status": 200,
+            "elapsed_ms": 13.8,
+            "bytes": 172,
+            "content_type": "text/html",
+            "preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Download Test</title>\n</head>\n<body>\n    <"
+          }
+        }
+      ],
+      "response_body": {
+        "id": "chatcmpl-7cd627037a40",
+        "object": "chat.completion",
+        "created": 1780989013,
+        "model": "gemini-3.5-flash",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Download Test</title>\n</head>\n<body>\n    <p>Gemini artifact download test.</p>\n</body>\n</html>\n```"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": "<redacted>",
+          "completion_tokens": "<redacted>",
+          "total_tokens": "<redacted>"
+        },
+        "artifacts": [
+          {
+            "type": "code",
+            "language": "html",
+            "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Download Test</title>\n</head>\n<body>\n    <p>Gemini artifact download test.</p>\n</body>\n</html>"
+          },
+          {
+            "type": "html",
+            "language": "html",
+            "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Download Test</title>\n</head>\n<body>\n    <p>Gemini artifact download test.</p>\n</body>\n</html>"
+          }
+        ],
+        "files": [
+          {
+            "type": "code",
+            "language": "html",
+            "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Download Test</title>\n</head>\n<body>\n    <p>Gemini artifact download test.</p>\n</body>\n</html>",
+            "materialized": {
+              "status": "saved",
+              "filename": "generated-html.html",
+              "local_path": "D:\\workspaces\\2api\\gemini2api\\output\\generated_artifacts\\1780989013_7a1732de27_generated-html.html",
+              "download_url": "http://127.0.0.1:8081/artifacts/1780989013_7a1732de27_generated-html.html",
+              "bytes": 172,
+              "mime_type": "text/plain"
+            },
+            "download_url": "http://127.0.0.1:8081/artifacts/1780989013_7a1732de27_generated-html.html",
+            "local_path": "D:\\workspaces\\2api\\gemini2api\\output\\generated_artifacts\\1780989013_7a1732de27_generated-html.html"
+          },
+          {
+            "type": "html",
+            "language": "html",
+            "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Download Test</title>\n</head>\n<body>\n    <p>Gemini artifact download test.</p>\n</body>\n</html>",
+            "materialized": {
+              "status": "saved",
+              "filename": "generated-html.html",
+              "local_path": "D:\\workspaces\\2api\\gemini2api\\output\\generated_artifacts\\1780989013_a209ef0b6b_generated-html.html",
+              "download_url": "http://127.0.0.1:8081/artifacts/1780989013_a209ef0b6b_generated-html.html",
+              "bytes": 172,
+              "mime_type": "text/plain"
+            },
+            "download_url": "http://127.0.0.1:8081/artifacts/1780989013_a209ef0b6b_generated-html.html",
+            "local_path": "D:\\workspaces\\2api\\gemini2api\\output\\generated_artifacts\\1780989013_a209ef0b6b_generated-html.html"
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "canvas_html_artifact",
+      "endpoint": "/v1/chat/completions",
+      "request_body": {
+        "model": "gemini-canvas",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Who are you\n1+1=?\nReturn only one fenced html code block containing a minimal file with text: Gemini canvas artifact download test."
+          }
+        ]
+      },
+      "response_status": 200,
+      "ok": true,
+      "elapsed_ms": 4116.96,
+      "response_preview": "```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Gemini Canvas Artifact Download Test</title>\n</head>\n<body>\n    <p>Gemini canvas artifact download test.</p>\n</body>\n</html>\n```",
+      "web_feature": {
+        "id": "canvas",
+        "name": "Canvas",
+        "requested_model": "Gemini Canvas",
+        "declared_status": "supported",
+        "runtime_status": "supported",
+        "artifact_count": 2
+      },
+      "data_count": null,
+      "images_count": 0,
+      "media_count": 0,
+      "artifacts_count": 2,
+      "files_count": 2,
+      "downloads": [
+        {
+          "url": "http://127.0.0.1:8081/artifacts/1780989017_6168d7c093_generated-html.html",
+          "download_result": {
+            "ok": true,
+            "status": 200,
+            "elapsed_ms": 4.05,
+            "bytes": 202,
+            "content_type": "text/html",
+            "preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Gemini Canvas Artifact Download Test</titl"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:8081/artifacts/1780989017_5afcbd58c9_generated-html.html",
+          "download_result": {
+            "ok": true,
+            "status": 200,
+            "elapsed_ms": 3.52,
+            "bytes": 202,
+            "content_type": "text/html",
+            "preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Gemini Canvas Artifact Download Test</titl"
+          }
+        }
+      ],
+      "response_body": {
+        "id": "chatcmpl-e64d45bf82e7",
+        "object": "chat.completion",
+        "created": 1780989017,
+        "model": "gemini-canvas",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Gemini Canvas Artifact Download Test</title>\n</head>\n<body>\n    <p>Gemini canvas artifact download test.</p>\n</body>\n</html>\n```"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": "<redacted>",
+          "completion_tokens": "<redacted>",
+          "total_tokens": "<redacted>"
+        },
+        "artifacts": [
+          {
+            "type": "code",
+            "language": "html",
+            "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Gemini Canvas Artifact Download Test</title>\n</head>\n<body>\n    <p>Gemini canvas artifact download test.</p>\n</body>\n</html>"
+          },
+          {
+            "type": "html",
+            "language": "html",
+            "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Gemini Canvas Artifact Download Test</title>\n</head>\n<body>\n    <p>Gemini canvas artifact download test.</p>\n</body>\n</html>"
+          }
+        ],
+        "files": [
+          {
+            "type": "code",
+            "language": "html",
+            "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Gemini Canvas Artifact Download Test</title>\n</head>\n<body>\n    <p>Gemini canvas artifact download test.</p>\n</body>\n</html>",
+            "materialized": {
+              "status": "saved",
+              "filename": "generated-html.html",
+              "local_path": "D:\\workspaces\\2api\\gemini2api\\output\\generated_artifacts\\1780989017_6168d7c093_generated-html.html",
+              "download_url": "http://127.0.0.1:8081/artifacts/1780989017_6168d7c093_generated-html.html",
+              "bytes": 202,
+              "mime_type": "text/plain"
+            },
+            "download_url": "http://127.0.0.1:8081/artifacts/1780989017_6168d7c093_generated-html.html",
+            "local_path": "D:\\workspaces\\2api\\gemini2api\\output\\generated_artifacts\\1780989017_6168d7c093_generated-html.html"
+          },
+          {
+            "type": "html",
+            "language": "html",
+            "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Gemini Canvas Artifact Download Test</title>\n</head>\n<body>\n    <p>Gemini canvas artifact download test.</p>\n</body>\n</html>",
+            "materialized": {
+              "status": "saved",
+              "filename": "generated-html.html",
+              "local_path": "D:\\workspaces\\2api\\gemini2api\\output\\generated_artifacts\\1780989017_5afcbd58c9_generated-html.html",
+              "download_url": "http://127.0.0.1:8081/artifacts/1780989017_5afcbd58c9_generated-html.html",
+              "bytes": 202,
+              "mime_type": "text/plain"
+            },
+            "download_url": "http://127.0.0.1:8081/artifacts/1780989017_5afcbd58c9_generated-html.html",
+            "local_path": "D:\\workspaces\\2api\\gemini2api\\output\\generated_artifacts\\1780989017_5afcbd58c9_generated-html.html"
+          }
+        ],
+        "web_feature": {
+          "id": "canvas",
+          "name": "Canvas",
+          "requested_model": "Gemini Canvas",
+          "declared_status": "supported",
+          "runtime_status": "supported",
+          "artifact_count": 2
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "deep_research_alias",
+      "endpoint": "/v1/chat/completions",
+      "request_body": {
+        "model": "gemini-deep-research",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Who are you\n1+1=?"
+          }
+        ]
+      },
+      "response_status": 200,
+      "ok": true,
+      "elapsed_ms": 12150.99,
+      "response_preview": "I am Gemini, a large language model built by Google. \n\nAs for your question:\n\n$$1 + 1 = 2$$",
+      "web_feature": {
+        "id": "deep_research",
+        "name": "Deep research",
+        "requested_model": "Gemini Deep Research",
+        "declared_status": "experimental",
+        "runtime_status": "limited",
+        "note": "Uses Gemini Web research UI/RPC flows. The proxy can request search/research mode but must verify real output."
+      },
+      "data_count": null,
+      "images_count": 0,
+      "media_count": 0,
+      "artifacts_count": 0,
+      "files_count": 0,
+      "downloads": [],
+      "response_body": {
+        "id": "chatcmpl-75a2ff3d77c3",
+        "object": "chat.completion",
+        "created": 1780989029,
+        "model": "gemini-deep-research",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "I am Gemini, a large language model built by Google. \n\nAs for your question:\n\n$$1 + 1 = 2$$"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": "<redacted>",
+          "completion_tokens": "<redacted>",
+          "total_tokens": "<redacted>"
+        },
+        "web_feature": {
+          "id": "deep_research",
+          "name": "Deep research",
+          "requested_model": "Gemini Deep Research",
+          "declared_status": "experimental",
+          "runtime_status": "limited",
+          "note": "Uses Gemini Web research UI/RPC flows. The proxy can request search/research mode but must verify real output."
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "image_generation_endpoint",
+      "endpoint": "/v1/images/generations",
+      "request_body": {
+        "model": "nano-banana-2",
+        "prompt": "Create an image of a single blue square on a white background. Return the image."
+      },
+      "response_status": 200,
+      "ok": true,
+      "elapsed_ms": 3956.35,
+      "response_preview": "{\"created\": 1780989033, \"data\": [], \"model\": \"nano-banana-2\", \"object\": \"list\", \"web_feature\": {\"id\": \"image_generation\", \"name\": \"Create images\", \"requested_model\": \"Nano Banana 2\", \"declared_status\": \"experimental\", \"runtime_status\": \"limited\", \"artifact_count\": 0, \"note\": \"No real image artifact was returned by the upstream response.\"}, \"files\": [], \"message\": \"I can try to find an image like that for you, but can't create it right now. It's possible you're signed out or image creation isn't available in your location.\", \"elapsed_ms\": 3954.62}",
+      "web_feature": {
+        "id": "image_generation",
+        "name": "Create images",
+        "requested_model": "Nano Banana 2",
+        "declared_status": "experimental",
+        "runtime_status": "limited",
+        "artifact_count": 0,
+        "note": "No real image artifact was returned by the upstream response."
+      },
+      "data_count": 0,
+      "images_count": 0,
+      "media_count": 0,
+      "artifacts_count": 0,
+      "files_count": 0,
+      "downloads": [],
+      "response_body": {
+        "created": 1780989033,
+        "data": [],
+        "model": "nano-banana-2",
+        "object": "list",
+        "web_feature": {
+          "id": "image_generation",
+          "name": "Create images",
+          "requested_model": "Nano Banana 2",
+          "declared_status": "experimental",
+          "runtime_status": "limited",
+          "artifact_count": 0,
+          "note": "No real image artifact was returned by the upstream response."
+        },
+        "files": [],
+        "message": "I can try to find an image like that for you, but can't create it right now. It's possible you're signed out or image creation isn't available in your location.",
+        "elapsed_ms": 3954.62
+      },
+      "error": null
+    },
+    {
+      "name": "video_generation_endpoint",
+      "endpoint": "/v1/videos/generations",
+      "request_body": {
+        "model": "omni",
+        "prompt": "Create a two-second video of a single blue square moving left to right."
+      },
+      "response_status": 200,
+      "ok": true,
+      "elapsed_ms": 12518.66,
+      "response_preview": "{\"created\": 1780989046, \"data\": [], \"model\": \"omni\", \"object\": \"list\", \"web_feature\": {\"id\": \"video_generation\", \"name\": \"Create videos\", \"requested_model\": \"Omni\", \"declared_status\": \"experimental\", \"runtime_status\": \"limited\", \"artifact_count\": 0, \"note\": \"No real video artifact was returned by the upstream response.\"}, \"files\": [], \"message\": \"I couldn't do that because I'm getting a lot of requests right now. Please try again later.\", \"elapsed_ms\": 12516.96}",
+      "web_feature": {
+        "id": "video_generation",
+        "name": "Create videos",
+        "requested_model": "Omni",
+        "declared_status": "experimental",
+        "runtime_status": "limited",
+        "artifact_count": 0,
+        "note": "No real video artifact was returned by the upstream response."
+      },
+      "data_count": 0,
+      "images_count": 0,
+      "media_count": 0,
+      "artifacts_count": 0,
+      "files_count": 0,
+      "downloads": [],
+      "response_body": {
+        "created": 1780989046,
+        "data": [],
+        "model": "omni",
+        "object": "list",
+        "web_feature": {
+          "id": "video_generation",
+          "name": "Create videos",
+          "requested_model": "Omni",
+          "declared_status": "experimental",
+          "runtime_status": "limited",
+          "artifact_count": 0,
+          "note": "No real video artifact was returned by the upstream response."
+        },
+        "files": [],
+        "message": "I couldn't do that because I'm getting a lot of requests right now. Please try again later.",
+        "elapsed_ms": 12516.96
+      },
+      "error": null
+    },
+    {
+      "name": "audio_speech_endpoint",
+      "endpoint": "/v1/audio/speech",
+      "request_body": {
+        "model": "gemini-2.5-flash-preview-tts",
+        "input": "Who are you",
+        "response_format": "json"
+      },
+      "response_status": 200,
+      "ok": true,
+      "elapsed_ms": 4767.11,
+      "response_preview": "{\"created\": 1780989050, \"data\": [], \"model\": \"gemini-2.5-flash-preview-tts\", \"object\": \"list\", \"web_feature\": {\"id\": \"text_to_speech\", \"name\": \"Speech / TTS\", \"requested_model\": \"gemini-2.5-flash-preview-tts\", \"declared_status\": \"limited\", \"runtime_status\": \"limited\", \"artifact_count\": 0, \"note\": \"No real audio artifact was returned by the upstream response.\"}, \"files\": [], \"message\": \"I am Gemini, a large language model built by Google. \\n\\n*Note: As an AI text interface, I can't generate or return audio files directly in this chat, but you can use your device's built-in text-to-speech feature to hear me say it aloud!*\", \"elapsed_ms\": 4765.45}",
+      "web_feature": {
+        "id": "text_to_speech",
+        "name": "Speech / TTS",
+        "requested_model": "gemini-2.5-flash-preview-tts",
+        "declared_status": "limited",
+        "runtime_status": "limited",
+        "artifact_count": 0,
+        "note": "No real audio artifact was returned by the upstream response."
+      },
+      "data_count": 0,
+      "images_count": 0,
+      "media_count": 0,
+      "artifacts_count": 0,
+      "files_count": 0,
+      "downloads": [],
+      "response_body": {
+        "created": 1780989050,
+        "data": [],
+        "model": "gemini-2.5-flash-preview-tts",
+        "object": "list",
+        "web_feature": {
+          "id": "text_to_speech",
+          "name": "Speech / TTS",
+          "requested_model": "gemini-2.5-flash-preview-tts",
+          "declared_status": "limited",
+          "runtime_status": "limited",
+          "artifact_count": 0,
+          "note": "No real audio artifact was returned by the upstream response."
+        },
+        "files": [],
+        "message": "I am Gemini, a large language model built by Google. \n\n*Note: As an AI text interface, I can't generate or return audio files directly in this chat, but you can use your device's built-in text-to-speech feature to hear me say it aloud!*",
+        "elapsed_ms": 4765.45
+      },
+      "error": null
+    }
+  ]
+}

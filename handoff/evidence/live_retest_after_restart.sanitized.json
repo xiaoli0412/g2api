@@ -1,0 +1,489 @@
+{
+  "models": {
+    "object": "list",
+    "data": [
+      {
+        "id": "gemini-3.5-flash",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Fast general-purpose model (全方位帮助)"
+      },
+      {
+        "id": "3.5-flash",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web UI alias: 3.5 Flash"
+      },
+      {
+        "id": "flash",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web UI alias: Flash"
+      },
+      {
+        "id": "gemini-3.1-flash",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web UI alias: 3.1 Flash"
+      },
+      {
+        "id": "gemini-3.0-flash",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Previous generation flash model"
+      },
+      {
+        "id": "gemini-2.5-flash",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "2.5 Flash stable release"
+      },
+      {
+        "id": "gemini-2.5-flash-preview-04-17",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Source-discovered Gemini Web 2.5 Flash preview alias"
+      },
+      {
+        "id": "gemini-2.5-flash-preview-05-20",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Source-discovered Gemini Web 2.5 Flash preview alias"
+      },
+      {
+        "id": "gemini-2.5-flash-preview-09-2025",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Source-discovered Gemini Web 2.5 Flash preview alias"
+      },
+      {
+        "id": "gemini-3-flash-preview",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Source-discovered Gemini Web 3 Flash preview alias"
+      },
+      {
+        "id": "gemini-2.0-flash",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "2.0 Flash stable release"
+      },
+      {
+        "id": "gemini-3.5-flash-thinking",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Deep thinking mode (解决复杂问题)"
+      },
+      {
+        "id": "gemini-3.1-pro",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Pro model for math/code (高等数学与代码)"
+      },
+      {
+        "id": "3.1-pro",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web UI alias: 3.1 Pro"
+      },
+      {
+        "id": "gemini-3.1-pro-enhanced",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Pro with enhanced output (experimental)"
+      },
+      {
+        "id": "gemini-advanced",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web Advanced tier alias; real routing depends on account entitlement"
+      },
+      {
+        "id": "gemini-2.5-pro",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "2.5 Pro stable release"
+      },
+      {
+        "id": "gemini-3.0-pro",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Previous generation pro model"
+      },
+      {
+        "id": "gemini-auto",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Auto model selection"
+      },
+      {
+        "id": "gemini-3.5-flash-thinking-lite",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Dynamic thinking with adaptive depth"
+      },
+      {
+        "id": "gemini-flash-lite",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Lightweight fast model"
+      },
+      {
+        "id": "gemini-3.1-flash-lite",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web UI alias: 3.1 Flash-Lite"
+      },
+      {
+        "id": "3.1-flash-lite",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web UI alias: 3.1 Flash-Lite"
+      },
+      {
+        "id": "gemini-2.5-flash-lite",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "2.5 Flash Lite - cost-efficient"
+      },
+      {
+        "id": "gemini-3.5-flash-search",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Flash with web search"
+      },
+      {
+        "id": "gemini-3.5-flash-thinking-search",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Thinking with web search"
+      },
+      {
+        "id": "gemini-3.1-pro-search",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Pro with web search"
+      },
+      {
+        "id": "gemini-2.5-pro-search",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "2.5 Pro with web search"
+      },
+      {
+        "id": "gemini-2.5-flash-search",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "2.5 Flash with web search"
+      },
+      {
+        "id": "nano-banana-2",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web Create images alias: Nano Banana 2",
+        "web_feature": "image_generation"
+      },
+      {
+        "id": "nano-banana-pro",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web Create images alias: Nano Banana Pro",
+        "web_feature": "image_generation"
+      },
+      {
+        "id": "gemini-2.5-flash-image",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Hidden Gemini Web image model alias",
+        "web_feature": "image_generation"
+      },
+      {
+        "id": "gemini-2.5-flash-image-preview",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Hidden Gemini Web image preview model alias",
+        "web_feature": "image_generation"
+      },
+      {
+        "id": "gemini-3.1-flash-image-preview",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Hidden Gemini Web image preview model alias",
+        "web_feature": "image_generation"
+      },
+      {
+        "id": "gemini-3-pro-image-preview-11-2025",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Hidden Gemini Web Pro image preview alias",
+        "web_feature": "image_generation"
+      },
+      {
+        "id": "imagen-3.0-generate-001",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Imagen generation model name observed in Gemini Web source",
+        "web_feature": "image_generation"
+      },
+      {
+        "id": "imagen-3.0-generate-002",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Imagen generation model name observed in Gemini Web source",
+        "web_feature": "image_generation"
+      },
+      {
+        "id": "imagen-4.0-generate-001",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Imagen generation model name observed in Gemini Web source",
+        "web_feature": "image_generation"
+      },
+      {
+        "id": "omni",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web Create videos alias: Omni",
+        "web_feature": "video_generation"
+      },
+      {
+        "id": "veo-2.0-generate-001",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Veo generation model name observed in Gemini Web source",
+        "web_feature": "video_generation"
+      },
+      {
+        "id": "lyria-3",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web Music alias: Lyria 3",
+        "web_feature": "music"
+      },
+      {
+        "id": "gemini-2.5-flash-preview-tts",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web source-discovered TTS preview alias",
+        "web_feature": "text_to_speech"
+      },
+      {
+        "id": "gemini-deep-research",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web Deep research alias",
+        "web_feature": "deep_research"
+      },
+      {
+        "id": "gemini-canvas",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Canvas-like artifact extraction alias",
+        "web_feature": "canvas"
+      },
+      {
+        "id": "gemini-photos",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web Photos integration alias",
+        "web_feature": "photos"
+      },
+      {
+        "id": "gemini-library",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web Library surface alias",
+        "web_feature": "library"
+      },
+      {
+        "id": "gemini-notebook",
+        "object": "model",
+        "created": 1700000000,
+        "owned_by": "google",
+        "description": "Gemini Web Notebooks/NotebookLM handoff alias",
+        "web_feature": "notebook"
+      }
+    ]
+  },
+  "chat_who": {
+    "id": "chatcmpl-bd5b0db03614",
+    "object": "chat.completion",
+    "created": 1781020755,
+    "model": "gemini-3.5-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator and assistant. I'm here to help you learn, create, brainstorm, or just chat about whatever is on your mind. \n\nWhat are we working on today?"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": "<redacted>",
+      "completion_tokens": "<redacted>",
+      "total_tokens": "<redacted>"
+    }
+  },
+  "chat_math": {
+    "id": "chatcmpl-faafc74123c0",
+    "object": "chat.completion",
+    "created": 1781020761,
+    "model": "gemini-3.5-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "$1 + 1 = 2$"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": "<redacted>",
+      "completion_tokens": "<redacted>",
+      "total_tokens": "<redacted>"
+    }
+  },
+  "chat_search": {
+    "id": "chatcmpl-599eb5d0f4db",
+    "object": "chat.completion",
+    "created": 1781020766,
+    "model": "gemini-3.5-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator, research assistant, and sounding board. Whether you need help brainstorming ideas, organizing a project, learning a complex topic, or just want to chat, I'm here to help you figure it out. \n\nWhat are you working on today?"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": "<redacted>",
+      "completion_tokens": "<redacted>",
+      "total_tokens": "<redacted>"
+    }
+  },
+  "chat_stream": "data: {\"id\": \"chatcmpl-0cc2b8bb7743\", \"object\": \"chat.completion.chunk\", \"created\": 1781020770, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {\"content\": \"I am\"}, \"finish_reason\": null}]}\n\ndata: {\"id\": \"chatcmpl-0cc2b8bb7743\", \"object\": \"chat.completion.chunk\", \"created\": 1781020770, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {\"content\": \" Gemini, a large language model built by Google. I'm here as your AI collaborator\"}, \"finish_reason\": null}]}\n\ndata: {\"id\": \"chatcmpl-0cc2b8bb7743\", \"object\": \"chat.completion.chunk\", \"created\": 1781020771, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {\"content\": \", ready to help you with everything from writing and brainstorming to learning new things or just exploring ideas.\"}, \"finish_reason\": null}]}\n\ndata: {\"id\": \"chatcmpl-0cc2b8bb7743\", \"object\": \"chat.completion.chunk\", \"created\": 1781020773, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {}, \"finish_reason\": \"stop\"}]}\n\ndata: {\"id\": \"chatcmpl-0cc2b8bb7743\", \"object\": \"chat.completion.chunk\", \"created\": 1781020773, \"model\": \"gemini-3.5-flash\", \"choices\": [], \"usage\": {\"prompt_tokens\": 2, \"completion_tokens\": 49, \"total_tokens\": 51, \"prompt_tokens_details\": {\"cached_tokens\": 0}, \"completion_tokens_details\": {\"reasoning_tokens\": 0}}}\n\ndata: [DONE]\n\n",
+  "responses_who": {
+    "id": "resp_5e00289fe54f46fc",
+    "object": "response",
+    "created_at": 1781020777,
+    "status": "completed",
+    "model": "gemini-3.5-flash",
+    "output": [
+      {
+        "type": "message",
+        "id": "msg_19e7e745a3b7",
+        "role": "assistant",
+        "status": "completed",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator and assistant—here to help you brainstorm ideas, learn new things, write stories, organize information, or just chat. \n\nHow can I help you out today?",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "output_text": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator and assistant—here to help you brainstorm ideas, learn new things, write stories, organize information, or just chat. \n\nHow can I help you out today?",
+    "usage": {
+      "input_tokens": "<redacted>",
+      "output_tokens": "<redacted>",
+      "total_tokens": "<redacted>"
+    }
+  },
+  "responses_stream": "event: response.created\ndata: {\"type\": \"response.created\", \"response\": {\"id\": \"resp_3ffeeebba11349f2\", \"object\": \"response\", \"status\": \"in_progress\", \"model\": \"gemini-3.5-flash\", \"output\": []}}\n\nevent: response.output_item.added\ndata: {\"type\": \"response.output_item.added\", \"item\": {\"type\": \"message\", \"id\": \"msg_a5ede85b8f1c\", \"role\": \"assistant\", \"status\": \"completed\", \"content\": []}, \"output_index\": 0}\n\nevent: response.content_part.added\ndata: {\"type\": \"response.content_part.added\", \"item_id\": \"msg_a5ede85b8f1c\", \"output_index\": 0, \"content_index\": 0, \"part\": {\"type\": \"output_text\", \"text\": \"\", \"annotations\": []}}\n\nevent: response.output_text.delta\ndata: {\"type\": \"response.output_text.delta\", \"item_id\": \"msg_a5ede85b8f1c\", \"output_index\": 0, \"content_index\": 0, \"delta\": \"I am Gemini, a \"}\n\nevent: response.output_text.delta\ndata: {\"type\": \"response.output_text.delta\", \"item_id\": \"msg_a5ede85b8f1c\", \"output_index\": 0, \"content_index\": 0, \"delta\": \"large language \"}\n\nevent: response.output_text.delta\ndata: {\"type\": \"response.output_text.delta\", \"item_id\": \"msg_a5ede85b8f1c\", \"output_index\": 0, \"content_index\": 0, \"delta\": \"model built by \"}\n\nevent: response.output_text.delta\ndata: {\"type\": \"response.output_text.delta\", \"item_id\": \"msg_a5ede85b8f1c\", \"output_index\": 0, \"content_index\": 0, \"delta\": \"Google.\"}\n\nevent: response.output_text.done\ndata: {\"type\": \"response.output_text.done\", \"item_id\": \"msg_a5ede85b8f1c\", \"content_index\": 0, \"text\": \"I am Gemini, a large language model built by Google.\"}\n\nevent: response.content_part.done\ndata: {\"type\": \"response.content_part.done\", \"item_id\": \"msg_a5ede85b8f1c\", \"output_index\": 0, \"content_index\": 0, \"part\": {\"type\": \"output_text\", \"text\": \"I am Gemini, a large language model built by Google.\", \"annotations\": []}}\n\nevent: response.output_item.done\ndata: {\"type\": \"response.output_item.done\", \"item\": {\"type\": \"message\", \"id\": \"msg_a5ede85b8f1c\", \"role\": \"assistant\", \"status\": \"completed\", \"content\": [{\"type\": \"output_text\", \"text\": \"I am Gemini, a large language model built by Google.\", \"annotations\": []}]}, \"output_index\": 0}\n\nevent: response.completed\ndata: {\"type\": \"response.completed\", \"response\": {\"id\": \"resp_3ffeeebba11349f2\", \"object\": \"response\", \"status\": \"completed\", \"model\": \"gemini-3.5-flash\", \"output\": [{\"type\": \"message\", \"id\": \"msg_a5ede85b8f1c\", \"role\": \"assistant\", \"status\": \"completed\", \"content\": [{\"type\": \"output_text\", \"text\": \"I am Gemini, a large language model built by Google.\", \"annotations\": []}]}], \"output_text\": \"I am Gemini, a large language model built by Google.\", \"usage\": {\"input_tokens\": 2, \"output_tokens\": 13, \"total_tokens\": 15}}}\n\ndata: [DONE]\n\n",
+  "claude_who": {
+    "id": "chatcmpl-672624d87774",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator and assistant—here to help you brainstorm, learn, write, and tackle whatever projects you're working on."
+      }
+    ],
+    "model": "gemini-3.5-flash",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": "<redacted>",
+      "output_tokens": "<redacted>",
+      "cache_creation_input_tokens": "<redacted>",
+      "cache_read_input_tokens": "<redacted>"
+    }
+  },
+  "google_who": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator and assistant. I'm here to help you brainstorm creative ideas, write stories or essays, learn new concepts, or just chat about whatever is on your mind. \n\nHow can I help you out today?"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": "<redacted>",
+      "candidatesTokenCount": "<redacted>",
+      "totalTokenCount": "<redacted>"
+    },
+    "modelVersion": "gemini-3.5-flash"
+  }
+}

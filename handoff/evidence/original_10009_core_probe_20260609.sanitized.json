@@ -1,0 +1,113 @@
+{
+  "started_at": "2026-06-09T18:34:51",
+  "tasks": [
+    {
+      "label": "upstream-10009",
+      "base": "http://127.0.0.1:10009",
+      "endpoint": "/v1/chat/completions",
+      "model": "gemini-3.5-flash",
+      "prompt": "Who are you",
+      "status": "pass",
+      "semantic_ok": true,
+      "text_excerpt": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator—here to help you brainstorm ideas, break down complex topics, write code, or just chat about whatever is on your mind. \n\nHow can I help you out today?",
+      "request": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "gemini-3.5-flash",
+          "messages": [
+            {
+              "role": "user",
+              "content": "Who are you"
+            }
+          ],
+          "temperature": 0,
+          "stream": false
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "elapsed_ms": 4934.6,
+        "raw": "{\"id\": \"chatcmpl-75400bd6eb77\", \"object\": \"chat.completion\", \"created\": 1781001296, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"I am Gemini, a large language model built by Google. \\n\\nThink of me as your AI collaborator—here to help you brainstorm ideas, break down complex topics, write code, or just chat about whatever is on your mind. \\n\\nHow can I help you out today?\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 2, \"completion_tokens\": 60, \"total_tokens\": 63}}",
+        "json": {
+          "id": "chatcmpl-75400bd6eb77",
+          "object": "chat.completion",
+          "created": 1781001296,
+          "model": "gemini-3.5-flash",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator—here to help you brainstorm ideas, break down complex topics, write code, or just chat about whatever is on your mind. \n\nHow can I help you out today?"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": "<redacted>",
+            "completion_tokens": "<redacted>",
+            "total_tokens": "<redacted>"
+          }
+        }
+      }
+    },
+    {
+      "label": "upstream-10009",
+      "base": "http://127.0.0.1:10009",
+      "endpoint": "/v1/chat/completions",
+      "model": "gemini-3.5-flash",
+      "prompt": "1+1=?",
+      "status": "pass",
+      "semantic_ok": true,
+      "text_excerpt": "$1 + 1 = 2$",
+      "request": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "gemini-3.5-flash",
+          "messages": [
+            {
+              "role": "user",
+              "content": "1+1=?"
+            }
+          ],
+          "temperature": 0,
+          "stream": false
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "elapsed_ms": 6979.9,
+        "raw": "{\"id\": \"chatcmpl-0e57d6e97ba2\", \"object\": \"chat.completion\", \"created\": 1781001303, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"$1 + 1 = 2$\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 1, \"completion_tokens\": 2, \"total_tokens\": 4}}",
+        "json": {
+          "id": "chatcmpl-0e57d6e97ba2",
+          "object": "chat.completion",
+          "created": 1781001303,
+          "model": "gemini-3.5-flash",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "$1 + 1 = 2$"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": "<redacted>",
+            "completion_tokens": "<redacted>",
+            "total_tokens": "<redacted>"
+          }
+        }
+      }
+    }
+  ],
+  "updated_at": "2026-06-09T18:35:03",
+  "finished_at": "2026-06-09T18:35:03"
+}

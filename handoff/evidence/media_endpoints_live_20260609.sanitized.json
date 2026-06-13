@@ -1,0 +1,413 @@
+{
+  "started_at": "2026-06-09T18:42:29",
+  "base": "http://127.0.0.1:8081",
+  "tasks": [
+    {
+      "endpoint": "/v1/images/generations",
+      "model": "nano-banana-2",
+      "status": "limited",
+      "local_download_ok": false,
+      "urls": [],
+      "downloads": [],
+      "unresolved_materializations": [],
+      "request": {
+        "headers": {
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "nano-banana-2",
+          "prompt": "Create one tiny red square icon on a white background."
+        }
+      },
+      "response": {
+        "elapsed_ms": 180050.2,
+        "error": "TimeoutError('timed out')"
+      }
+    },
+    {
+      "endpoint": "/v1/images/generations",
+      "model": "nano-banana-pro",
+      "status": "limited",
+      "local_download_ok": false,
+      "urls": [],
+      "downloads": [],
+      "unresolved_materializations": [
+        {
+          "status": "unresolved",
+          "reason": "placeholder_url_not_downloadable",
+          "note": "Gemini Web returned a UI placeholder URL, not a fetchable media file."
+        },
+        {
+          "status": "unresolved",
+          "reason": "placeholder_url_not_downloadable",
+          "note": "Gemini Web returned a UI placeholder URL, not a fetchable media file."
+        },
+        {
+          "status": "failed",
+          "reason": "HTTP Error 400: Bad Request"
+        },
+        {
+          "status": "failed",
+          "reason": "HTTP Error 403: Forbidden"
+        },
+        {
+          "status": "failed",
+          "reason": "HTTP Error 403: Forbidden"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "nano-banana-pro",
+          "prompt": "Create one tiny blue circle icon on a white background."
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "content_type": "application/json",
+        "elapsed_ms": 36998.1,
+        "raw": "{\"created\": 1781001966, \"data\": [], \"model\": \"nano-banana-pro\", \"object\": \"list\", \"web_feature\": {\"id\": \"image_generation\", \"name\": \"Create images\", \"requested_model\": \"Nano Banana Pro\", \"declared_status\": \"experimental\", \"runtime_status\": \"supported\", \"artifact_count\": 3}, \"files\": [{\"kind\": \"image\", \"url\": \"http://googleusercontent.com/image_generation_content/0\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"http://googleusercontent.com/image_generation_content/0\", \"materialized\": {\"status\": \"unresolved\", \"reason\": \"placeholder_url_not_downloadable\", \"note\": \"Gemini Web returned a UI placeholder URL, not a fetchable media file.\"}}, {\"kind\": \"image\", \"url\": \"http://googleusercontent.com/image_generation_content/0\\\\\\\"],[null,null,null,null,[null,null,7]],null,null,null,null,null,[2],\\\\\\\"und\\\\\\\",null,null,[{\\\\\\\"7\\\\\\\":[3],\\\\\\\"8\\\\\\\":[[[[null,null,null,[null,1,\\\\\\\"13572505673210793138.png\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\\\\\\\",null,\\\\\\\"$AQbORAAYXErzCJiHrsft/tjZ2/Qj/cVKX9W7Vecq7styOf3kf0ZwQ1YvUc25l+PEIZoAtnD8hiEHLpbgwtU1Azs5TkIzmK+f60i0W79icKi72y7Mlm7sUnUr25ZGKjAumeZdbUPk9WvT6izCBRE6nVHC4xgl2HCqzjHm4LjWkDBMq5it0gwzzxJ0F1DJMAS82RyXQ27s1ydOhNZMyNV25fdMDf/W2RDbi8zV1hqpUzrR1H39B7OsYhpHCJmlZMfp62OMOA\\\\=\\\\=\\\\\\\",null,null,2,[1781001944,502153773],null,\\\\\\\"image/png\\\\\\\",null,null,null,[1408,768,1121385]],null,null,[null,1,\\\\\\\"4307040975494890180.jpeg\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\\\\\\\",null,\\\\\\\"$AQbORABC9qo00BGU6+hppTCcym99fKBvGzG/2hPad2lxT1ieim56Juiur78oOejGrQcfPK+pI8Yw1bDcW576UQ6+TJ8b338Q3iMhbxYdVIcQxubH2Dp57iMvMum/te0hbIkRpnkZ7T7R58jk/+ION3kaACDGzjOWyl0su1Tuu8PvUqfp0aL8PWTTfsSVHyH40BJvPOioIit0fX/xCvPbFpN74Cdnx0qzhHgZRSwpTTXsVcwHXB5ObeKEEp/xJ+j8PiGb\\\\\\\",null,null,2,[1781001944,502051943],null,\\\\\\\"image/jpeg\\\\\\\",null,null,null,[1408,768,390002]]],[\\\\\\\"http://googleusercontent.com/image_generation_content/0\\\\\\\",null,null,null,null,1],null,[20,null,null,null,[\\\\\\\"en\\\\\\\",\\\\\\\"JP\\\\\\\"],null,null,null,null,null,null,0,null,null,[[\\\\\\\"Blue\\\\\\\",\\\\\\\"/m/01g5v\\\\\\\",0.98557234],[\\\\\\\"White\\\\\\\",\\\\\\\"/m/083jv\\\\\\\",0.9576381],[\\\\\\\"Photograph\\\\\\\",\\\\\\\"/m/068jd\\\\\\\",0.9473354],[\\\\\\\"Daytime\\\\\\\",\\\\\\\"/m/02q7ylj\\\\\\\",0.91123295],[\\\\\\\"Grey\\\\\\\",\\\\\\\"/m/036k5h\\\\\\\",0.8925353],[\\\\\\\"Black\\\\\\\",\\\\\\\"/m/019sc\\\\\\\",0.88902134],[\\\\\\\"Font\\\\\\\",\\\\\\\"/m/03gq5hm\\\\\\\",0.7177974],[\\\\\\\"Design\\\\\\\",\\\\\\\"/m/02cwm\\\\\\\",0.68778783],[\\\\\\\"Red\\\\\\\",\\\\\\\"/m/06fvc\\\\\\\",0.68292564],[\\\\\\\"Text\\\\\\\",\\\\\\\"/m/07s6nbt\\\\\\\",0.6699692],[\\\\\\\"Language\\\\\\\",\\\\\\\"/j/2sh_y4\\\\\\\",0.6637206],[\\\\\\\"Vertical\\\\\\\",\\\\\\\"/a/4hh3p0\\\\\\\",0.61943007],[\\\\\\\"Horizontal\\\\\\\",\\\\\\\"/a/2mqvzc\\\\\\\",0.6028729],[\\\\\\\"Color\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"http://googleusercontent.com/image_generation_content/0\\\\\\\"],[null,null,null,null,[null,null,7]],null,null,null,null,null,[2],\\\\\\\"und\\\\\\\",null,null,[{\\\\\\\"7\\\\\\\":[3],\\\\\\\"8\\\\\\\":[[[[null,null,null,[null,1,\\\\\\\"13572505673210793138.png\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\\\\\\\",null,\\\\\\\"$AQbORAAYXErzCJiHrsft/tjZ2/Qj/cVKX9W7Vecq7styOf3kf0ZwQ1YvUc25l+PEIZoAtnD8hiEHLpbgwtU1Azs5TkIzmK+f60i0W79icKi72y7Mlm7sUnUr25ZGKjAumeZdbUPk9WvT6izCBRE6nVHC4xgl2HCqzjHm4LjWkDBMq5it0gwzzxJ0F1DJMAS82RyXQ27s1ydOhNZMyNV25fdMDf/W2RDbi8zV1hqpUzrR1H39B7OsYhpHCJmlZMfp62OMOA\\\\=\\\\=\\\\\\\",null,null,2,[1781001944,502153773],null,\\\\\\\"image/png\\\\\\\",null,null,null,[1408,768,1121385]],null,null,[null,1,\\\\\\\"4307040975494890180.jpeg\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\\\\\\\",null,\\\\\\\"$AQbORABC9qo00BGU6+hppTCcym99fKBvGzG/2hPad2lxT1ieim56Juiur78oOejGrQcfPK+pI8Yw1bDcW576UQ6+TJ8b338Q3iMhbxYdVIcQxubH2Dp57iMvMum/te0hbIkRpnkZ7T7R58jk/+ION3kaACDGzjOWyl0su1Tuu8PvUqfp0aL8PWTTfsSVHyH40BJvPOioIit0fX/xCvPbFpN74Cdnx0qzhHgZRSwpTTXsVcwHXB5ObeKEEp/xJ+j8PiGb\\\\\\\",null,null,2,[1781001944,502051943],null,\\\\\\\"image/jpeg\\\\\\\",null,null,null,[1408,768,390002]]],[\\\\\\\"http://googleusercontent.com/image_generation_content/0\\\\\\\",null,null,null,null,1],null,[20,null,null,null,[\\\\\\\"en\\\\\\\",\\\\\\\"JP\\\\\\\"],null,null,null,null,null,null,0,null,null,[[\\\\\\\"Blue\\\\\\\",\\\\\\\"/m/01g5v\\\\\\\",0.98557234],[\\\\\\\"White\\\\\\\",\\\\\\\"/m/083jv\\\\\\\",0.9576381],[\\\\\\\"Photograph\\\\\\\",\\\\\\\"/m/068jd\\\\\\\",0.9473354],[\\\\\\\"Daytime\\\\\\\",\\\\\\\"/m/02q7ylj\\\\\\\",0.91123295],[\\\\\\\"Grey\\\\\\\",\\\\\\\"/m/036k5h\\\\\\\",0.8925353],[\\\\\\\"Black\\\\\\\",\\\\\\\"/m/019sc\\\\\\\",0.88902134],[\\\\\\\"Font\\\\\\\",\\\\\\\"/m/03gq5hm\\\\\\\",0.7177974],[\\\\\\\"Design\\\\\\\",\\\\\\\"/m/02cwm\\\\\\\",0.68778783],[\\\\\\\"Red\\\\\\\",\\\\\\\"/m/06fvc\\\\\\\",0.68292564],[\\\\\\\"Text\\\\\\\",\\\\\\\"/m/07s6nbt\\\\\\\",0.6699692],[\\\\\\\"Language\\\\\\\",\\\\\\\"/j/2sh_y4\\\\\\\",0.6637206],[\\\\\\\"Vertical\\\\\\\",\\\\\\\"/a/4hh3p0\\\\\\\",0.61943007],[\\\\\\\"Horizontal\\\\\\\",\\\\\\\"/a/2mqvzc\\\\\\\",0.6028729],[\\\\\\\"Color\", \"materialized\": {\"status\": \"unresolved\", \"reason\": \"placeholder_url_not_downloadable\", \"note\": \"Gemini Web returned a UI placeholder URL, not a fetchable media file.\"}}, {\"kind\": \"image\", \"url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\\\\\\\",null,\\\\\\\"$AQbORAAYXErzCJiHrsft/tjZ2/Qj/cVKX9W7Vecq7styOf3kf0ZwQ1YvUc25l+PEIZoAtnD8hiEHLpbgwtU1Azs5TkIzmK+f60i0W79icKi72y7Mlm7sUnUr25ZGKjAumeZdbUPk9WvT6izCBRE6nVHC4xgl2HCqzjHm4LjWkDBMq5it0gwzzxJ0F1DJMAS82RyXQ27s1ydOhNZMyNV25fdMDf/W2RDbi8zV1hqpUzrR1H39B7OsYhpHCJmlZMfp62OMOA\\\\=\\\\=\\\\\\\",null,null,2,[1781001944,502153773],null,\\\\\\\"image/png\\\\\\\",null,null,null,[1408,768,1121385]],null,null,[null,1,\\\\\\\"4307040975494890180.jpeg\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\\\\\\\",null,\\\\\\\"$AQbORABC9qo00BGU6+hppTCcym99fKBvGzG/2hPad2lxT1ieim56Juiur78oOejGrQcfPK+pI8Yw1bDcW576UQ6+TJ8b338Q3iMhbxYdVIcQxubH2Dp57iMvMum/te0hbIkRpnkZ7T7R58jk/+ION3kaACDGzjOWyl0su1Tuu8PvUqfp0aL8PWTTfsSVHyH40BJvPOioIit0fX/xCvPbFpN74Cdnx0qzhHgZRSwpTTXsVcwHXB5ObeKEEp/xJ+j8PiGb\\\\\\\",null,null,2,[1781001944,502051943],null,\\\\\\\"image/jpeg\\\\\\\",null,null,null,[1408,768,390002]]],[\\\\\\\"http://googleusercontent.com/image_generation_content/0\\\\\\\",null,null,null,null,1],null,[20,null,null,null,[\\\\\\\"en\\\\\\\",\\\\\\\"JP\\\\\\\"],null,null,null,null,null,null,0,null,null,[[\\\\\\\"Blue\\\\\\\",\\\\\\\"/m/01g5v\\\\\\\",0.98557234],[\\\\\\\"White\\\\\\\",\\\\\\\"/m/083jv\\\\\\\",0.9576381],[\\\\\\\"Photograph\\\\\\\",\\\\\\\"/m/068jd\\\\\\\",0.9473354],[\\\\\\\"Daytime\\\\\\\",\\\\\\\"/m/02q7ylj\\\\\\\",0.91123295],[\\\\\\\"Grey\\\\\\\",\\\\\\\"/m/036k5h\\\\\\\",0.8925353],[\\\\\\\"Black\\\\\\\",\\\\\\\"/m/019sc\\\\\\\",0.88902134],[\\\\\\\"Font\\\\\\\",\\\\\\\"/m/03gq5hm\\\\\\\",0.7177974],[\\\\\\\"Design\\\\\\\",\\\\\\\"/m/02cwm\\\\\\\",0.68778783],[\\\\\\\"Red\\\\\\\",\\\\\\\"/m/06fvc\\\\\\\",0.68292564],[\\\\\\\"Text\\\\\\\",\\\\\\\"/m/07s6nbt\\\\\\\",0.6699692],[\\\\\\\"Language\\\\\\\",\\\\\\\"/j/2sh_y4\\\\\\\",0.6637206],[\\\\\\\"Vertical\\\\\\\",\\\\\\\"/a/4hh3p0\\\\\\\",0.61943007],[\\\\\\\"Horizontal\\\\\\\",\\\\\\\"/a/2mqvzc\\\\\\\",0.6028729],[\\\\\\\"Color\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\\\\\\\",null,\\\\\\\"$AQbORAAYXErzCJiHrsft/tjZ2/Qj/cVKX9W7Vecq7styOf3kf0ZwQ1YvUc25l+PEIZoAtnD8hiEHLpbgwtU1Azs5TkIzmK+f60i0W79icKi72y7Mlm7sUnUr25ZGKjAumeZdbUPk9WvT6izCBRE6nVHC4xgl2HCqzjHm4LjWkDBMq5it0gwzzxJ0F1DJMAS82RyXQ27s1ydOhNZMyNV25fdMDf/W2RDbi8zV1hqpUzrR1H39B7OsYhpHCJmlZMfp62OMOA\\\\=\\\\=\\\\\\\",null,null,2,[1781001944,502153773],null,\\\\\\\"image/png\\\\\\\",null,null,null,[1408,768,1121385]],null,null,[null,1,\\\\\\\"4307040975494890180.jpeg\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\\\\\\\",null,\\\\\\\"$AQbORABC9qo00BGU6+hppTCcym99fKBvGzG/2hPad2lxT1ieim56Juiur78oOejGrQcfPK+pI8Yw1bDcW576UQ6+TJ8b338Q3iMhbxYdVIcQxubH2Dp57iMvMum/te0hbIkRpnkZ7T7R58jk/+ION3kaACDGzjOWyl0su1Tuu8PvUqfp0aL8PWTTfsSVHyH40BJvPOioIit0fX/xCvPbFpN74Cdnx0qzhHgZRSwpTTXsVcwHXB5ObeKEEp/xJ+j8PiGb\\\\\\\",null,null,2,[1781001944,502051943],null,\\\\\\\"image/jpeg\\\\\\\",null,null,null,[1408,768,390002]]],[\\\\\\\"http://googleusercontent.com/image_generation_content/0\\\\\\\",null,null,null,null,1],null,[20,null,null,null,[\\\\\\\"en\\\\\\\",\\\\\\\"JP\\\\\\\"],null,null,null,null,null,null,0,null,null,[[\\\\\\\"Blue\\\\\\\",\\\\\\\"/m/01g5v\\\\\\\",0.98557234],[\\\\\\\"White\\\\\\\",\\\\\\\"/m/083jv\\\\\\\",0.9576381],[\\\\\\\"Photograph\\\\\\\",\\\\\\\"/m/068jd\\\\\\\",0.9473354],[\\\\\\\"Daytime\\\\\\\",\\\\\\\"/m/02q7ylj\\\\\\\",0.91123295],[\\\\\\\"Grey\\\\\\\",\\\\\\\"/m/036k5h\\\\\\\",0.8925353],[\\\\\\\"Black\\\\\\\",\\\\\\\"/m/019sc\\\\\\\",0.88902134],[\\\\\\\"Font\\\\\\\",\\\\\\\"/m/03gq5hm\\\\\\\",0.7177974],[\\\\\\\"Design\\\\\\\",\\\\\\\"/m/02cwm\\\\\\\",0.68778783],[\\\\\\\"Red\\\\\\\",\\\\\\\"/m/06fvc\\\\\\\",0.68292564],[\\\\\\\"Text\\\\\\\",\\\\\\\"/m/07s6nbt\\\\\\\",0.6699692],[\\\\\\\"Language\\\\\\\",\\\\\\\"/j/2sh_y4\\\\\\\",0.6637206],[\\\\\\\"Vertical\\\\\\\",\\\\\\\"/a/4hh3p0\\\\\\\",0.61943007],[\\\\\\\"Horizontal\\\\\\\",\\\\\\\"/a/2mqvzc\\\\\\\",0.6028729],[\\\\\\\"Color\", \"materialized\": {\"status\": \"failed\", \"reason\": \"HTTP Error 400: Bad Request\"}}, {\"kind\": \"image\", \"url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\", \"materialized\": {\"status\": \"failed\", \"reason\": \"HTTP Error 403: Forbidden\"}}, {\"kind\": \"image\", \"url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\", \"materialized\": {\"status\": \"failed\", \"reason\": \"HTTP Error 403: Forbidden\"}}], \"message\": \"\", \"elapsed_ms\": 36983.23}",
+        "json": {
+          "created": 1781001966,
+          "data": [],
+          "model": "nano-banana-pro",
+          "object": "list",
+          "web_feature": {
+            "id": "image_generation",
+            "name": "Create images",
+            "requested_model": "Nano Banana Pro",
+            "declared_status": "experimental",
+            "runtime_status": "supported",
+            "artifact_count": 3
+          },
+          "files": [
+            {
+              "kind": "image",
+              "url": "http://googleusercontent.com/image_generation_content/0",
+              "alt": "",
+              "type": "url",
+              "source_url": "http://googleusercontent.com/image_generation_content/0",
+              "materialized": {
+                "status": "unresolved",
+                "reason": "placeholder_url_not_downloadable",
+                "note": "Gemini Web returned a UI placeholder URL, not a fetchable media file."
+              }
+            },
+            {
+              "kind": "image",
+              "url": "http://googleusercontent.com/image_generation_content/0\\\"],[null,null,null,null,[null,null,7]],null,null,null,null,null,[2],\\\"und\\\",null,null,[{\\\"7\\\":[3],\\\"8\\\":[[[[null,null,null,[null,1,\\\"13572505673210793138.png\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\\\",null,\\\"$AQbORAAYXErzCJiHrsft/tjZ2/Qj/cVKX9W7Vecq7styOf3kf0ZwQ1YvUc25l+PEIZoAtnD8hiEHLpbgwtU1Azs5TkIzmK+f60i0W79icKi72y7Mlm7sUnUr25ZGKjAumeZdbUPk9WvT6izCBRE6nVHC4xgl2HCqzjHm4LjWkDBMq5it0gwzzxJ0F1DJMAS82RyXQ27s1ydOhNZMyNV25fdMDf/W2RDbi8zV1hqpUzrR1H39B7OsYhpHCJmlZMfp62OMOA\\=\\=\\\",null,null,2,[1781001944,502153773],null,\\\"image/png\\\",null,null,null,[1408,768,1121385]],null,null,[null,1,\\\"4307040975494890180.jpeg\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\\\",null,\\\"$AQbORABC9qo00BGU6+hppTCcym99fKBvGzG/2hPad2lxT1ieim56Juiur78oOejGrQcfPK+pI8Yw1bDcW576UQ6+TJ8b338Q3iMhbxYdVIcQxubH2Dp57iMvMum/te0hbIkRpnkZ7T7R58jk/+ION3kaACDGzjOWyl0su1Tuu8PvUqfp0aL8PWTTfsSVHyH40BJvPOioIit0fX/xCvPbFpN74Cdnx0qzhHgZRSwpTTXsVcwHXB5ObeKEEp/xJ+j8PiGb\\\",null,null,2,[1781001944,502051943],null,\\\"image/jpeg\\\",null,null,null,[1408,768,390002]]],[\\\"http://googleusercontent.com/image_generation_content/0\\\",null,null,null,null,1],null,[20,null,null,null,[\\\"en\\\",\\\"JP\\\"],null,null,null,null,null,null,0,null,null,[[\\\"Blue\\\",\\\"/m/01g5v\\\",0.98557234],[\\\"White\\\",\\\"/m/083jv\\\",0.9576381],[\\\"Photograph\\\",\\\"/m/068jd\\\",0.9473354],[\\\"Daytime\\\",\\\"/m/02q7ylj\\\",0.91123295],[\\\"Grey\\\",\\\"/m/036k5h\\\",0.8925353],[\\\"Black\\\",\\\"/m/019sc\\\",0.88902134],[\\\"Font\\\",\\\"/m/03gq5hm\\\",0.7177974],[\\\"Design\\\",\\\"/m/02cwm\\\",0.68778783],[\\\"Red\\\",\\\"/m/06fvc\\\",0.68292564],[\\\"Text\\\",\\\"/m/07s6nbt\\\",0.6699692],[\\\"Language\\\",\\\"/j/2sh_y4\\\",0.6637206],[\\\"Vertical\\\",\\\"/a/4hh3p0\\\",0.61943007],[\\\"Horizontal\\\",\\\"/a/2mqvzc\\\",0.6028729],[\\\"Color",
+              "alt": "",
+              "type": "url",
+              "source_url": "http://googleusercontent.com/image_generation_content/0\\\"],[null,null,null,null,[null,null,7]],null,null,null,null,null,[2],\\\"und\\\",null,null,[{\\\"7\\\":[3],\\\"8\\\":[[[[null,null,null,[null,1,\\\"13572505673210793138.png\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\\\",null,\\\"$AQbORAAYXErzCJiHrsft/tjZ2/Qj/cVKX9W7Vecq7styOf3kf0ZwQ1YvUc25l+PEIZoAtnD8hiEHLpbgwtU1Azs5TkIzmK+f60i0W79icKi72y7Mlm7sUnUr25ZGKjAumeZdbUPk9WvT6izCBRE6nVHC4xgl2HCqzjHm4LjWkDBMq5it0gwzzxJ0F1DJMAS82RyXQ27s1ydOhNZMyNV25fdMDf/W2RDbi8zV1hqpUzrR1H39B7OsYhpHCJmlZMfp62OMOA\\=\\=\\\",null,null,2,[1781001944,502153773],null,\\\"image/png\\\",null,null,null,[1408,768,1121385]],null,null,[null,1,\\\"4307040975494890180.jpeg\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\\\",null,\\\"$AQbORABC9qo00BGU6+hppTCcym99fKBvGzG/2hPad2lxT1ieim56Juiur78oOejGrQcfPK+pI8Yw1bDcW576UQ6+TJ8b338Q3iMhbxYdVIcQxubH2Dp57iMvMum/te0hbIkRpnkZ7T7R58jk/+ION3kaACDGzjOWyl0su1Tuu8PvUqfp0aL8PWTTfsSVHyH40BJvPOioIit0fX/xCvPbFpN74Cdnx0qzhHgZRSwpTTXsVcwHXB5ObeKEEp/xJ+j8PiGb\\\",null,null,2,[1781001944,502051943],null,\\\"image/jpeg\\\",null,null,null,[1408,768,390002]]],[\\\"http://googleusercontent.com/image_generation_content/0\\\",null,null,null,null,1],null,[20,null,null,null,[\\\"en\\\",\\\"JP\\\"],null,null,null,null,null,null,0,null,null,[[\\\"Blue\\\",\\\"/m/01g5v\\\",0.98557234],[\\\"White\\\",\\\"/m/083jv\\\",0.9576381],[\\\"Photograph\\\",\\\"/m/068jd\\\",0.9473354],[\\\"Daytime\\\",\\\"/m/02q7ylj\\\",0.91123295],[\\\"Grey\\\",\\\"/m/036k5h\\\",0.8925353],[\\\"Black\\\",\\\"/m/019sc\\\",0.88902134],[\\\"Font\\\",\\\"/m/03gq5hm\\\",0.7177974],[\\\"Design\\\",\\\"/m/02cwm\\\",0.68778783],[\\\"Red\\\",\\\"/m/06fvc\\\",0.68292564],[\\\"Text\\\",\\\"/m/07s6nbt\\\",0.6699692],[\\\"Language\\\",\\\"/j/2sh_y4\\\",0.6637206],[\\\"Vertical\\\",\\\"/a/4hh3p0\\\",0.61943007],[\\\"Horizontal\\\",\\\"/a/2mqvzc\\\",0.6028729],[\\\"Color",
+              "materialized": {
+                "status": "unresolved",
+                "reason": "placeholder_url_not_downloadable",
+                "note": "Gemini Web returned a UI placeholder URL, not a fetchable media file."
+              }
+            },
+            {
+              "kind": "image",
+              "url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\\\",null,\\\"$AQbORAAYXErzCJiHrsft/tjZ2/Qj/cVKX9W7Vecq7styOf3kf0ZwQ1YvUc25l+PEIZoAtnD8hiEHLpbgwtU1Azs5TkIzmK+f60i0W79icKi72y7Mlm7sUnUr25ZGKjAumeZdbUPk9WvT6izCBRE6nVHC4xgl2HCqzjHm4LjWkDBMq5it0gwzzxJ0F1DJMAS82RyXQ27s1ydOhNZMyNV25fdMDf/W2RDbi8zV1hqpUzrR1H39B7OsYhpHCJmlZMfp62OMOA\\=\\=\\\",null,null,2,[1781001944,502153773],null,\\\"image/png\\\",null,null,null,[1408,768,1121385]],null,null,[null,1,\\\"4307040975494890180.jpeg\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\\\",null,\\\"$AQbORABC9qo00BGU6+hppTCcym99fKBvGzG/2hPad2lxT1ieim56Juiur78oOejGrQcfPK+pI8Yw1bDcW576UQ6+TJ8b338Q3iMhbxYdVIcQxubH2Dp57iMvMum/te0hbIkRpnkZ7T7R58jk/+ION3kaACDGzjOWyl0su1Tuu8PvUqfp0aL8PWTTfsSVHyH40BJvPOioIit0fX/xCvPbFpN74Cdnx0qzhHgZRSwpTTXsVcwHXB5ObeKEEp/xJ+j8PiGb\\\",null,null,2,[1781001944,502051943],null,\\\"image/jpeg\\\",null,null,null,[1408,768,390002]]],[\\\"http://googleusercontent.com/image_generation_content/0\\\",null,null,null,null,1],null,[20,null,null,null,[\\\"en\\\",\\\"JP\\\"],null,null,null,null,null,null,0,null,null,[[\\\"Blue\\\",\\\"/m/01g5v\\\",0.98557234],[\\\"White\\\",\\\"/m/083jv\\\",0.9576381],[\\\"Photograph\\\",\\\"/m/068jd\\\",0.9473354],[\\\"Daytime\\\",\\\"/m/02q7ylj\\\",0.91123295],[\\\"Grey\\\",\\\"/m/036k5h\\\",0.8925353],[\\\"Black\\\",\\\"/m/019sc\\\",0.88902134],[\\\"Font\\\",\\\"/m/03gq5hm\\\",0.7177974],[\\\"Design\\\",\\\"/m/02cwm\\\",0.68778783],[\\\"Red\\\",\\\"/m/06fvc\\\",0.68292564],[\\\"Text\\\",\\\"/m/07s6nbt\\\",0.6699692],[\\\"Language\\\",\\\"/j/2sh_y4\\\",0.6637206],[\\\"Vertical\\\",\\\"/a/4hh3p0\\\",0.61943007],[\\\"Horizontal\\\",\\\"/a/2mqvzc\\\",0.6028729],[\\\"Color",
+              "alt": "",
+              "type": "url",
+              "source_url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ\\\",null,\\\"$AQbORAAYXErzCJiHrsft/tjZ2/Qj/cVKX9W7Vecq7styOf3kf0ZwQ1YvUc25l+PEIZoAtnD8hiEHLpbgwtU1Azs5TkIzmK+f60i0W79icKi72y7Mlm7sUnUr25ZGKjAumeZdbUPk9WvT6izCBRE6nVHC4xgl2HCqzjHm4LjWkDBMq5it0gwzzxJ0F1DJMAS82RyXQ27s1ydOhNZMyNV25fdMDf/W2RDbi8zV1hqpUzrR1H39B7OsYhpHCJmlZMfp62OMOA\\=\\=\\\",null,null,2,[1781001944,502153773],null,\\\"image/png\\\",null,null,null,[1408,768,1121385]],null,null,[null,1,\\\"4307040975494890180.jpeg\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g\\\",null,\\\"$AQbORABC9qo00BGU6+hppTCcym99fKBvGzG/2hPad2lxT1ieim56Juiur78oOejGrQcfPK+pI8Yw1bDcW576UQ6+TJ8b338Q3iMhbxYdVIcQxubH2Dp57iMvMum/te0hbIkRpnkZ7T7R58jk/+ION3kaACDGzjOWyl0su1Tuu8PvUqfp0aL8PWTTfsSVHyH40BJvPOioIit0fX/xCvPbFpN74Cdnx0qzhHgZRSwpTTXsVcwHXB5ObeKEEp/xJ+j8PiGb\\\",null,null,2,[1781001944,502051943],null,\\\"image/jpeg\\\",null,null,null,[1408,768,390002]]],[\\\"http://googleusercontent.com/image_generation_content/0\\\",null,null,null,null,1],null,[20,null,null,null,[\\\"en\\\",\\\"JP\\\"],null,null,null,null,null,null,0,null,null,[[\\\"Blue\\\",\\\"/m/01g5v\\\",0.98557234],[\\\"White\\\",\\\"/m/083jv\\\",0.9576381],[\\\"Photograph\\\",\\\"/m/068jd\\\",0.9473354],[\\\"Daytime\\\",\\\"/m/02q7ylj\\\",0.91123295],[\\\"Grey\\\",\\\"/m/036k5h\\\",0.8925353],[\\\"Black\\\",\\\"/m/019sc\\\",0.88902134],[\\\"Font\\\",\\\"/m/03gq5hm\\\",0.7177974],[\\\"Design\\\",\\\"/m/02cwm\\\",0.68778783],[\\\"Red\\\",\\\"/m/06fvc\\\",0.68292564],[\\\"Text\\\",\\\"/m/07s6nbt\\\",0.6699692],[\\\"Language\\\",\\\"/j/2sh_y4\\\",0.6637206],[\\\"Vertical\\\",\\\"/a/4hh3p0\\\",0.61943007],[\\\"Horizontal\\\",\\\"/a/2mqvzc\\\",0.6028729],[\\\"Color",
+              "materialized": {
+                "status": "failed",
+                "reason": "HTTP Error 400: Bad Request"
+              }
+            },
+            {
+              "kind": "image",
+              "url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ",
+              "alt": "",
+              "type": "url",
+              "source_url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fIl7OdO6WJHikUmDVq4AgtxiJo7AxCQoH66V5RSvIourg5R6zyb3nfNaw84kJV7gyZIO-vaMIAm8me2sNdqLC_Zpvs2c1Fu4QoQMhoKUfChQqL2GSAYcJ4Np0HKFrtRLgR6MNHV9BGrPhAGWOcgfyabgUf0BCyvcbiwqer6M-EVe6tGbQ",
+              "materialized": {
+                "status": "failed",
+                "reason": "HTTP Error 403: Forbidden"
+              }
+            },
+            {
+              "kind": "image",
+              "url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g",
+              "alt": "",
+              "type": "url",
+              "source_url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fKCSWXxnwgq3QRiXeCK8GEFgrIVsCDGYMMc65iz_UhjkDPsH0M_1iQf3JaqhigAvXwP1PWarcM8ZB8XWHxuhzfQa2Kj1N2M8d4W15G2yAqnw7HvrV6NCClywzoQ2bcDZnsTZE7rZAAuXI0ms66JhXFhqp991_RtU_4bvl3ZBndJ_qUu8g",
+              "materialized": {
+                "status": "failed",
+                "reason": "HTTP Error 403: Forbidden"
+              }
+            }
+          ],
+          "message": "",
+          "elapsed_ms": 36983.23
+        }
+      }
+    },
+    {
+      "endpoint": "/v1beta/models/nano-banana-2:generateImages",
+      "model": "nano-banana-2",
+      "status": "limited",
+      "local_download_ok": false,
+      "urls": [],
+      "downloads": [],
+      "unresolved_materializations": [
+        {
+          "status": "unresolved",
+          "reason": "placeholder_url_not_downloadable",
+          "note": "Gemini Web returned a UI placeholder URL, not a fetchable media file."
+        },
+        {
+          "status": "unresolved",
+          "reason": "placeholder_url_not_downloadable",
+          "note": "Gemini Web returned a UI placeholder URL, not a fetchable media file."
+        },
+        {
+          "status": "failed",
+          "reason": "HTTP Error 400: Bad Request"
+        },
+        {
+          "status": "failed",
+          "reason": "HTTP Error 403: Forbidden"
+        },
+        {
+          "status": "failed",
+          "reason": "HTTP Error 403: Forbidden"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "prompt": "Create one tiny green triangle icon on a white background."
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "content_type": "application/json",
+        "elapsed_ms": 61909.3,
+        "raw": "{\"model\": \"nano-banana-2\", \"predictions\": [], \"generatedMedia\": [], \"files\": [{\"kind\": \"image\", \"url\": \"http://googleusercontent.com/image_generation_content/0\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"http://googleusercontent.com/image_generation_content/0\", \"materialized\": {\"status\": \"unresolved\", \"reason\": \"placeholder_url_not_downloadable\", \"note\": \"Gemini Web returned a UI placeholder URL, not a fetchable media file.\"}}, {\"kind\": \"image\", \"url\": \"http://googleusercontent.com/image_generation_content/0\\\\\\\"],[null,null,null,null,[null,null,7]],null,null,null,null,null,[2],\\\\\\\"und\\\\\\\",null,null,[null,null,null,null,null,null,[3],[[[[null,null,null,[null,1,\\\\\\\"15569976298304941232.png\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\\\\\\\",null,\\\\\\\"$AQbORADBT3zUS3edRj0ooGatnqYeabOSc7tpH1dwjU2IQ8Q2vZTuUoxNPfb4dW5WbAJy+Qy2k3VJNQjW9mF+pL1+6bBJCHtkUcMXYdDe7I6lvFtvtAdibeh1ijb3+8ykEBRmCcfYZbh1ql4g+Ag6s1tbphSSS+dY9oquZoxtOsLCNsQYtwnZA/IWsdtBnX1C2CgQNwxNVBuTUMvLYQtX8JQCZCl84rpG/wrm1bRTihclsdV+gBkhEWTzhls2K0vAqjTEmw\\\\=\\\\=\\\\\\\",null,null,2,[1781001976,998040770],null,\\\\\\\"image/png\\\\\\\",null,null,null,[1408,768,43965]],null,null,[null,1,\\\\\\\"16481517089778911324.jpeg\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\\\\\\\",null,\\\\\\\"$AQbORACRHchw5kNwfMrQtNemczIrqaU7qkRSpPQ0oofD8sUB74dbBCXDZ4KKRmSD4+OA99IRKMKnZFV955Z7ZxTEmugktCZpFMRo3/61M4sigGxATscxlwpvLuGCsg3EBfwxG+fTuk/Dwz2fGQgsLZFKH8PKzMe+FXvMDjr36YLsUORF0aLuKtQa5cKlMMgImelNoRp+5fCLMR54GK1yGcOsNYeN3+AmPW3As9gX033GSZuCdk1v+2zdSsFhh4mtRgIhMIbq\\\\\\\",null,null,2,[1781001976,998047890],null,\\\\\\\"image/jpeg\\\\\\\",null,null,null,[1408,768,32420]]],[\\\\\\\"http://googleusercontent.com/image_generation_content/0\\\\\\\",null,null,null,null,1],null,[20,null,null,null,[\\\\\\\"en\\\\\\\",\\\\\\\"JP\\\\\\\"],null,null,null,null,null,null,0,null,null,[[\\\\\\\"White\\\\\\\",\\\\\\\"/m/083jv\\\\\\\",0.9576381],[\\\\\\\"Photograph\\\\\\\",\\\\\\\"/m/068jd\\\\\\\",0.91813815],[\\\\\\\"Black\\\\\\\",\\\\\\\"/m/019sc\\\\\\\",0.88941497],[\\\\\\\"Grey\\\\\\\",\\\\\\\"/m/036k5h\\\\\\\",0.88155586],[\\\\\\\"Blue\\\\\\\",\\\\\\\"/m/01g5v\\\\\\\",0.8280756],[\\\\\\\"Green\\\\\\\",\\\\\\\"/m/038hg\\\\\\\",0.8053006],[\\\\\\\"Text\\\\\\\",\\\\\\\"/m/07s6nbt\\\\\\\",0.78870094],[\\\\\\\"Font\\\\\\\",\\\\\\\"/m/03gq5hm\\\\\\\",0.7768085],[\\\\\\\"Slope\\\\\\\",\\\\\\\"/m/0cnmh5b\\\\\\\",0.6974476],[\\\\\\\"Design\\\\\\\",\\\\\\\"/m/02cwm\\\\\\\",0.6970487],[\\\\\\\"Triangle\\\\\\\",\\\\\\\"/m/07jx7\\\\\\\",0.6940224],[\\\\\\\"Vertical\\\\\\\",\\\\\\\"/a/4hh3p0\\\\\\\",0.6756913],[\\\\\\\"Horizontal\\\\\\\",\\\\\\\"/a/2mqvzc\\\\\\\",0.66317946],[\\\\\\\"Language\\\\\\\",\\\\\\\"/j/2sh_y4\\\\\\\",0.6560507],[\\\\\\\"Sleeve\\\\\\\",\\\\\\\"/m/062581\\\\\\\",0.65134716],[\\\\\\\"Slope\\\\\\\",\\\\\\\"/m/078hm\\\\\\\",0.64460903],[\\\\\\\"Daytime\\\\\\\",\\\\\\\"/m/02q7ylj\\\\\\\",0.62817067],[\\\\\\\"Textile\\\\\\\",\\\\\\\"/m/0dnr7\\\\\\\",0.45913672],[\\\\\\\"Yellow\\\\\\\",\\\\\\\"/m/088fh\\\\\\\",0.43578282],[\\\\\\\"Multicolor\\\\\\\",\\\\\\\"/a/fbwxsx\\\\\\\",0.43241122],[\\\\\\\"Red\\\\\\\",\\\\\\\"/m/06fvc\\\\\\\",0.42766923],[\\\\\\\"Symbol\\\\\\\",\\\\\\\"/m/09ddf\\\\\\\",0.42042312],[\\\\\\\"Symmetry\\\\\\\",\\\\\\\"/m/0f28m\\\\\\\",0.4153394],[\\\\\\\"Graphics\\\\\\\",\\\\\\\"/m/021sdg\\\\\\\",0.41300085],[\\\\\\\"Empty\\\\\\\",\\\\\\\"/a/dr1qwm\\\\\\\",0.40605834],[\\\\\\\"Color\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"http://googleusercontent.com/image_generation_content/0\\\\\\\"],[null,null,null,null,[null,null,7]],null,null,null,null,null,[2],\\\\\\\"und\\\\\\\",null,null,[null,null,null,null,null,null,[3],[[[[null,null,null,[null,1,\\\\\\\"15569976298304941232.png\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\\\\\\\",null,\\\\\\\"$AQbORADBT3zUS3edRj0ooGatnqYeabOSc7tpH1dwjU2IQ8Q2vZTuUoxNPfb4dW5WbAJy+Qy2k3VJNQjW9mF+pL1+6bBJCHtkUcMXYdDe7I6lvFtvtAdibeh1ijb3+8ykEBRmCcfYZbh1ql4g+Ag6s1tbphSSS+dY9oquZoxtOsLCNsQYtwnZA/IWsdtBnX1C2CgQNwxNVBuTUMvLYQtX8JQCZCl84rpG/wrm1bRTihclsdV+gBkhEWTzhls2K0vAqjTEmw\\\\=\\\\=\\\\\\\",null,null,2,[1781001976,998040770],null,\\\\\\\"image/png\\\\\\\",null,null,null,[1408,768,43965]],null,null,[null,1,\\\\\\\"16481517089778911324.jpeg\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\\\\\\\",null,\\\\\\\"$AQbORACRHchw5kNwfMrQtNemczIrqaU7qkRSpPQ0oofD8sUB74dbBCXDZ4KKRmSD4+OA99IRKMKnZFV955Z7ZxTEmugktCZpFMRo3/61M4sigGxATscxlwpvLuGCsg3EBfwxG+fTuk/Dwz2fGQgsLZFKH8PKzMe+FXvMDjr36YLsUORF0aLuKtQa5cKlMMgImelNoRp+5fCLMR54GK1yGcOsNYeN3+AmPW3As9gX033GSZuCdk1v+2zdSsFhh4mtRgIhMIbq\\\\\\\",null,null,2,[1781001976,998047890],null,\\\\\\\"image/jpeg\\\\\\\",null,null,null,[1408,768,32420]]],[\\\\\\\"http://googleusercontent.com/image_generation_content/0\\\\\\\",null,null,null,null,1],null,[20,null,null,null,[\\\\\\\"en\\\\\\\",\\\\\\\"JP\\\\\\\"],null,null,null,null,null,null,0,null,null,[[\\\\\\\"White\\\\\\\",\\\\\\\"/m/083jv\\\\\\\",0.9576381],[\\\\\\\"Photograph\\\\\\\",\\\\\\\"/m/068jd\\\\\\\",0.91813815],[\\\\\\\"Black\\\\\\\",\\\\\\\"/m/019sc\\\\\\\",0.88941497],[\\\\\\\"Grey\\\\\\\",\\\\\\\"/m/036k5h\\\\\\\",0.88155586],[\\\\\\\"Blue\\\\\\\",\\\\\\\"/m/01g5v\\\\\\\",0.8280756],[\\\\\\\"Green\\\\\\\",\\\\\\\"/m/038hg\\\\\\\",0.8053006],[\\\\\\\"Text\\\\\\\",\\\\\\\"/m/07s6nbt\\\\\\\",0.78870094],[\\\\\\\"Font\\\\\\\",\\\\\\\"/m/03gq5hm\\\\\\\",0.7768085],[\\\\\\\"Slope\\\\\\\",\\\\\\\"/m/0cnmh5b\\\\\\\",0.6974476],[\\\\\\\"Design\\\\\\\",\\\\\\\"/m/02cwm\\\\\\\",0.6970487],[\\\\\\\"Triangle\\\\\\\",\\\\\\\"/m/07jx7\\\\\\\",0.6940224],[\\\\\\\"Vertical\\\\\\\",\\\\\\\"/a/4hh3p0\\\\\\\",0.6756913],[\\\\\\\"Horizontal\\\\\\\",\\\\\\\"/a/2mqvzc\\\\\\\",0.66317946],[\\\\\\\"Language\\\\\\\",\\\\\\\"/j/2sh_y4\\\\\\\",0.6560507],[\\\\\\\"Sleeve\\\\\\\",\\\\\\\"/m/062581\\\\\\\",0.65134716],[\\\\\\\"Slope\\\\\\\",\\\\\\\"/m/078hm\\\\\\\",0.64460903],[\\\\\\\"Daytime\\\\\\\",\\\\\\\"/m/02q7ylj\\\\\\\",0.62817067],[\\\\\\\"Textile\\\\\\\",\\\\\\\"/m/0dnr7\\\\\\\",0.45913672],[\\\\\\\"Yellow\\\\\\\",\\\\\\\"/m/088fh\\\\\\\",0.43578282],[\\\\\\\"Multicolor\\\\\\\",\\\\\\\"/a/fbwxsx\\\\\\\",0.43241122],[\\\\\\\"Red\\\\\\\",\\\\\\\"/m/06fvc\\\\\\\",0.42766923],[\\\\\\\"Symbol\\\\\\\",\\\\\\\"/m/09ddf\\\\\\\",0.42042312],[\\\\\\\"Symmetry\\\\\\\",\\\\\\\"/m/0f28m\\\\\\\",0.4153394],[\\\\\\\"Graphics\\\\\\\",\\\\\\\"/m/021sdg\\\\\\\",0.41300085],[\\\\\\\"Empty\\\\\\\",\\\\\\\"/a/dr1qwm\\\\\\\",0.40605834],[\\\\\\\"Color\", \"materialized\": {\"status\": \"unresolved\", \"reason\": \"placeholder_url_not_downloadable\", \"note\": \"Gemini Web returned a UI placeholder URL, not a fetchable media file.\"}}, {\"kind\": \"image\", \"url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\\\\\\\",null,\\\\\\\"$AQbORADBT3zUS3edRj0ooGatnqYeabOSc7tpH1dwjU2IQ8Q2vZTuUoxNPfb4dW5WbAJy+Qy2k3VJNQjW9mF+pL1+6bBJCHtkUcMXYdDe7I6lvFtvtAdibeh1ijb3+8ykEBRmCcfYZbh1ql4g+Ag6s1tbphSSS+dY9oquZoxtOsLCNsQYtwnZA/IWsdtBnX1C2CgQNwxNVBuTUMvLYQtX8JQCZCl84rpG/wrm1bRTihclsdV+gBkhEWTzhls2K0vAqjTEmw\\\\=\\\\=\\\\\\\",null,null,2,[1781001976,998040770],null,\\\\\\\"image/png\\\\\\\",null,null,null,[1408,768,43965]],null,null,[null,1,\\\\\\\"16481517089778911324.jpeg\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\\\\\\\",null,\\\\\\\"$AQbORACRHchw5kNwfMrQtNemczIrqaU7qkRSpPQ0oofD8sUB74dbBCXDZ4KKRmSD4+OA99IRKMKnZFV955Z7ZxTEmugktCZpFMRo3/61M4sigGxATscxlwpvLuGCsg3EBfwxG+fTuk/Dwz2fGQgsLZFKH8PKzMe+FXvMDjr36YLsUORF0aLuKtQa5cKlMMgImelNoRp+5fCLMR54GK1yGcOsNYeN3+AmPW3As9gX033GSZuCdk1v+2zdSsFhh4mtRgIhMIbq\\\\\\\",null,null,2,[1781001976,998047890],null,\\\\\\\"image/jpeg\\\\\\\",null,null,null,[1408,768,32420]]],[\\\\\\\"http://googleusercontent.com/image_generation_content/0\\\\\\\",null,null,null,null,1],null,[20,null,null,null,[\\\\\\\"en\\\\\\\",\\\\\\\"JP\\\\\\\"],null,null,null,null,null,null,0,null,null,[[\\\\\\\"White\\\\\\\",\\\\\\\"/m/083jv\\\\\\\",0.9576381],[\\\\\\\"Photograph\\\\\\\",\\\\\\\"/m/068jd\\\\\\\",0.91813815],[\\\\\\\"Black\\\\\\\",\\\\\\\"/m/019sc\\\\\\\",0.88941497],[\\\\\\\"Grey\\\\\\\",\\\\\\\"/m/036k5h\\\\\\\",0.88155586],[\\\\\\\"Blue\\\\\\\",\\\\\\\"/m/01g5v\\\\\\\",0.8280756],[\\\\\\\"Green\\\\\\\",\\\\\\\"/m/038hg\\\\\\\",0.8053006],[\\\\\\\"Text\\\\\\\",\\\\\\\"/m/07s6nbt\\\\\\\",0.78870094],[\\\\\\\"Font\\\\\\\",\\\\\\\"/m/03gq5hm\\\\\\\",0.7768085],[\\\\\\\"Slope\\\\\\\",\\\\\\\"/m/0cnmh5b\\\\\\\",0.6974476],[\\\\\\\"Design\\\\\\\",\\\\\\\"/m/02cwm\\\\\\\",0.6970487],[\\\\\\\"Triangle\\\\\\\",\\\\\\\"/m/07jx7\\\\\\\",0.6940224],[\\\\\\\"Vertical\\\\\\\",\\\\\\\"/a/4hh3p0\\\\\\\",0.6756913],[\\\\\\\"Horizontal\\\\\\\",\\\\\\\"/a/2mqvzc\\\\\\\",0.66317946],[\\\\\\\"Language\\\\\\\",\\\\\\\"/j/2sh_y4\\\\\\\",0.6560507],[\\\\\\\"Sleeve\\\\\\\",\\\\\\\"/m/062581\\\\\\\",0.65134716],[\\\\\\\"Slope\\\\\\\",\\\\\\\"/m/078hm\\\\\\\",0.64460903],[\\\\\\\"Daytime\\\\\\\",\\\\\\\"/m/02q7ylj\\\\\\\",0.62817067],[\\\\\\\"Textile\\\\\\\",\\\\\\\"/m/0dnr7\\\\\\\",0.45913672],[\\\\\\\"Yellow\\\\\\\",\\\\\\\"/m/088fh\\\\\\\",0.43578282],[\\\\\\\"Multicolor\\\\\\\",\\\\\\\"/a/fbwxsx\\\\\\\",0.43241122],[\\\\\\\"Red\\\\\\\",\\\\\\\"/m/06fvc\\\\\\\",0.42766923],[\\\\\\\"Symbol\\\\\\\",\\\\\\\"/m/09ddf\\\\\\\",0.42042312],[\\\\\\\"Symmetry\\\\\\\",\\\\\\\"/m/0f28m\\\\\\\",0.4153394],[\\\\\\\"Graphics\\\\\\\",\\\\\\\"/m/021sdg\\\\\\\",0.41300085],[\\\\\\\"Empty\\\\\\\",\\\\\\\"/a/dr1qwm\\\\\\\",0.40605834],[\\\\\\\"Color\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\\\\\\\",null,\\\\\\\"$AQbORADBT3zUS3edRj0ooGatnqYeabOSc7tpH1dwjU2IQ8Q2vZTuUoxNPfb4dW5WbAJy+Qy2k3VJNQjW9mF+pL1+6bBJCHtkUcMXYdDe7I6lvFtvtAdibeh1ijb3+8ykEBRmCcfYZbh1ql4g+Ag6s1tbphSSS+dY9oquZoxtOsLCNsQYtwnZA/IWsdtBnX1C2CgQNwxNVBuTUMvLYQtX8JQCZCl84rpG/wrm1bRTihclsdV+gBkhEWTzhls2K0vAqjTEmw\\\\=\\\\=\\\\\\\",null,null,2,[1781001976,998040770],null,\\\\\\\"image/png\\\\\\\",null,null,null,[1408,768,43965]],null,null,[null,1,\\\\\\\"16481517089778911324.jpeg\\\\\\\",\\\\\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\\\\\\\",null,\\\\\\\"$AQbORACRHchw5kNwfMrQtNemczIrqaU7qkRSpPQ0oofD8sUB74dbBCXDZ4KKRmSD4+OA99IRKMKnZFV955Z7ZxTEmugktCZpFMRo3/61M4sigGxATscxlwpvLuGCsg3EBfwxG+fTuk/Dwz2fGQgsLZFKH8PKzMe+FXvMDjr36YLsUORF0aLuKtQa5cKlMMgImelNoRp+5fCLMR54GK1yGcOsNYeN3+AmPW3As9gX033GSZuCdk1v+2zdSsFhh4mtRgIhMIbq\\\\\\\",null,null,2,[1781001976,998047890],null,\\\\\\\"image/jpeg\\\\\\\",null,null,null,[1408,768,32420]]],[\\\\\\\"http://googleusercontent.com/image_generation_content/0\\\\\\\",null,null,null,null,1],null,[20,null,null,null,[\\\\\\\"en\\\\\\\",\\\\\\\"JP\\\\\\\"],null,null,null,null,null,null,0,null,null,[[\\\\\\\"White\\\\\\\",\\\\\\\"/m/083jv\\\\\\\",0.9576381],[\\\\\\\"Photograph\\\\\\\",\\\\\\\"/m/068jd\\\\\\\",0.91813815],[\\\\\\\"Black\\\\\\\",\\\\\\\"/m/019sc\\\\\\\",0.88941497],[\\\\\\\"Grey\\\\\\\",\\\\\\\"/m/036k5h\\\\\\\",0.88155586],[\\\\\\\"Blue\\\\\\\",\\\\\\\"/m/01g5v\\\\\\\",0.8280756],[\\\\\\\"Green\\\\\\\",\\\\\\\"/m/038hg\\\\\\\",0.8053006],[\\\\\\\"Text\\\\\\\",\\\\\\\"/m/07s6nbt\\\\\\\",0.78870094],[\\\\\\\"Font\\\\\\\",\\\\\\\"/m/03gq5hm\\\\\\\",0.7768085],[\\\\\\\"Slope\\\\\\\",\\\\\\\"/m/0cnmh5b\\\\\\\",0.6974476],[\\\\\\\"Design\\\\\\\",\\\\\\\"/m/02cwm\\\\\\\",0.6970487],[\\\\\\\"Triangle\\\\\\\",\\\\\\\"/m/07jx7\\\\\\\",0.6940224],[\\\\\\\"Vertical\\\\\\\",\\\\\\\"/a/4hh3p0\\\\\\\",0.6756913],[\\\\\\\"Horizontal\\\\\\\",\\\\\\\"/a/2mqvzc\\\\\\\",0.66317946],[\\\\\\\"Language\\\\\\\",\\\\\\\"/j/2sh_y4\\\\\\\",0.6560507],[\\\\\\\"Sleeve\\\\\\\",\\\\\\\"/m/062581\\\\\\\",0.65134716],[\\\\\\\"Slope\\\\\\\",\\\\\\\"/m/078hm\\\\\\\",0.64460903],[\\\\\\\"Daytime\\\\\\\",\\\\\\\"/m/02q7ylj\\\\\\\",0.62817067],[\\\\\\\"Textile\\\\\\\",\\\\\\\"/m/0dnr7\\\\\\\",0.45913672],[\\\\\\\"Yellow\\\\\\\",\\\\\\\"/m/088fh\\\\\\\",0.43578282],[\\\\\\\"Multicolor\\\\\\\",\\\\\\\"/a/fbwxsx\\\\\\\",0.43241122],[\\\\\\\"Red\\\\\\\",\\\\\\\"/m/06fvc\\\\\\\",0.42766923],[\\\\\\\"Symbol\\\\\\\",\\\\\\\"/m/09ddf\\\\\\\",0.42042312],[\\\\\\\"Symmetry\\\\\\\",\\\\\\\"/m/0f28m\\\\\\\",0.4153394],[\\\\\\\"Graphics\\\\\\\",\\\\\\\"/m/021sdg\\\\\\\",0.41300085],[\\\\\\\"Empty\\\\\\\",\\\\\\\"/a/dr1qwm\\\\\\\",0.40605834],[\\\\\\\"Color\", \"materialized\": {\"status\": \"failed\", \"reason\": \"HTTP Error 400: Bad Request\"}}, {\"kind\": \"image\", \"url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\", \"materialized\": {\"status\": \"failed\", \"reason\": \"HTTP Error 403: Forbidden\"}}, {\"kind\": \"image\", \"url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\", \"alt\": \"\", \"type\": \"url\", \"source_url\": \"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\", \"materialized\": {\"status\": \"failed\", \"reason\": \"HTTP Error 403: Forbidden\"}}], \"webFeature\": {\"id\": \"image_generation\", \"name\": \"Create images\", \"requested_model\": \"Nano Banana 2\", \"declared_status\": \"experimental\", \"runtime_status\": \"supported\", \"artifact_count\": 3}, \"text\": \"\", \"usageMetadata\": {\"promptTokenCount\": 14, \"candidatesTokenCount\": 0, \"totalTokenCount\": 14}, \"elapsedMs\": 61883.89, \"candidates\": [{\"content\": {\"role\": \"model\", \"parts\": [{\"text\": \"\"}]}, \"finishReason\": \"STOP\", \"index\": 0}]}",
+        "json": {
+          "model": "nano-banana-2",
+          "predictions": [],
+          "generatedMedia": [],
+          "files": [
+            {
+              "kind": "image",
+              "url": "http://googleusercontent.com/image_generation_content/0",
+              "alt": "",
+              "type": "url",
+              "source_url": "http://googleusercontent.com/image_generation_content/0",
+              "materialized": {
+                "status": "unresolved",
+                "reason": "placeholder_url_not_downloadable",
+                "note": "Gemini Web returned a UI placeholder URL, not a fetchable media file."
+              }
+            },
+            {
+              "kind": "image",
+              "url": "http://googleusercontent.com/image_generation_content/0\\\"],[null,null,null,null,[null,null,7]],null,null,null,null,null,[2],\\\"und\\\",null,null,[null,null,null,null,null,null,[3],[[[[null,null,null,[null,1,\\\"15569976298304941232.png\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\\\",null,\\\"$AQbORADBT3zUS3edRj0ooGatnqYeabOSc7tpH1dwjU2IQ8Q2vZTuUoxNPfb4dW5WbAJy+Qy2k3VJNQjW9mF+pL1+6bBJCHtkUcMXYdDe7I6lvFtvtAdibeh1ijb3+8ykEBRmCcfYZbh1ql4g+Ag6s1tbphSSS+dY9oquZoxtOsLCNsQYtwnZA/IWsdtBnX1C2CgQNwxNVBuTUMvLYQtX8JQCZCl84rpG/wrm1bRTihclsdV+gBkhEWTzhls2K0vAqjTEmw\\=\\=\\\",null,null,2,[1781001976,998040770],null,\\\"image/png\\\",null,null,null,[1408,768,43965]],null,null,[null,1,\\\"16481517089778911324.jpeg\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\\\",null,\\\"$AQbORACRHchw5kNwfMrQtNemczIrqaU7qkRSpPQ0oofD8sUB74dbBCXDZ4KKRmSD4+OA99IRKMKnZFV955Z7ZxTEmugktCZpFMRo3/61M4sigGxATscxlwpvLuGCsg3EBfwxG+fTuk/Dwz2fGQgsLZFKH8PKzMe+FXvMDjr36YLsUORF0aLuKtQa5cKlMMgImelNoRp+5fCLMR54GK1yGcOsNYeN3+AmPW3As9gX033GSZuCdk1v+2zdSsFhh4mtRgIhMIbq\\\",null,null,2,[1781001976,998047890],null,\\\"image/jpeg\\\",null,null,null,[1408,768,32420]]],[\\\"http://googleusercontent.com/image_generation_content/0\\\",null,null,null,null,1],null,[20,null,null,null,[\\\"en\\\",\\\"JP\\\"],null,null,null,null,null,null,0,null,null,[[\\\"White\\\",\\\"/m/083jv\\\",0.9576381],[\\\"Photograph\\\",\\\"/m/068jd\\\",0.91813815],[\\\"Black\\\",\\\"/m/019sc\\\",0.88941497],[\\\"Grey\\\",\\\"/m/036k5h\\\",0.88155586],[\\\"Blue\\\",\\\"/m/01g5v\\\",0.8280756],[\\\"Green\\\",\\\"/m/038hg\\\",0.8053006],[\\\"Text\\\",\\\"/m/07s6nbt\\\",0.78870094],[\\\"Font\\\",\\\"/m/03gq5hm\\\",0.7768085],[\\\"Slope\\\",\\\"/m/0cnmh5b\\\",0.6974476],[\\\"Design\\\",\\\"/m/02cwm\\\",0.6970487],[\\\"Triangle\\\",\\\"/m/07jx7\\\",0.6940224],[\\\"Vertical\\\",\\\"/a/4hh3p0\\\",0.6756913],[\\\"Horizontal\\\",\\\"/a/2mqvzc\\\",0.66317946],[\\\"Language\\\",\\\"/j/2sh_y4\\\",0.6560507],[\\\"Sleeve\\\",\\\"/m/062581\\\",0.65134716],[\\\"Slope\\\",\\\"/m/078hm\\\",0.64460903],[\\\"Daytime\\\",\\\"/m/02q7ylj\\\",0.62817067],[\\\"Textile\\\",\\\"/m/0dnr7\\\",0.45913672],[\\\"Yellow\\\",\\\"/m/088fh\\\",0.43578282],[\\\"Multicolor\\\",\\\"/a/fbwxsx\\\",0.43241122],[\\\"Red\\\",\\\"/m/06fvc\\\",0.42766923],[\\\"Symbol\\\",\\\"/m/09ddf\\\",0.42042312],[\\\"Symmetry\\\",\\\"/m/0f28m\\\",0.4153394],[\\\"Graphics\\\",\\\"/m/021sdg\\\",0.41300085],[\\\"Empty\\\",\\\"/a/dr1qwm\\\",0.40605834],[\\\"Color",
+              "alt": "",
+              "type": "url",
+              "source_url": "http://googleusercontent.com/image_generation_content/0\\\"],[null,null,null,null,[null,null,7]],null,null,null,null,null,[2],\\\"und\\\",null,null,[null,null,null,null,null,null,[3],[[[[null,null,null,[null,1,\\\"15569976298304941232.png\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\\\",null,\\\"$AQbORADBT3zUS3edRj0ooGatnqYeabOSc7tpH1dwjU2IQ8Q2vZTuUoxNPfb4dW5WbAJy+Qy2k3VJNQjW9mF+pL1+6bBJCHtkUcMXYdDe7I6lvFtvtAdibeh1ijb3+8ykEBRmCcfYZbh1ql4g+Ag6s1tbphSSS+dY9oquZoxtOsLCNsQYtwnZA/IWsdtBnX1C2CgQNwxNVBuTUMvLYQtX8JQCZCl84rpG/wrm1bRTihclsdV+gBkhEWTzhls2K0vAqjTEmw\\=\\=\\\",null,null,2,[1781001976,998040770],null,\\\"image/png\\\",null,null,null,[1408,768,43965]],null,null,[null,1,\\\"16481517089778911324.jpeg\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\\\",null,\\\"$AQbORACRHchw5kNwfMrQtNemczIrqaU7qkRSpPQ0oofD8sUB74dbBCXDZ4KKRmSD4+OA99IRKMKnZFV955Z7ZxTEmugktCZpFMRo3/61M4sigGxATscxlwpvLuGCsg3EBfwxG+fTuk/Dwz2fGQgsLZFKH8PKzMe+FXvMDjr36YLsUORF0aLuKtQa5cKlMMgImelNoRp+5fCLMR54GK1yGcOsNYeN3+AmPW3As9gX033GSZuCdk1v+2zdSsFhh4mtRgIhMIbq\\\",null,null,2,[1781001976,998047890],null,\\\"image/jpeg\\\",null,null,null,[1408,768,32420]]],[\\\"http://googleusercontent.com/image_generation_content/0\\\",null,null,null,null,1],null,[20,null,null,null,[\\\"en\\\",\\\"JP\\\"],null,null,null,null,null,null,0,null,null,[[\\\"White\\\",\\\"/m/083jv\\\",0.9576381],[\\\"Photograph\\\",\\\"/m/068jd\\\",0.91813815],[\\\"Black\\\",\\\"/m/019sc\\\",0.88941497],[\\\"Grey\\\",\\\"/m/036k5h\\\",0.88155586],[\\\"Blue\\\",\\\"/m/01g5v\\\",0.8280756],[\\\"Green\\\",\\\"/m/038hg\\\",0.8053006],[\\\"Text\\\",\\\"/m/07s6nbt\\\",0.78870094],[\\\"Font\\\",\\\"/m/03gq5hm\\\",0.7768085],[\\\"Slope\\\",\\\"/m/0cnmh5b\\\",0.6974476],[\\\"Design\\\",\\\"/m/02cwm\\\",0.6970487],[\\\"Triangle\\\",\\\"/m/07jx7\\\",0.6940224],[\\\"Vertical\\\",\\\"/a/4hh3p0\\\",0.6756913],[\\\"Horizontal\\\",\\\"/a/2mqvzc\\\",0.66317946],[\\\"Language\\\",\\\"/j/2sh_y4\\\",0.6560507],[\\\"Sleeve\\\",\\\"/m/062581\\\",0.65134716],[\\\"Slope\\\",\\\"/m/078hm\\\",0.64460903],[\\\"Daytime\\\",\\\"/m/02q7ylj\\\",0.62817067],[\\\"Textile\\\",\\\"/m/0dnr7\\\",0.45913672],[\\\"Yellow\\\",\\\"/m/088fh\\\",0.43578282],[\\\"Multicolor\\\",\\\"/a/fbwxsx\\\",0.43241122],[\\\"Red\\\",\\\"/m/06fvc\\\",0.42766923],[\\\"Symbol\\\",\\\"/m/09ddf\\\",0.42042312],[\\\"Symmetry\\\",\\\"/m/0f28m\\\",0.4153394],[\\\"Graphics\\\",\\\"/m/021sdg\\\",0.41300085],[\\\"Empty\\\",\\\"/a/dr1qwm\\\",0.40605834],[\\\"Color",
+              "materialized": {
+                "status": "unresolved",
+                "reason": "placeholder_url_not_downloadable",
+                "note": "Gemini Web returned a UI placeholder URL, not a fetchable media file."
+              }
+            },
+            {
+              "kind": "image",
+              "url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\\\",null,\\\"$AQbORADBT3zUS3edRj0ooGatnqYeabOSc7tpH1dwjU2IQ8Q2vZTuUoxNPfb4dW5WbAJy+Qy2k3VJNQjW9mF+pL1+6bBJCHtkUcMXYdDe7I6lvFtvtAdibeh1ijb3+8ykEBRmCcfYZbh1ql4g+Ag6s1tbphSSS+dY9oquZoxtOsLCNsQYtwnZA/IWsdtBnX1C2CgQNwxNVBuTUMvLYQtX8JQCZCl84rpG/wrm1bRTihclsdV+gBkhEWTzhls2K0vAqjTEmw\\=\\=\\\",null,null,2,[1781001976,998040770],null,\\\"image/png\\\",null,null,null,[1408,768,43965]],null,null,[null,1,\\\"16481517089778911324.jpeg\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\\\",null,\\\"$AQbORACRHchw5kNwfMrQtNemczIrqaU7qkRSpPQ0oofD8sUB74dbBCXDZ4KKRmSD4+OA99IRKMKnZFV955Z7ZxTEmugktCZpFMRo3/61M4sigGxATscxlwpvLuGCsg3EBfwxG+fTuk/Dwz2fGQgsLZFKH8PKzMe+FXvMDjr36YLsUORF0aLuKtQa5cKlMMgImelNoRp+5fCLMR54GK1yGcOsNYeN3+AmPW3As9gX033GSZuCdk1v+2zdSsFhh4mtRgIhMIbq\\\",null,null,2,[1781001976,998047890],null,\\\"image/jpeg\\\",null,null,null,[1408,768,32420]]],[\\\"http://googleusercontent.com/image_generation_content/0\\\",null,null,null,null,1],null,[20,null,null,null,[\\\"en\\\",\\\"JP\\\"],null,null,null,null,null,null,0,null,null,[[\\\"White\\\",\\\"/m/083jv\\\",0.9576381],[\\\"Photograph\\\",\\\"/m/068jd\\\",0.91813815],[\\\"Black\\\",\\\"/m/019sc\\\",0.88941497],[\\\"Grey\\\",\\\"/m/036k5h\\\",0.88155586],[\\\"Blue\\\",\\\"/m/01g5v\\\",0.8280756],[\\\"Green\\\",\\\"/m/038hg\\\",0.8053006],[\\\"Text\\\",\\\"/m/07s6nbt\\\",0.78870094],[\\\"Font\\\",\\\"/m/03gq5hm\\\",0.7768085],[\\\"Slope\\\",\\\"/m/0cnmh5b\\\",0.6974476],[\\\"Design\\\",\\\"/m/02cwm\\\",0.6970487],[\\\"Triangle\\\",\\\"/m/07jx7\\\",0.6940224],[\\\"Vertical\\\",\\\"/a/4hh3p0\\\",0.6756913],[\\\"Horizontal\\\",\\\"/a/2mqvzc\\\",0.66317946],[\\\"Language\\\",\\\"/j/2sh_y4\\\",0.6560507],[\\\"Sleeve\\\",\\\"/m/062581\\\",0.65134716],[\\\"Slope\\\",\\\"/m/078hm\\\",0.64460903],[\\\"Daytime\\\",\\\"/m/02q7ylj\\\",0.62817067],[\\\"Textile\\\",\\\"/m/0dnr7\\\",0.45913672],[\\\"Yellow\\\",\\\"/m/088fh\\\",0.43578282],[\\\"Multicolor\\\",\\\"/a/fbwxsx\\\",0.43241122],[\\\"Red\\\",\\\"/m/06fvc\\\",0.42766923],[\\\"Symbol\\\",\\\"/m/09ddf\\\",0.42042312],[\\\"Symmetry\\\",\\\"/m/0f28m\\\",0.4153394],[\\\"Graphics\\\",\\\"/m/021sdg\\\",0.41300085],[\\\"Empty\\\",\\\"/a/dr1qwm\\\",0.40605834],[\\\"Color",
+              "alt": "",
+              "type": "url",
+              "source_url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA\\\",null,\\\"$AQbORADBT3zUS3edRj0ooGatnqYeabOSc7tpH1dwjU2IQ8Q2vZTuUoxNPfb4dW5WbAJy+Qy2k3VJNQjW9mF+pL1+6bBJCHtkUcMXYdDe7I6lvFtvtAdibeh1ijb3+8ykEBRmCcfYZbh1ql4g+Ag6s1tbphSSS+dY9oquZoxtOsLCNsQYtwnZA/IWsdtBnX1C2CgQNwxNVBuTUMvLYQtX8JQCZCl84rpG/wrm1bRTihclsdV+gBkhEWTzhls2K0vAqjTEmw\\=\\=\\\",null,null,2,[1781001976,998040770],null,\\\"image/png\\\",null,null,null,[1408,768,43965]],null,null,[null,1,\\\"16481517089778911324.jpeg\\\",\\\"https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl\\\",null,\\\"$AQbORACRHchw5kNwfMrQtNemczIrqaU7qkRSpPQ0oofD8sUB74dbBCXDZ4KKRmSD4+OA99IRKMKnZFV955Z7ZxTEmugktCZpFMRo3/61M4sigGxATscxlwpvLuGCsg3EBfwxG+fTuk/Dwz2fGQgsLZFKH8PKzMe+FXvMDjr36YLsUORF0aLuKtQa5cKlMMgImelNoRp+5fCLMR54GK1yGcOsNYeN3+AmPW3As9gX033GSZuCdk1v+2zdSsFhh4mtRgIhMIbq\\\",null,null,2,[1781001976,998047890],null,\\\"image/jpeg\\\",null,null,null,[1408,768,32420]]],[\\\"http://googleusercontent.com/image_generation_content/0\\\",null,null,null,null,1],null,[20,null,null,null,[\\\"en\\\",\\\"JP\\\"],null,null,null,null,null,null,0,null,null,[[\\\"White\\\",\\\"/m/083jv\\\",0.9576381],[\\\"Photograph\\\",\\\"/m/068jd\\\",0.91813815],[\\\"Black\\\",\\\"/m/019sc\\\",0.88941497],[\\\"Grey\\\",\\\"/m/036k5h\\\",0.88155586],[\\\"Blue\\\",\\\"/m/01g5v\\\",0.8280756],[\\\"Green\\\",\\\"/m/038hg\\\",0.8053006],[\\\"Text\\\",\\\"/m/07s6nbt\\\",0.78870094],[\\\"Font\\\",\\\"/m/03gq5hm\\\",0.7768085],[\\\"Slope\\\",\\\"/m/0cnmh5b\\\",0.6974476],[\\\"Design\\\",\\\"/m/02cwm\\\",0.6970487],[\\\"Triangle\\\",\\\"/m/07jx7\\\",0.6940224],[\\\"Vertical\\\",\\\"/a/4hh3p0\\\",0.6756913],[\\\"Horizontal\\\",\\\"/a/2mqvzc\\\",0.66317946],[\\\"Language\\\",\\\"/j/2sh_y4\\\",0.6560507],[\\\"Sleeve\\\",\\\"/m/062581\\\",0.65134716],[\\\"Slope\\\",\\\"/m/078hm\\\",0.64460903],[\\\"Daytime\\\",\\\"/m/02q7ylj\\\",0.62817067],[\\\"Textile\\\",\\\"/m/0dnr7\\\",0.45913672],[\\\"Yellow\\\",\\\"/m/088fh\\\",0.43578282],[\\\"Multicolor\\\",\\\"/a/fbwxsx\\\",0.43241122],[\\\"Red\\\",\\\"/m/06fvc\\\",0.42766923],[\\\"Symbol\\\",\\\"/m/09ddf\\\",0.42042312],[\\\"Symmetry\\\",\\\"/m/0f28m\\\",0.4153394],[\\\"Graphics\\\",\\\"/m/021sdg\\\",0.41300085],[\\\"Empty\\\",\\\"/a/dr1qwm\\\",0.40605834],[\\\"Color",
+              "materialized": {
+                "status": "failed",
+                "reason": "HTTP Error 400: Bad Request"
+              }
+            },
+            {
+              "kind": "image",
+              "url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA",
+              "alt": "",
+              "type": "url",
+              "source_url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fIXPfzID5GR5PErcRmITYIQTJdgPxoVgENrTNFcDWojMCM_LXRClxmJQijzL4zhypu4KSNrKHbGwz2TOmBblOu3UvIhDQ4_sJ2scCJlMmCqXy57GLKe5Uykv41nSG_7fZdMwWT7gs_rBgHkM1K-b092TrVl-8-THeklhSQaLp0u1LWLcA",
+              "materialized": {
+                "status": "failed",
+                "reason": "HTTP Error 403: Forbidden"
+              }
+            },
+            {
+              "kind": "image",
+              "url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl",
+              "alt": "",
+              "type": "url",
+              "source_url": "https://lh3.googleusercontent.com/gg-dl/AFfU-fJk2TWqyjYhredUj5BtHW8UcD_v7LKSFVuWsyLvVWCFu04TLOELtKTA4lzppOCSL7Mb5xOFbUngWxWZ25SQWlRqjOU3mAkpWxKGvfWCI5a2N8t8ZmVacy0ob9uvcFzN06BBBQP8cTpzlSU7Aea4lDx3lPrU-uhXTI9zckCrHhXYeBFl",
+              "materialized": {
+                "status": "failed",
+                "reason": "HTTP Error 403: Forbidden"
+              }
+            }
+          ],
+          "webFeature": {
+            "id": "image_generation",
+            "name": "Create images",
+            "requested_model": "Nano Banana 2",
+            "declared_status": "experimental",
+            "runtime_status": "supported",
+            "artifact_count": 3
+          },
+          "text": "",
+          "usageMetadata": {
+            "promptTokenCount": "<redacted>",
+            "candidatesTokenCount": "<redacted>",
+            "totalTokenCount": "<redacted>"
+          },
+          "elapsedMs": 61883.89,
+          "candidates": [
+            {
+              "content": {
+                "role": "model",
+                "parts": [
+                  {
+                    "text": ""
+                  }
+                ]
+              },
+              "finishReason": "STOP",
+              "index": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "endpoint": "/v1/videos/generations",
+      "model": "omni",
+      "status": "limited",
+      "local_download_ok": false,
+      "urls": [],
+      "downloads": [],
+      "unresolved_materializations": [],
+      "request": {
+        "headers": {
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "omni",
+          "prompt": "Create a one second simple moving red square video."
+        }
+      },
+      "response": {
+        "elapsed_ms": 180018.9,
+        "error": "TimeoutError('timed out')"
+      }
+    },
+    {
+      "endpoint": "/v1/audio/generations",
+      "model": "gemini-2.5-flash-preview-tts",
+      "status": "limited",
+      "local_download_ok": false,
+      "urls": [],
+      "downloads": [],
+      "unresolved_materializations": [],
+      "request": {
+        "headers": {
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "gemini-2.5-flash-preview-tts",
+          "input": "Who are you"
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "content_type": "application/json",
+        "elapsed_ms": 5468.4,
+        "raw": "{\"created\": 1781002214, \"data\": [], \"model\": \"gemini-2.5-flash-preview-tts\", \"object\": \"list\", \"web_feature\": {\"id\": \"text_to_speech\", \"name\": \"Speech / TTS\", \"requested_model\": \"gemini-2.5-flash-preview-tts\", \"declared_status\": \"limited\", \"runtime_status\": \"limited\", \"artifact_count\": 0, \"note\": \"No real audio artifact was returned by the upstream response.\"}, \"files\": [], \"message\": \"I am Gemini, a large language model built by Google. \\n\\n*(Note: I am a text-based AI and don't have the ability to generate or return audio files, but you can use your device's built-in text-to-speech feature to hear me read this aloud!)*\", \"elapsed_ms\": 5453.03}",
+        "json": {
+          "created": 1781002214,
+          "data": [],
+          "model": "gemini-2.5-flash-preview-tts",
+          "object": "list",
+          "web_feature": {
+            "id": "text_to_speech",
+            "name": "Speech / TTS",
+            "requested_model": "gemini-2.5-flash-preview-tts",
+            "declared_status": "limited",
+            "runtime_status": "limited",
+            "artifact_count": 0,
+            "note": "No real audio artifact was returned by the upstream response."
+          },
+          "files": [],
+          "message": "I am Gemini, a large language model built by Google. \n\n*(Note: I am a text-based AI and don't have the ability to generate or return audio files, but you can use your device's built-in text-to-speech feature to hear me read this aloud!)*",
+          "elapsed_ms": 5453.03
+        }
+      }
+    },
+    {
+      "endpoint": "/v1beta/models/gemini-2.5-flash-preview-tts:generateAudio",
+      "model": "gemini-2.5-flash-preview-tts",
+      "status": "limited",
+      "local_download_ok": false,
+      "urls": [],
+      "downloads": [],
+      "unresolved_materializations": [],
+      "request": {
+        "headers": {
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "text": "Who are you"
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "content_type": "application/json",
+        "elapsed_ms": 5026.4,
+        "raw": "{\"model\": \"gemini-2.5-flash-preview-tts\", \"predictions\": [], \"generatedMedia\": [], \"files\": [], \"webFeature\": {\"id\": \"text_to_speech\", \"name\": \"Speech / TTS\", \"requested_model\": \"gemini-2.5-flash-preview-tts\", \"declared_status\": \"limited\", \"runtime_status\": \"limited\", \"artifact_count\": 0, \"note\": \"No real audio artifact was returned by the upstream response.\"}, \"text\": \"I am Gemini, a large language model built by Google. \\n\\nYou can think of me as your AI collaborator. I'm here to help you brainstorm ideas, write stories or essays, learn new topics, solve problems, or just chat about whatever is on your mind. \\n\\nHow can I help you out today?\", \"usageMetadata\": {\"promptTokenCount\": 2, \"candidatesTokenCount\": 68, \"totalTokenCount\": 71}, \"elapsedMs\": 5024.37, \"candidates\": [{\"content\": {\"role\": \"model\", \"parts\": [{\"text\": \"I am Gemini, a large language model built by Google. \\n\\nYou can think of me as your AI collaborator. I'm here to help you brainstorm ideas, write stories or essays, learn new topics, solve problems, or just chat about whatever is on your mind. \\n\\nHow can I help you out today?\"}]}, \"finishReason\": \"STOP\", \"index\": 0}]}",
+        "json": {
+          "model": "gemini-2.5-flash-preview-tts",
+          "predictions": [],
+          "generatedMedia": [],
+          "files": [],
+          "webFeature": {
+            "id": "text_to_speech",
+            "name": "Speech / TTS",
+            "requested_model": "gemini-2.5-flash-preview-tts",
+            "declared_status": "limited",
+            "runtime_status": "limited",
+            "artifact_count": 0,
+            "note": "No real audio artifact was returned by the upstream response."
+          },
+          "text": "I am Gemini, a large language model built by Google. \n\nYou can think of me as your AI collaborator. I'm here to help you brainstorm ideas, write stories or essays, learn new topics, solve problems, or just chat about whatever is on your mind. \n\nHow can I help you out today?",
+          "usageMetadata": {
+            "promptTokenCount": "<redacted>",
+            "candidatesTokenCount": "<redacted>",
+            "totalTokenCount": "<redacted>"
+          },
+          "elapsedMs": 5024.37,
+          "candidates": [
+            {
+              "content": {
+                "role": "model",
+                "parts": [
+                  {
+                    "text": "I am Gemini, a large language model built by Google. \n\nYou can think of me as your AI collaborator. I'm here to help you brainstorm ideas, write stories or essays, learn new topics, solve problems, or just chat about whatever is on your mind. \n\nHow can I help you out today?"
+                  }
+                ]
+              },
+              "finishReason": "STOP",
+              "index": 0
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "finished_at": "2026-06-09T18:50:19"
+}

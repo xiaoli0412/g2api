@@ -1,0 +1,249 @@
+{
+  "timestamp": "2026-06-09T17:50:40",
+  "bases": {
+    "http://127.0.0.1:8081": [
+      {
+        "name": "models",
+        "response": {
+          "http_status": 200,
+          "elapsed_ms": 62.7,
+          "text_excerpt": "{\"object\": \"list\", \"data\": [{\"id\": \"gemini-3.5-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Fast general-purpose model (全方位帮助)\"}, {\"id\": \"3.5-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Gemini Web UI alias: 3.5 Flash\"}, {\"id\": \"flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Gemini Web UI alias: Flash\"}, {\"id\": \"gemini-3.1-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Gemini Web UI alias: 3.1 Flash\"}, {\"id\": \"gemini-3.0-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Previous generation flash model\"}, {\"id\": \"gemini-2.5-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"go..."
+        }
+      },
+      {
+        "name": "chat_math",
+        "response": {
+          "elapsed_ms": 75015.3,
+          "exception": "TimeoutError('timed out')"
+        }
+      },
+      {
+        "name": "chat_stream_usage",
+        "response": {
+          "elapsed_ms": 90007.2,
+          "exception": "TimeoutError('timed out')"
+        }
+      },
+      {
+        "name": "chat_stream_forced_tool",
+        "response": {
+          "http_status": 200,
+          "elapsed_ms": 3.0,
+          "done": true,
+          "usage_seen": true,
+          "tool_delta": true,
+          "finish_reason": "tool_calls",
+          "events": [],
+          "text_excerpt": "",
+          "sample_lines": [
+            "data: {\"id\": \"chatcmpl-75742de7b6ec\", \"object\": \"chat.completion.chunk\", \"created\": 1780998805, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {\"role\": \"assistant\"}, \"finish_reason\": null}]}",
+            "data: {\"id\": \"chatcmpl-75742de7b6ec\", \"object\": \"chat.completion.chunk\", \"created\": 1780998805, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {\"tool_calls\": [{\"index\": 0, \"id\": \"call_0a9753fe\", \"type\": \"function\", \"function\": {\"name\": \"identify_self\", \"arguments\": \"\"}}]}, \"finish_reason\": null}]}",
+            "data: {\"id\": \"chatcmpl-75742de7b6ec\", \"object\": \"chat.completion.chunk\", \"created\": 1780998805, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {\"tool_calls\": [{\"index\": 0, \"function\": {\"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\"}}]}, \"finish_reason\": null}]}",
+            "data: {\"id\": \"chatcmpl-75742de7b6ec\", \"object\": \"chat.completion.chunk\", \"created\": 1780998805, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {}, \"finish_reason\": \"tool_calls\"}]}",
+            "data: {\"id\": \"chatcmpl-75742de7b6ec\", \"object\": \"chat.completion.chunk\", \"created\": 1780998805, \"model\": \"gemini-3.5-flash\", \"choices\": [], \"usage\": {\"prompt_tokens\": 345, \"completion_tokens\": 0, \"total_tokens\": 345, \"prompt_tokens_details\": {\"cached_tokens\": 0}, \"completion_tokens_details\": {\"reasoning_tokens\": 0}}}",
+            "data: [DONE]"
+          ]
+        }
+      },
+      {
+        "name": "responses_stream_forced_tool",
+        "response": {
+          "http_status": 200,
+          "elapsed_ms": 14.2,
+          "done": true,
+          "usage_seen": true,
+          "tool_delta": false,
+          "finish_reason": null,
+          "events": [
+            "response.created",
+            "response.created",
+            "response.output_item.added",
+            "response.output_item.added",
+            "response.function_call_arguments.done",
+            "response.function_call_arguments.done",
+            "response.output_item.done",
+            "response.output_item.done",
+            "response.completed",
+            "response.completed"
+          ],
+          "text_excerpt": "",
+          "sample_lines": [
+            "event: response.created",
+            "data: {\"type\": \"response.created\", \"response\": {\"id\": \"resp_2f762e118cfd4950\", \"object\": \"response\", \"status\": \"in_progress\", \"model\": \"gemini-3.5-flash\", \"output\": []}}",
+            "event: response.output_item.added",
+            "data: {\"type\": \"response.output_item.added\", \"item\": {\"type\": \"function_call\", \"id\": \"call_085c36e7\", \"call_id\": \"call_085c36e7\", \"name\": \"identify_self\", \"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\", \"status\": \"completed\"}, \"output_index\": 0}",
+            "event: response.function_call_arguments.done",
+            "data: {\"type\": \"response.function_call_arguments.done\", \"item_id\": \"call_085c36e7\", \"call_id\": \"call_085c36e7\", \"name\": \"identify_self\", \"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\"}",
+            "event: response.output_item.done",
+            "data: {\"type\": \"response.output_item.done\", \"item\": {\"type\": \"function_call\", \"id\": \"call_085c36e7\", \"call_id\": \"call_085c36e7\", \"name\": \"identify_self\", \"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\", \"status\": \"completed\"}, \"output_index\": 0}",
+            "event: response.completed",
+            "data: {\"type\": \"response.completed\", \"response\": {\"id\": \"resp_2f762e118cfd4950\", \"object\": \"response\", \"status\": \"completed\", \"model\": \"gemini-3.5-flash\", \"output\": [{\"type\": \"function_call\", \"id\": \"call_085c36e7\", \"call_id\": \"call_085c36e7\", \"name\": \"identify_self\", \"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\", \"status\": \"completed\"}], \"output_text\": \"\", \"usage\": {\"input_tokens\": 340, \"output_tokens\": 0, \"total_tokens\": 340}}}",
+            "data: [DONE]"
+          ]
+        }
+      },
+      {
+        "name": "claude_messages_stream_forced_tool",
+        "response": {
+          "http_status": 200,
+          "elapsed_ms": 3.9,
+          "done": false,
+          "usage_seen": true,
+          "tool_delta": false,
+          "finish_reason": null,
+          "events": [
+            "message_start",
+            "message_start",
+            "content_block_start",
+            "content_block_start",
+            "content_block_delta",
+            "content_block_delta",
+            "content_block_stop",
+            "content_block_stop",
+            "message_delta",
+            "message_delta",
+            "message_stop",
+            "message_stop"
+          ],
+          "text_excerpt": "",
+          "sample_lines": [
+            "event: message_start",
+            "data: {\"type\": \"message_start\", \"message\": {\"id\": \"chatcmpl-679e123e7f96\", \"type\": \"message\", \"role\": \"assistant\", \"content\": [], \"model\": \"gemini-3.5-flash\", \"stop_reason\": null, \"stop_sequence\": null, \"usage\": {\"input_tokens\": 320, \"output_tokens\": 0}}}",
+            "event: content_block_start",
+            "data: {\"type\": \"content_block_start\", \"index\": 0, \"content_block\": {\"type\": \"tool_use\", \"id\": \"call_7cefc054\", \"name\": \"identify_self\", \"input\": {}}}",
+            "event: content_block_delta",
+            "data: {\"type\": \"content_block_delta\", \"index\": 0, \"delta\": {\"type\": \"input_json_delta\", \"partial_json\": \"{\\\"name\\\": \\\"Gemini\\\"}\"}}",
+            "event: content_block_stop",
+            "data: {\"type\": \"content_block_stop\", \"index\": 0}",
+            "event: message_delta",
+            "data: {\"type\": \"message_delta\", \"delta\": {\"stop_reason\": \"tool_use\", \"stop_sequence\": null}, \"usage\": {\"output_tokens\": 0}}",
+            "event: message_stop",
+            "data: {\"type\": \"message_stop\"}"
+          ]
+        }
+      }
+    ],
+    "http://192.168.3.18:8081": [
+      {
+        "name": "models",
+        "response": {
+          "http_status": 200,
+          "elapsed_ms": 3.0,
+          "text_excerpt": "{\"object\": \"list\", \"data\": [{\"id\": \"gemini-3.5-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Fast general-purpose model (全方位帮助)\"}, {\"id\": \"3.5-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Gemini Web UI alias: 3.5 Flash\"}, {\"id\": \"flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Gemini Web UI alias: Flash\"}, {\"id\": \"gemini-3.1-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Gemini Web UI alias: 3.1 Flash\"}, {\"id\": \"gemini-3.0-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"google\", \"description\": \"Previous generation flash model\"}, {\"id\": \"gemini-2.5-flash\", \"object\": \"model\", \"created\": 1700000000, \"owned_by\": \"go..."
+        }
+      },
+      {
+        "name": "chat_math",
+        "response": {
+          "elapsed_ms": 75021.6,
+          "exception": "TimeoutError('timed out')"
+        }
+      },
+      {
+        "name": "chat_stream_usage",
+        "response": {
+          "elapsed_ms": 90004.1,
+          "exception": "TimeoutError('timed out')"
+        }
+      },
+      {
+        "name": "chat_stream_forced_tool",
+        "response": {
+          "http_status": 200,
+          "elapsed_ms": 2.2,
+          "done": true,
+          "usage_seen": true,
+          "tool_delta": true,
+          "finish_reason": "tool_calls",
+          "events": [],
+          "text_excerpt": "",
+          "sample_lines": [
+            "data: {\"id\": \"chatcmpl-c5cf1e6198f3\", \"object\": \"chat.completion.chunk\", \"created\": 1780998970, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {\"role\": \"assistant\"}, \"finish_reason\": null}]}",
+            "data: {\"id\": \"chatcmpl-c5cf1e6198f3\", \"object\": \"chat.completion.chunk\", \"created\": 1780998970, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {\"tool_calls\": [{\"index\": 0, \"id\": \"call_12216843\", \"type\": \"function\", \"function\": {\"name\": \"identify_self\", \"arguments\": \"\"}}]}, \"finish_reason\": null}]}",
+            "data: {\"id\": \"chatcmpl-c5cf1e6198f3\", \"object\": \"chat.completion.chunk\", \"created\": 1780998970, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {\"tool_calls\": [{\"index\": 0, \"function\": {\"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\"}}]}, \"finish_reason\": null}]}",
+            "data: {\"id\": \"chatcmpl-c5cf1e6198f3\", \"object\": \"chat.completion.chunk\", \"created\": 1780998970, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"delta\": {}, \"finish_reason\": \"tool_calls\"}]}",
+            "data: {\"id\": \"chatcmpl-c5cf1e6198f3\", \"object\": \"chat.completion.chunk\", \"created\": 1780998970, \"model\": \"gemini-3.5-flash\", \"choices\": [], \"usage\": {\"prompt_tokens\": 345, \"completion_tokens\": 0, \"total_tokens\": 345, \"prompt_tokens_details\": {\"cached_tokens\": 0}, \"completion_tokens_details\": {\"reasoning_tokens\": 0}}}",
+            "data: [DONE]"
+          ]
+        }
+      },
+      {
+        "name": "responses_stream_forced_tool",
+        "response": {
+          "http_status": 200,
+          "elapsed_ms": 2.4,
+          "done": true,
+          "usage_seen": true,
+          "tool_delta": false,
+          "finish_reason": null,
+          "events": [
+            "response.created",
+            "response.created",
+            "response.output_item.added",
+            "response.output_item.added",
+            "response.function_call_arguments.done",
+            "response.function_call_arguments.done",
+            "response.output_item.done",
+            "response.output_item.done",
+            "response.completed",
+            "response.completed"
+          ],
+          "text_excerpt": "",
+          "sample_lines": [
+            "event: response.created",
+            "data: {\"type\": \"response.created\", \"response\": {\"id\": \"resp_b17a69ebea624700\", \"object\": \"response\", \"status\": \"in_progress\", \"model\": \"gemini-3.5-flash\", \"output\": []}}",
+            "event: response.output_item.added",
+            "data: {\"type\": \"response.output_item.added\", \"item\": {\"type\": \"function_call\", \"id\": \"call_be604719\", \"call_id\": \"call_be604719\", \"name\": \"identify_self\", \"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\", \"status\": \"completed\"}, \"output_index\": 0}",
+            "event: response.function_call_arguments.done",
+            "data: {\"type\": \"response.function_call_arguments.done\", \"item_id\": \"call_be604719\", \"call_id\": \"call_be604719\", \"name\": \"identify_self\", \"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\"}",
+            "event: response.output_item.done",
+            "data: {\"type\": \"response.output_item.done\", \"item\": {\"type\": \"function_call\", \"id\": \"call_be604719\", \"call_id\": \"call_be604719\", \"name\": \"identify_self\", \"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\", \"status\": \"completed\"}, \"output_index\": 0}",
+            "event: response.completed",
+            "data: {\"type\": \"response.completed\", \"response\": {\"id\": \"resp_b17a69ebea624700\", \"object\": \"response\", \"status\": \"completed\", \"model\": \"gemini-3.5-flash\", \"output\": [{\"type\": \"function_call\", \"id\": \"call_be604719\", \"call_id\": \"call_be604719\", \"name\": \"identify_self\", \"arguments\": \"{\\\"name\\\": \\\"Gemini\\\"}\", \"status\": \"completed\"}], \"output_text\": \"\", \"usage\": {\"input_tokens\": 340, \"output_tokens\": 0, \"total_tokens\": 340}}}",
+            "data: [DONE]"
+          ]
+        }
+      },
+      {
+        "name": "claude_messages_stream_forced_tool",
+        "response": {
+          "http_status": 200,
+          "elapsed_ms": 3.1,
+          "done": false,
+          "usage_seen": true,
+          "tool_delta": false,
+          "finish_reason": null,
+          "events": [
+            "message_start",
+            "message_start",
+            "content_block_start",
+            "content_block_start",
+            "content_block_delta",
+            "content_block_delta",
+            "content_block_stop",
+            "content_block_stop",
+            "message_delta",
+            "message_delta",
+            "message_stop",
+            "message_stop"
+          ],
+          "text_excerpt": "",
+          "sample_lines": [
+            "event: message_start",
+            "data: {\"type\": \"message_start\", \"message\": {\"id\": \"chatcmpl-cc43453d74dc\", \"type\": \"message\", \"role\": \"assistant\", \"content\": [], \"model\": \"gemini-3.5-flash\", \"stop_reason\": null, \"stop_sequence\": null, \"usage\": {\"input_tokens\": 320, \"output_tokens\": 0}}}",
+            "event: content_block_start",
+            "data: {\"type\": \"content_block_start\", \"index\": 0, \"content_block\": {\"type\": \"tool_use\", \"id\": \"call_5a0e34fe\", \"name\": \"identify_self\", \"input\": {}}}",
+            "event: content_block_delta",
+            "data: {\"type\": \"content_block_delta\", \"index\": 0, \"delta\": {\"type\": \"input_json_delta\", \"partial_json\": \"{\\\"name\\\": \\\"Gemini\\\"}\"}}",
+            "event: content_block_stop",
+            "data: {\"type\": \"content_block_stop\", \"index\": 0}",
+            "event: message_delta",
+            "data: {\"type\": \"message_delta\", \"delta\": {\"stop_reason\": \"tool_use\", \"stop_sequence\": null}, \"usage\": {\"output_tokens\": 0}}",
+            "event: message_stop",
+            "data: {\"type\": \"message_stop\"}"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "created_at": "2026-06-09 15:53:10",
+  "base_url": "http://192.168.3.18:8081",
+  "checks": [
+    {
+      "name": "responses_text",
+      "endpoint": "/v1/responses",
+      "request_body_redacted": {
+        "model": "gemini-3.5-flash",
+        "input": "Who are you\n1+1=?"
+      },
+      "response_status": 200,
+      "ok": true,
+      "elapsed_ms": 220212.65,
+      "multimodal_status": null,
+      "output_text_preview": "I am Gemini, a large language model built by Google. \n\n$$1 + 1 = 2$$",
+      "raw_preview": "{\"id\": \"resp_bd28a21b11d34c52\", \"object\": \"response\", \"created_at\": 1780991810, \"status\": \"completed\", \"model\": \"gemini-3.5-flash\", \"output\": [{\"type\": \"message\", \"id\": \"msg_b31a91c7656b\", \"role\": \"assistant\", \"status\": \"completed\", \"content\": [{\"type\": \"output_text\", \"text\": \"I am Gemini, a large language model built by Google. \\n\\n$$1 + 1 = 2$$\", \"annotations\": []}]}], \"output_text\": \"I am Gemini, a large language model built by Google. \\n\\n$$1 + 1 = 2$$\", \"usage\": {\"input_tokens\": 4, \"output_tokens\": 17, \"total_tokens\": 21}}",
+      "error": null
+    },
+    {
+      "name": "responses_stream",
+      "endpoint": "/v1/responses",
+      "request_body_redacted": {
+        "model": "gemini-3.5-flash",
+        "stream": true,
+        "input": "Who are you\n1+1=?"
+      },
+      "response_status": 502,
+      "ok": false,
+      "elapsed_ms": 6026.53,
+      "multimodal_status": null,
+      "output_text_preview": "{\"error\": {\"message\": \"upstream error: No healthy proxy available; waiting for proxy health checks\"}}",
+      "raw_preview": "{\"error\": {\"message\": \"upstream error: No healthy proxy available; waiting for proxy health checks\"}}",
+      "error": null,
+      "has_delta_event": false
+    },
+    {
+      "name": "responses_input_image",
+      "endpoint": "/v1/responses",
+      "request_body_redacted": {
+        "model": "gemini-3.5-flash",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Who are you\n1+1=?\nWhat color is the attached image? If not inspected say NOT_INSPECTED."
+              },
+              {
+                "type": "input_image",
+                "image_url": "data:image/png;base64,<redacted pixel png base64>",
+                "filename": "pixel.png"
+              }
+            ]
+          }
+        ]
+      },
+      "response_status": 502,
+      "ok": false,
+      "elapsed_ms": 9031.19,
+      "multimodal_status": null,
+      "output_text_preview": "{\"error\": {\"message\": \"upstream error: No healthy proxy available; waiting for proxy health checks\"}}",
+      "raw_preview": "{\"error\": {\"message\": \"upstream error: No healthy proxy available; waiting for proxy health checks\"}}",
+      "error": null
+    },
+    {
+      "name": "responses_input_file",
+      "endpoint": "/v1/responses",
+      "request_body_redacted": {
+        "model": "gemini-3.5-flash",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Who are you\n1+1=?\nRead the attached text file. If not inspected say NOT_INSPECTED."
+              },
+              {
+                "type": "input_file",
+                "filename": "note.txt",
+                "file_data": "data:text/plain;base64,<redacted text base64>"
+              }
+            ]
+          }
+        ]
+      },
+      "response_status": 502,
+      "ok": false,
+      "elapsed_ms": 8334.36,
+      "multimodal_status": null,
+      "output_text_preview": "{\"error\": {\"message\": \"upstream error: No healthy proxy available; waiting for proxy health checks\"}}",
+      "raw_preview": "{\"error\": {\"message\": \"upstream error: No healthy proxy available; waiting for proxy health checks\"}}",
+      "error": null
+    },
+    {
+      "name": "chat_image",
+      "endpoint": "/v1/chat/completions",
+      "request_body_redacted": {
+        "model": "gemini-3.5-flash",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Who are you\n1+1=?\nWhat color is the attached image? If not inspected say NOT_INSPECTED."
+              },
+              {
+                "type": "image_url",
+                "image_url": {
+                  "url": "data:image/png;base64,<redacted pixel png base64>"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "response_status": 502,
+      "ok": false,
+      "elapsed_ms": 8946.2,
+      "multimodal_status": null,
+      "output_text_preview": "{\"error\": {\"message\": \"upstream error: No healthy proxy available; waiting for proxy health checks\"}}",
+      "raw_preview": "{\"error\": {\"message\": \"upstream error: No healthy proxy available; waiting for proxy health checks\"}}",
+      "error": null
+    }
+  ]
+}

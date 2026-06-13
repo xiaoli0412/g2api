@@ -1,0 +1,77 @@
+{
+  "created_at": "2026-06-09 17:15:34",
+  "base_url": "http://192.168.3.18:8081",
+  "checks": [
+    {
+      "name": "chat_image_data_url",
+      "endpoint": "/v1/chat/completions",
+      "request_body_redacted": {
+        "model": "gemini-3.5-flash",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Who are you\n1+1=?\nWhat color is the attached image? If not inspected say NOT_INSPECTED."
+              },
+              {
+                "type": "image_url",
+                "image_url": {
+                  "url": "data:image/png;base64,<redacted 1x1 png>"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "response_status": 200,
+      "ok": true,
+      "elapsed_ms": 40783.03,
+      "output_text_preview": "I am Gemini, a large language model built by Google.\n\n---\n\n1 + 1 = 2\n\n---\n\nNOT_INSPECTED",
+      "multimodal_status": {
+        "runtime_status": "limited",
+        "input_count": 1,
+        "uploaded_count": 1,
+        "fallback": "text_only",
+        "reason": "BardErrorInfo [1003]"
+      },
+      "raw_preview": "{\"id\": \"chatcmpl-7cf0b9ebae7f\", \"object\": \"chat.completion\", \"created\": 1780996575, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"I am Gemini, a large language model built by Google.\\n\\n---\\n\\n1 + 1 = 2\\n\\n---\\n\\nNOT_INSPECTED\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 27, \"completion_tokens\": 22, \"total_tokens\": 49}, \"multimodal_status\": {\"runtime_status\": \"limited\", \"input_count\": 1, \"uploaded_count\": 1, \"fallback\": \"text_only\", \"reason\": \"BardErrorInfo [1003]\"}}"
+    },
+    {
+      "name": "responses_input_file_data_url",
+      "endpoint": "/v1/responses",
+      "request_body_redacted": {
+        "model": "gemini-3.5-flash",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Who are you\n1+1=?\nRead the attached text file. If not inspected say NOT_INSPECTED."
+              },
+              {
+                "type": "input_file",
+                "filename": "note.txt",
+                "file_data": "data:text/plain;base64,<redacted text>"
+              }
+            ]
+          }
+        ]
+      },
+      "response_status": 200,
+      "ok": true,
+      "elapsed_ms": 39658.6,
+      "output_text_preview": "I am Gemini, a large language model built by Google.\n\n1+1=2\n\nNOT_INSPECTED",
+      "multimodal_status": {
+        "runtime_status": "limited",
+        "input_count": 1,
+        "uploaded_count": 1,
+        "fallback": "text_only",
+        "reason": "BardErrorInfo [1003]"
+      },
+      "raw_preview": "{\"id\": \"resp_7507eb47631f43d3\", \"object\": \"response\", \"created_at\": 1780996615, \"status\": \"completed\", \"model\": \"gemini-3.5-flash\", \"output\": [{\"type\": \"message\", \"id\": \"msg_38a5b0910859\", \"role\": \"assistant\", \"status\": \"completed\", \"content\": [{\"type\": \"output_text\", \"text\": \"I am Gemini, a large language model built by Google.\\n\\n1+1=2\\n\\nNOT_INSPECTED\", \"annotations\": []}]}], \"output_text\": \"I am Gemini, a large language model built by Google.\\n\\n1+1=2\\n\\nNOT_INSPECTED\", \"usage\": {\"input_tokens\": 27, \"output_tokens\": 18, \"total_tokens\": 45}, \"multimodal_status\": {\"runtime_status\": \"limited\", \"input_count\": 1, \"uploaded_count\": 1, \"fallback\": \"text_only\", \"reason\": \"BardErrorInfo [1003]\"}}"
+    }
+  ]
+}

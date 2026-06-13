@@ -1,0 +1,275 @@
+{
+  "started_at": "2026-06-09T18:23:48",
+  "timeout_sec": 390,
+  "tasks": [
+    {
+      "label": "current-8081",
+      "base": "http://127.0.0.1:8081",
+      "endpoint": "/v1/chat/completions",
+      "model": "gemini-2.5-flash",
+      "prompt": "Who are you",
+      "status": "pass",
+      "semantic_ok": true,
+      "text_excerpt": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator and assistant. I'm here to help you with a bit of everything—whether you want to brainstorm creative ideas, write essays, break down complex school topics, or just chat. \n\nWhat's on your mind today?",
+      "request": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "gemini-2.5-flash",
+          "messages": [
+            {
+              "role": "user",
+              "content": "Who are you"
+            }
+          ],
+          "temperature": 0,
+          "stream": false
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "elapsed_ms": 5988.9,
+        "raw": "{\"id\": \"chatcmpl-ad4e3d16038d\", \"object\": \"chat.completion\", \"created\": 1781000634, \"model\": \"gemini-2.5-flash\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"I am Gemini, a large language model built by Google. \\n\\nThink of me as your AI collaborator and assistant. I'm here to help you with a bit of everything—whether you want to brainstorm creative ideas, write essays, break down complex school topics, or just chat. \\n\\nWhat's on your mind today?\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 2, \"completion_tokens\": 72, \"total_tokens\": 75}}",
+        "json": {
+          "id": "chatcmpl-ad4e3d16038d",
+          "object": "chat.completion",
+          "created": 1781000634,
+          "model": "gemini-2.5-flash",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator and assistant. I'm here to help you with a bit of everything—whether you want to brainstorm creative ideas, write essays, break down complex school topics, or just chat. \n\nWhat's on your mind today?"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": "<redacted>",
+            "completion_tokens": "<redacted>",
+            "total_tokens": "<redacted>"
+          }
+        }
+      }
+    },
+    {
+      "label": "current-8081",
+      "base": "http://127.0.0.1:8081",
+      "endpoint": "/v1/chat/completions",
+      "model": "gemini-2.5-flash",
+      "prompt": "1+1=?",
+      "status": "pass",
+      "semantic_ok": true,
+      "text_excerpt": "$1 + 1 = 2$",
+      "request": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "gemini-2.5-flash",
+          "messages": [
+            {
+              "role": "user",
+              "content": "1+1=?"
+            }
+          ],
+          "temperature": 0,
+          "stream": false
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "elapsed_ms": 6165.4,
+        "raw": "{\"id\": \"chatcmpl-f6538f730fda\", \"object\": \"chat.completion\", \"created\": 1781000640, \"model\": \"gemini-2.5-flash\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"$1 + 1 = 2$\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 1, \"completion_tokens\": 2, \"total_tokens\": 4}}",
+        "json": {
+          "id": "chatcmpl-f6538f730fda",
+          "object": "chat.completion",
+          "created": 1781000640,
+          "model": "gemini-2.5-flash",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "$1 + 1 = 2$"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": "<redacted>",
+            "completion_tokens": "<redacted>",
+            "total_tokens": "<redacted>"
+          }
+        }
+      }
+    },
+    {
+      "label": "current-8081",
+      "base": "http://127.0.0.1:8081",
+      "endpoint": "/v1/chat/completions",
+      "model": "gemini-3.5-flash",
+      "prompt": "Who are you",
+      "status": "pass",
+      "semantic_ok": true,
+      "text_excerpt": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator and assistant. I'm here to help you with a whole bunch of things, like:\n\n* **Writing & Brainstorming:** Crafting essays, stories, emails, or just bouncing ideas around.\n* **Learning & Research:** Explaining tricky concepts, summarizing topics, or helping with homework.\n* **Coding & Math:** Writing code, debugging, or breaking down complex problems.\n* **Organization:** Planning schedules, organizing data into tables, or structuring your projects.\n\nWhat are you working on today? How can I help you out?",
+      "request": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "gemini-3.5-flash",
+          "messages": [
+            {
+              "role": "user",
+              "content": "Who are you"
+            }
+          ],
+          "temperature": 0,
+          "stream": false
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "elapsed_ms": 5699.8,
+        "raw": "{\"id\": \"chatcmpl-821fe1a5d5c6\", \"object\": \"chat.completion\", \"created\": 1781000646, \"model\": \"gemini-3.5-flash\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"I am Gemini, a large language model built by Google. \\n\\nThink of me as your AI collaborator and assistant. I'm here to help you with a whole bunch of things, like:\\n\\n* **Writing & Brainstorming:** Crafting essays, stories, emails, or just bouncing ideas around.\\n* **Learning & Research:** Explaining tricky concepts, summarizing topics, or helping with homework.\\n* **Coding & Math:** Writing code, debugging, or breaking down complex problems.\\n* **Organization:** Planning schedules, organizing data into tables, or structuring your projects.\\n\\nWhat are you working on today? How can I help you out?\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 2, \"completion_tokens\": 149, \"total_tokens\": 151}}",
+        "json": {
+          "id": "chatcmpl-821fe1a5d5c6",
+          "object": "chat.completion",
+          "created": 1781000646,
+          "model": "gemini-3.5-flash",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "I am Gemini, a large language model built by Google. \n\nThink of me as your AI collaborator and assistant. I'm here to help you with a whole bunch of things, like:\n\n* **Writing & Brainstorming:** Crafting essays, stories, emails, or just bouncing ideas around.\n* **Learning & Research:** Explaining tricky concepts, summarizing topics, or helping with homework.\n* **Coding & Math:** Writing code, debugging, or breaking down complex problems.\n* **Organization:** Planning schedules, organizing data into tables, or structuring your projects.\n\nWhat are you working on today? How can I help you out?"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": "<redacted>",
+            "completion_tokens": "<redacted>",
+            "total_tokens": "<redacted>"
+          }
+        }
+      }
+    },
+    {
+      "label": "current-8081",
+      "base": "http://127.0.0.1:8081",
+      "endpoint": "/v1/chat/completions",
+      "model": "gemini-3.5-flash",
+      "prompt": "1+1=?",
+      "status": "fail",
+      "semantic_ok": false,
+      "text_excerpt": "",
+      "request": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "gemini-3.5-flash",
+          "messages": [
+            {
+              "role": "user",
+              "content": "1+1=?"
+            }
+          ],
+          "temperature": 0,
+          "stream": false
+        }
+      },
+      "response": {
+        "elapsed_ms": 390005.0,
+        "error": "TimeoutError('timed out')",
+        "traceback": "Traceback (most recent call last):\n  File \"D:\\workspaces\\2api\\gemini2api\\output\\real_latency_probe.py\", line 45, in post_json\n    with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:\n         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\request.py\", line 189, in urlopen\n    return opener.open(url, data, timeout)\n           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\request.py\", line 489, in open\n    response = self._open(req, data)\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\request.py\", line 506, in _open\n    result = self._call_chain(self.handle_open, protocol, protocol +\n                              '_open', req)\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\request.py\", line 466, in _call_chain\n    result = func(*args)\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\request.py\", line 1348, in http_open\n    return self.do_open(http.client.HTTPConnection, req)\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\request.py\", line 1323, in do_open\n    r = h.getresponse()\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\http\\client.py\", line 1450, in getresponse\n    response.begin()\n    ~~~~~~~~~~~~~~^^\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\http\\client.py\", line 336, in begin\n    version, status, reason = self._read_status()\n                              ~~~~~~~~~~~~~~~~~^^\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\http\\client.py\", line 297, in _read_status\n    line = str(self.fp.readline(_MAXLINE + 1), \"iso-8859-1\")\n               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\socket.py\", line 719, in readinto\n    return self._sock.recv_into(b)\n           ~~~~~~~~~~~~~~~~~~~~^^^\nTimeoutError: timed out\n"
+      }
+    },
+    {
+      "label": "upstream-10009",
+      "base": "http://127.0.0.1:10009",
+      "endpoint": "/v1/chat/completions",
+      "model": "gemini-2.5-flash",
+      "prompt": "Who are you",
+      "status": "fail",
+      "semantic_ok": false,
+      "text_excerpt": "",
+      "request": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "gemini-2.5-flash",
+          "messages": [
+            {
+              "role": "user",
+              "content": "Who are you"
+            }
+          ],
+          "temperature": 0,
+          "stream": false
+        }
+      },
+      "response": {
+        "http_status": 400,
+        "elapsed_ms": 23.1,
+        "raw": "{\"error\": {\"message\": \"Unknown model: gemini-2.5-flash\"}}",
+        "json": {
+          "error": {
+            "message": "Unknown model: gemini-2.5-flash"
+          }
+        },
+        "error": "<HTTPError 400: 'Bad Request'>"
+      }
+    },
+    {
+      "label": "upstream-10009",
+      "base": "http://127.0.0.1:10009",
+      "endpoint": "/v1/chat/completions",
+      "model": "gemini-2.5-flash",
+      "prompt": "1+1=?",
+      "status": "fail",
+      "semantic_ok": false,
+      "text_excerpt": "",
+      "request": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "<redacted>"
+        },
+        "body": {
+          "model": "gemini-2.5-flash",
+          "messages": [
+            {
+              "role": "user",
+              "content": "1+1=?"
+            }
+          ],
+          "temperature": 0,
+          "stream": false
+        }
+      },
+      "response": {
+        "http_status": 400,
+        "elapsed_ms": 20.5,
+        "raw": "{\"error\": {\"message\": \"Unknown model: gemini-2.5-flash\"}}",
+        "json": {
+          "error": {
+            "message": "Unknown model: gemini-2.5-flash"
+          }
+        },
+        "error": "<HTTPError 400: 'Bad Request'>"
+      }
+    }
+  ],
+  "updated_at": "2026-06-09T18:30:36",
+  "finished_at": "2026-06-09T18:30:36"
+}

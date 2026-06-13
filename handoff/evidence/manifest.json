@@ -1,0 +1,62 @@
+[
+  {
+    "file": "live_retest_after_restart.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\live_retest_after_restart.json",
+    "bytes": 19913,
+    "status": "copied_sanitized_json"
+  },
+  {
+    "file": "real_latency_probe_20260609.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\real_latency_probe_20260609.json",
+    "bytes": 13617,
+    "status": "copied_sanitized_json"
+  },
+  {
+    "file": "original_10009_core_probe_20260609.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\original_10009_core_probe_20260609.json",
+    "bytes": 4391,
+    "status": "copied_sanitized_json"
+  },
+  {
+    "file": "ide_protocol_real_verify_after_tool_fix_20260609.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\ide_protocol_real_verify_after_tool_fix_20260609.json",
+    "bytes": 16102,
+    "status": "copied_sanitized_json"
+  },
+  {
+    "file": "ide_stream_tool_live_20260609.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\ide_stream_tool_live_20260609.json",
+    "bytes": 9126,
+    "status": "copied_sanitized_json"
+  },
+  {
+    "file": "media_endpoints_live_20260609.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\media_endpoints_live_20260609.json",
+    "bytes": 64222,
+    "status": "copied_sanitized_json"
+  },
+  {
+    "file": "multimodal_real_verify_after_restart.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\multimodal_real_verify_after_restart.json",
+    "bytes": 3733,
+    "status": "copied_sanitized_json"
+  },
+  {
+    "file": "lan_responses_upload_verify_8081.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\lan_responses_upload_verify_8081.json",
+    "bytes": 5130,
+    "status": "copied_sanitized_json"
+  },
+  {
+    "file": "artifact_media_real_checks_8081.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\artifact_media_real_checks_8081.json",
+    "bytes": 20182,
+    "status": "copied_sanitized_json"
+  },
+  {
+    "file": "real_model_port_matrix_8081.sanitized.json",
+    "source": "D:\\workspaces\\2api\\gemini2api\\output\\real_model_port_matrix_8081.json",
+    "bytes": 55149,
+    "status": "copied_sanitized_json"
+  }
+]
