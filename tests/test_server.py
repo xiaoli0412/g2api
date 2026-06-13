@@ -175,6 +175,42 @@ def test_api_keys_protect_google_admin_and_api_routes():
     assert GeminiHandler._path_requires_auth("/") is False
 
 
+def test_root_serves_dashboard_for_browser_accept_header(tmp_path):
+    from gemini_web2api.config import CONFIG
+
+    old_values = {
+        key: CONFIG.get(key)
+        for key in ("cookie_file", "api_keys", "host")
+    }
+    CONFIG["cookie_file"] = str(tmp_path / "missing-cookie.txt")
+    CONFIG["api_keys"] = ["test-key"]
+    CONFIG["host"] = "127.0.0.1"
+    server = ThreadedServer(("127.0.0.1", 0), GeminiHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    base_url = f"http://127.0.0.1:{server.server_address[1]}"
+    try:
+        req = urllib.request.Request(base_url + "/", headers={"Accept": "text/html"})
+        with urllib.request.urlopen(req, timeout=5) as response:
+            body = response.read().decode("utf-8")
+            content_type = response.headers.get("Content-Type", "")
+        assert response.status == 200
+        assert "text/html" in content_type
+        assert "Gemini2API" in body
+        assert "/api/dashboard" in body
+        assert "__DASH_API_KEY__" not in body
+
+        req = urllib.request.Request(base_url + "/", headers={"Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=5) as response:
+            data = json.loads(response.read().decode("utf-8"))
+        assert data["status"] == "ok"
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
+        CONFIG.update(old_values)
+
+
 def test_local_dashboard_bypass_allows_loopback_api_only():
     from gemini_web2api.config import CONFIG
 

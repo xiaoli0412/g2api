@@ -14,6 +14,8 @@ All files here are copied from `output/` and sanitized for handoff. They preserv
 - `lan_responses_upload_verify_8081.sanitized.json`: LAN Responses/upload checks.
 - `media_endpoints_live_20260609.sanitized.json`: image/video/audio endpoint live checks.
 - `artifact_media_real_checks_8081.sanitized.json`: local artifact/media materialization checks.
+- `dashboard_runtime_20260613.json`: real HTTP checks proving `/` browser requests and `/dashboard` return dashboard HTML.
+- `dashboard-8081-20260613.png`: Playwright Chromium screenshot proving the dashboard renders as a UI, not plain text.
 - `manifest.json`: source-to-handoff copy manifest.
 
 ## Reading Rules

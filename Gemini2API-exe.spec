@@ -18,6 +18,7 @@ datas = [
     (os.path.join(ROOT, "config.example.json"), "."),
     (os.path.join(ROOT, "logo.png"), "."),
     (os.path.join(ROOT, "extension"), "extension"),
+    (os.path.join(ROOT, "gemini_web2api", "dashboard.html"), "gemini_web2api"),
 ]
 
 ico_path = os.path.join(ROOT, "app_icon.ico")

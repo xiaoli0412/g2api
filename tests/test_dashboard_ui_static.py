@@ -156,3 +156,13 @@ def test_dashboard_runtime_visual_verifier_covers_real_viewports_and_language():
 
     assert "[switch]$RunWebVisual" in verify_all
     assert "verify-web-dashboard-runtime.ps1" in verify_all
+
+
+def test_dashboard_is_packaged_for_pip_and_pyinstaller():
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert "[tool.setuptools.package-data]" in pyproject
+    assert 'gemini_web2api = ["dashboard.html"]' in pyproject
+
+    spec = (ROOT / "Gemini2API-exe.spec").read_text(encoding="utf-8")
+    assert 'os.path.join(ROOT, "gemini_web2api", "dashboard.html")' in spec
+    assert '"gemini_web2api"' in spec

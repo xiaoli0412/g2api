@@ -937,6 +937,12 @@ class GeminiHandler(BaseHTTPRequestHandler):
             return True
         return False
 
+    def _accepts_html(self) -> bool:
+        accept = (self.headers.get("Accept", "") if getattr(self, "headers", None) else "").lower()
+        if not accept:
+            return False
+        return "text/html" in accept and "application/json" not in accept
+
     def do_OPTIONS(self):
         self.send_response(204)
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -1036,6 +1042,9 @@ class GeminiHandler(BaseHTTPRequestHandler):
                     status["internal_browser"] = {"available": False, "error": str(e)}
                 self.send_json(status)
             elif parsed_path == "/":
+                if self._accepts_html():
+                    self._send_dashboard()
+                    return
                 from .gemini import get_request_cookie
                 cookie_str, _ = get_request_cookie()
                 has_cookie = bool(cookie_str)
@@ -1068,8 +1077,17 @@ class GeminiHandler(BaseHTTPRequestHandler):
     def _send_dashboard(self):
         dashboard_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dashboard.html")
         try:
-            with open(dashboard_path, "r", encoding="utf-8") as f:
-                html = f.read()
+            html = ""
+            if os.path.exists(dashboard_path):
+                with open(dashboard_path, "r", encoding="utf-8") as f:
+                    html = f.read()
+            else:
+                import pkgutil
+                data = pkgutil.get_data(__package__ or "gemini_web2api", "dashboard.html")
+                if data:
+                    html = data.decode("utf-8", errors="replace")
+            if not html:
+                raise FileNotFoundError(f"dashboard.html not found next to server.py or in package data: {dashboard_path}")
             keys = CONFIG.get("api_keys") or []
             api_key = keys[0] if keys else ""
             html = html.replace("__DASH_API_KEY__", api_key)

@@ -19,6 +19,8 @@ The user wants this repository to remain a practical Gemini Web reverse-proxy/AP
 
 Do not replace this repository with upstream. Upstream is useful as a baseline, but this repo is intentionally much larger.
 
+Important dashboard clarification: there is no Vue/Vite frontend project here. The management UI is `gemini_web2api/dashboard.html`, a single native HTML/CSS/JS file served by `gemini_web2api/server.py`.
+
 ## Current Verification
 
 Latest local unit/static suite:
@@ -55,6 +57,8 @@ The user prefers restarting port `8081` before fresh verification, then opening 
 Known base URLs:
 
 - Current enhanced service: `http://127.0.0.1:8081`
+- Management UI: `http://127.0.0.1:8081/dashboard`
+- Browser root URL also opens the management UI: `http://127.0.0.1:8081/`
 - Upstream reference service when used: `http://127.0.0.1:10009`
 
 The user previously used API key `sk-100412`; do not publish it in external logs or new docs. Handoff evidence uses redacted keys.
@@ -68,6 +72,7 @@ The user previously used API key `sk-100412`; do not publish it in external logs
 - File upload and multimodal helpers: `gemini_web2api/multimodal.py`
 - Generated file/artifact materialization: `gemini_web2api/artifact_store.py`
 - Web dashboard: `gemini_web2api/dashboard.html`
+- Web dashboard handoff copy: `handoff/web/dashboard.html`
 - Admin/cookie/proxy operations: `gemini_web2api/admin.py`, `gemini_web2api/cookie_manager.py`, `gemini_web2api/proxy_builtin.py`
 - Live probes and HAR/source analysis: `gemini_web2api/live_verify.py`, `gemini_web2api/har_analyze.py`, `gemini_web2api/source_probe.py`, `gemini_web2api/web_probe.py`
 - Native Windows shell: `native/Gemini2API.WinUI/`
@@ -97,6 +102,17 @@ Build output is normally ignored under `build/`, so the current release artifact
 
 Debug symbols/PDBs were not copied because they are large and not required for operator handoff.
 
+## Web UI Deployment Fix
+
+The dashboard is now protected from being dropped during deployment:
+
+- `pyproject.toml` declares `gemini_web2api = ["dashboard.html"]` under `tool.setuptools.package-data`.
+- `Gemini2API-exe.spec` includes `gemini_web2api/dashboard.html` as PyInstaller data.
+- `server.py` can load the dashboard from the file next to `server.py` or from package data.
+- Browser requests to `/` now serve the dashboard, while API clients using `Accept: application/json` still receive the JSON status object.
+
+If another server shows only plain JSON/text, check that `gemini_web2api/dashboard.html` exists on the server and that the client is opening `/dashboard` or using a browser to open `/`.
+
 ## Startup Helpers
 
 Copies of ignored root scripts are committed in `handoff/scripts/`:
@@ -107,6 +123,7 @@ Copies of ignored root scripts are committed in `handoff/scripts/`:
 - `run-docker.bat`: local Docker compose helper
 
 Root-level originals remain available locally but are ignored by `.gitignore`.
+For committed cross-IDE handoff launchers, use `handoff/launchers/*.cmd`.
 
 ## Known Risks / Next Work
 

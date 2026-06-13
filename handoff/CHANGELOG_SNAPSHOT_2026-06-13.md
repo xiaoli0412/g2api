@@ -23,6 +23,12 @@ This snapshot summarizes the repository state for handoff. It is not a release c
   - cookie diagnostics and import
   - proxy import, health, groups, account binding
   - token and model visibility
+- Dashboard deployment hardening:
+  - browser root URL `/` opens dashboard
+  - API-style root requests still return JSON status
+  - `dashboard.html` declared as Python package data
+  - PyInstaller spec bundles `gemini_web2api/dashboard.html`
+  - handoff copy stored at `handoff/web/dashboard.html`
 - Gemini Web reverse-engineering support:
   - BL/XSRF discovery
   - source probe
@@ -74,10 +80,18 @@ handoff/artifacts/native-x64-release/Assets/gemini-icon.png
 Launch script copies:
 
 ```text
-handoff/scripts/run-api.bat
-handoff/scripts/run-gui.bat
-handoff/scripts/run-gui-pyqt.bat
-handoff/scripts/run-docker.bat
+handoff/launchers/start-api.cmd
+handoff/launchers/open-dashboard.cmd
+handoff/launchers/start-native-winui.cmd
+handoff/launchers/start-docker.cmd
+```
+
+Web management UI copy:
+
+```text
+handoff/web/dashboard.html
+handoff/web/README.md
+handoff/CORE_ASSET_INDEX_2026-06-13.md
 ```
 
 Sanitized evidence:

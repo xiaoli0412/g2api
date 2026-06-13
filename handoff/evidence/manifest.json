@@ -58,5 +58,17 @@
     "source": "D:\\workspaces\\2api\\gemini2api\\output\\real_model_port_matrix_8081.json",
     "bytes": 55149,
     "status": "copied_sanitized_json"
+  },
+  {
+    "file": "dashboard_runtime_20260613.json",
+    "source": "live http://127.0.0.1:8081/ and /dashboard",
+    "bytes": 1147,
+    "status": "generated_live_dashboard_check"
+  },
+  {
+    "file": "dashboard-8081-20260613.png",
+    "source": "Playwright Chromium screenshot of http://127.0.0.1:8081/dashboard",
+    "bytes": 74314,
+    "status": "generated_browser_screenshot"
   }
 ]

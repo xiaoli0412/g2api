@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemini2API Operations</title>
+<style>
+:root{
+  --bg:#090b0d;--bg2:#101316;--surface:#14181c;--surface2:#1a2025;--surface3:#20272d;
+  --line:#2a333a;--line2:#35414a;--text:#f6f8fb;--muted:#9aa8b4;--dim:#65727c;
+  --cyan:#4cc9f0;--green:#7bd88f;--amber:#f2c86b;--red:#ff5f6d;--violet:#b79cff;
+  --shadow:0 18px 48px rgba(0,0,0,.42);--radius:8px;--ease:150ms ease-out;
+}
+*{box-sizing:border-box;scrollbar-color:#4a5660 transparent;scrollbar-width:thin}html,body{height:100%;margin:0}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#3a4650;border:2px solid transparent;border-radius:999px;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:#4f5d68;border:2px solid transparent;background-clip:content-box}
+body{
+  min-width:0;overflow:hidden;background:
+    linear-gradient(180deg,#0c1013 0%,#090b0d 48%,#0f1014 100%);
+  color:var(--text);font:13px/1.35 "Segoe UI Variable","Segoe UI",system-ui,sans-serif;letter-spacing:0;
+  text-rendering:geometricPrecision;-webkit-font-smoothing:antialiased;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;z-index:2;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,transparent 1px 4px);
+  mix-blend-mode:soft-light;
+}
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:var(--visual-image,none);background-position:center;background-size:cover;background-repeat:no-repeat;
+  opacity:var(--visual-opacity,0);filter:saturate(.82) contrast(.9);
+}
+button,input,select,textarea{font:inherit;color:var(--text)}
+button{cursor:pointer}
+.app{position:relative;z-index:1;height:100%;min-width:0;display:grid;grid-template-columns:232px minmax(0,1fr);background:rgba(9,11,13,.86);contain:layout paint}
+body.has-visual .app{background:rgba(9,11,13,.80)}
+.side{min-height:0;border-right:1px solid var(--line);background:rgba(14,17,20,.78);display:grid;grid-template-rows:64px 1fr 104px}
+.brand{height:64px;display:flex;align-items:center;gap:12px;padding:0 18px;border-bottom:1px solid var(--line)}
+.mark{width:28px;height:28px;border-radius:7px;background:#101820;border:1px solid #2d5c70;display:grid;place-items:center;color:var(--cyan);font-weight:600;box-shadow:inset 0 0 0 1px rgba(76,201,240,.14)}
+.brand h1{font-size:14px;line-height:1.1;margin:0;font-weight:600}.brand p{margin:3px 0 0;color:var(--muted);font-size:11px}
+.nav{padding:12px 8px;display:grid;align-content:start;gap:4px}
+.nav button{height:38px;border:0;border-radius:7px;background:transparent;color:var(--muted);display:grid;grid-template-columns:28px 1fr;align-items:center;text-align:left;padding:0 10px;transition:background var(--ease),color var(--ease)}
+.nav button:hover{background:rgba(255,255,255,.055);color:var(--text)}
+.nav button.active{background:#1d252a;color:var(--text);box-shadow:inset 3px 0 0 var(--cyan)}
+.nav .ico{font-size:15px;text-align:center;color:currentColor}.nav .label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-foot{border-top:1px solid var(--line);padding:12px 16px;display:grid;gap:8px;color:var(--muted);font-size:12px}
+.sync-line{display:flex;align-items:center;justify-content:space-between;gap:8px}.pulse{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(255,95,109,.6)}
+.pulse.ok{background:var(--green);box-shadow:0 0 16px rgba(123,216,143,.45)}
+.main{min-width:0;min-height:0;display:grid;grid-template-rows:64px 1fr}
+.top{height:64px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;padding:0 20px;background:rgba(12,15,18,.72)}
+.title h2{font-size:18px;margin:0 0 2px;font-weight:600}.title p{margin:0;color:var(--muted);font-size:12px}
+.title{min-width:0}.title h2,.title p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-actions{display:flex;align-items:center;gap:8px;min-width:0}.iconbtn,.btn{border:1px solid var(--line2);background:var(--surface2);border-radius:7px;height:30px;transition:background var(--ease),border-color var(--ease),color var(--ease)}
+.iconbtn{width:30px;color:var(--muted)}.iconbtn:hover,.btn:hover{background:var(--surface3);border-color:#45535d;color:var(--text)}
+.btn{padding:0 12px;color:var(--text)}.btn.primary{background:#123141;border-color:#245b72;color:#dff8ff}.btn.danger{color:#ffd5d9;border-color:#68414a;background:#26181b}
+.lang{height:30px;border:1px solid var(--line2);background:var(--surface2);border-radius:7px;display:flex;padding:2px}
+.lang button{border:0;background:transparent;border-radius:5px;color:var(--muted);padding:0 9px}.lang button.active{background:#26323a;color:var(--text)}
+.workspace{min-height:0;min-width:0;overflow:auto;padding:16px 20px 20px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.metric{min-height:84px;background:linear-gradient(180deg,rgba(26,32,37,.96),rgba(18,22,26,.96));border:1px solid var(--line);border-radius:var(--radius);padding:12px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+.metric .k{font-size:12px;color:var(--muted);margin-bottom:10px}.metric .v{font-size:24px;font-weight:600;line-height:1}.metric .s{margin-top:8px;color:var(--dim);font-size:11px}
+.metric.cyan .v{color:var(--cyan)}.metric.green .v{color:var(--green)}.metric.amber .v{color:var(--amber)}.metric.red .v{color:var(--red)}
+.panel{display:none}.panel.active{display:grid;gap:14px}.grid2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.box{background:rgba(20,24,28,.92);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}
+.box-head{height:42px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:0 14px}.box-head h3{font-size:13px;margin:0;font-weight:600}.box-head .sub{color:var(--muted);font-size:12px}.box-body{padding:12px 14px;min-width:0;overflow-x:auto}.box-body:has(.chart){overflow:hidden}
+.modebar{height:34px;display:flex;align-items:center;gap:14px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+.modebar button{height:34px;border:0;background:transparent;color:var(--muted);position:relative;padding:0 1px}.modebar button.active{color:var(--text)}.modebar button.active:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--cyan)}
+table{width:100%;border-collapse:collapse}th{height:34px;color:var(--muted);font-size:12px;font-weight:500;text-align:left;padding:0 12px;white-space:nowrap;border-bottom:1px solid rgba(53,65,74,.76);background:rgba(12,16,20,.48)}td{height:46px;border-bottom:1px solid rgba(42,51,58,.62);padding:8px 12px;color:#dce5ea;vertical-align:middle;white-space:nowrap;background:rgba(13,18,22,.32)}tbody tr:last-child td{border-bottom-color:transparent}tr.clickable:hover td,tbody tr:hover td{background:#171f25}.num{text-align:right}.mono{font-family:"Cascadia Mono","Consolas",monospace;font-size:12px}.muted{color:var(--muted)}.dim{color:var(--dim)}
+.cell-main{display:block;color:var(--text);font-size:13px;line-height:1.2;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cell-sub{display:block;margin-top:3px;color:var(--dim);font-size:11px;line-height:1.2;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.token-stack{display:grid;gap:2px;justify-items:end;font-variant-numeric:tabular-nums}.token-stack strong{font-size:13px;color:var(--text);font-weight:600}.token-stack span{font-size:11px;color:var(--dim)}.request-table .endpoint-cell{max-width:300px}.model-cell{display:grid;gap:3px;min-width:0}.model-cell strong{font-weight:500;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.model-cell span{font-size:11px;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;height:20px;border-radius:999px;padding:0 8px;border:1px solid var(--line2);font-size:11px;color:var(--muted);background:#151a1f}.badge.ok{color:var(--green);border-color:#315f3d}.badge.err{color:var(--red);border-color:#74414a}.badge.warn{color:var(--amber);border-color:#6a5731}.badge.info{color:var(--cyan);border-color:#2a5d70}
+.route-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(156px,1fr));gap:8px;margin-bottom:12px}.route-card{min-width:0;border:1px solid rgba(53,65,74,.72);border-radius:7px;background:rgba(16,21,25,.52);padding:9px 10px}.route-card span{display:block;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.route-card strong{display:block;margin-top:5px;color:var(--text);font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.binding-table .model-cell strong{max-width:220px}.binding-table .model-cell span{max-width:220px}
+.chart{min-height:0;min-width:0;display:grid;gap:12px;padding:0;color:var(--muted)}
+.quota-head{display:grid;gap:10px;align-items:stretch}
+.quota-cards{overflow:hidden;border:1px solid rgba(53,65,74,.72);border-radius:8px;display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));background:rgba(13,18,22,.48)}
+.quota-mini{min-width:0;padding:10px 12px;border-left:1px solid rgba(42,51,58,.7)}.quota-mini:first-child{border-left:0}.quota-mini span{display:block;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.quota-mini strong{display:block;margin-top:5px;color:#dce5ea;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}.quota-mini.primary strong{color:var(--text);font-size:18px}.quota-mini.delta.up strong{color:var(--green)}.quota-mini.delta.down strong{color:var(--red)}.quota-mini.delta.flat strong{color:var(--muted)}
+.quota-tabs{display:flex;align-items:center;gap:8px;width:max-content;max-width:100%;height:24px;color:var(--muted);font-size:12px}.quota-tabs span{display:flex;align-items:center;gap:6px;white-space:nowrap}.quota-tabs span:before{content:"";width:5px;height:5px;border-radius:50%;background:#4b5963}.quota-tabs span.active{color:var(--text)}.quota-tabs span.active:before{background:var(--cyan)}
+.quota-body{min-height:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.quota-table-card,.quota-leaders{min-width:0;border:1px solid rgba(42,51,58,.72);border-radius:8px;background:rgba(10,14,18,.44);overflow:hidden}
+.quota-table th{height:30px}.quota-table td{height:38px}.quota-share{display:grid;grid-template-columns:minmax(80px,1fr) 46px;gap:8px;align-items:center}.quota-bars{height:7px;border-radius:999px;background:#10151a;overflow:hidden}.quota-bar{display:block;height:100%;width:0;border-radius:999px;background:rgba(76,201,240,.76)}.quota-bar.active{background:var(--cyan)}
+.quota-leaders{padding:10px;display:grid;align-content:start;gap:8px}.quota-leaders-title{color:var(--muted);font-size:11px;font-weight:500}.quota-leader{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 10px;align-items:center;color:var(--muted);font-size:12px}.quota-leader span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.quota-leader strong{color:#dce5ea;font-weight:600}.quota-meter{grid-column:1/-1;height:4px;border-radius:999px;background:#10151a;overflow:hidden}.quota-meter i{display:block;height:100%;border-radius:999px;background:rgba(76,201,240,.68)}
+.form{display:grid;gap:10px}.field{display:grid;gap:6px}.field label{font-size:12px;color:var(--muted)}input,select,textarea{width:100%;min-height:32px;background:#10151a;border:1px solid var(--line2);border-radius:7px;padding:6px 9px;outline:0}input[type="range"]{accent-color:var(--cyan)}textarea{resize:vertical;min-height:124px;font-family:"Cascadia Mono","Consolas",monospace;font-size:12px}input:focus,select:focus,textarea:focus{border-color:#34758c;box-shadow:0 0 0 3px rgba(76,201,240,.1)}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.hidden-file{display:none}.file-name{color:var(--muted);font-size:12px}.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}.empty{height:96px;display:grid;place-items:center;color:var(--dim)}
+.detail{position:fixed;top:0;right:0;width:min(920px,calc(100vw - 48px));max-width:100vw;height:100%;background:#0d1115;border-left:1px solid var(--line2);box-shadow:-24px 0 60px rgba(0,0,0,.45);transform:translateX(104%);transition:transform var(--ease);z-index:10;display:grid;grid-template-rows:auto minmax(0,1fr)}
+.detail.open{transform:translateX(0)}.detail-head{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);min-height:0}.detail-head-main{min-width:0;display:grid;gap:7px;overflow:hidden}.detail-head h3{margin:0;font-size:14px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.detail-ticker{color:var(--green);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.detail-ticker.ops{color:var(--muted);white-space:normal;overflow-wrap:anywhere}.detail-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.detail-chip{min-width:0;border:1px solid var(--line2);border-radius:6px;background:#10151a;padding:6px 8px}.detail-chip span{display:block;color:var(--muted);font-size:10px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.detail-chip strong{display:block;margin-top:3px;font-size:12px;line-height:1.1;color:#dce5ea;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.detail-body{min-height:0;overflow:auto;padding:14px;display:grid;gap:12px}.codebox{background:#07090b;border:1px solid var(--line);border-radius:7px;padding:10px;min-height:160px;max-height:46vh;overflow:auto;white-space:pre;color:#dce5ea}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(20px);opacity:0;background:#11181d;border:1px solid var(--line2);box-shadow:var(--shadow);border-radius:8px;padding:9px 14px;color:var(--text);transition:opacity var(--ease),transform var(--ease);z-index:20}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .side,.top,.box,.detail,.toast{backdrop-filter:blur(14px) saturate(1.08);-webkit-backdrop-filter:blur(14px) saturate(1.08)}
+  .detail,.toast{backdrop-filter:blur(18px) saturate(1.08);-webkit-backdrop-filter:blur(18px) saturate(1.08)}
+}
+@media(max-width:1180px){body{min-width:0}.app{grid-template-columns:64px minmax(0,1fr)}.brand h1,.brand p,.nav .label,.side-foot span{display:none}.brand{justify-content:center;padding:0}.nav button{grid-template-columns:1fr;padding:0}.grid2,.grid3{grid-template-columns:1fr}.detail{width:82vw}}
+@media(max-width:720px){.app{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}.side{grid-template-rows:56px;grid-template-columns:56px minmax(0,1fr);border-right:0;border-bottom:1px solid var(--line)}.brand{height:56px;border-bottom:0}.nav{grid-auto-flow:column;grid-auto-columns:44px;overflow-x:auto;align-content:center;padding:6px}.side-foot{display:none}.main{grid-template-rows:58px minmax(0,1fr)}.top{height:58px;padding:0 12px}.title p{display:none}.workspace{padding:12px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.metric .v{font-size:18px}.split{grid-template-columns:1fr}.detail{width:100vw}.detail-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.box{box-shadow:none}.chart{height:auto;min-height:360px}.quota-head,.quota-body{grid-template-columns:1fr}.quota-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.quota-tabs{max-width:100%;overflow:hidden}.request-table th:nth-child(3),.request-table td:nth-child(3),.request-table th:nth-child(4),.request-table td:nth-child(4),.request-table th:nth-child(5),.request-table td:nth-child(5),.request-table th:nth-child(6),.request-table td:nth-child(6),.request-table th:nth-child(7),.request-table td:nth-child(7),.request-table th:nth-child(8),.request-table td:nth-child(8){display:none}.model-mini-table th:nth-child(3),.model-mini-table td:nth-child(3),.model-mini-table th:nth-child(4),.model-mini-table td:nth-child(4),.model-table th:nth-child(2),.model-table td:nth-child(2),.model-table th:nth-child(4),.model-table td:nth-child(4),.model-table th:nth-child(5),.model-table td:nth-child(5),.model-table th:nth-child(7),.model-table td:nth-child(7){display:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="mark">✦</div><div><h1>Gemini2API</h1><p data-i18n="brandSub">Operations console</p></div></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot">
+      <div class="sync-line"><span data-i18n="liveStatus">Live status</span><i class="pulse" id="pulse"></i></div>
+      <div class="sync-line"><span data-i18n="lastSync">Last sync</span><span id="syncAge">--</span></div>
+      <div class="sync-line"><span data-i18n="cadence">Cadence</span><span>1s</span></div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="top">
+      <div class="title"><h2 id="pageTitle"></h2><p id="pageSub"></p></div>
+      <div class="top-actions">
+        <div class="lang"><button id="langEn" data-lang="en">EN</button><button id="langZh" data-lang="zh">中文</button></div>
+        <button class="iconbtn" id="refreshBtn">↻</button>
+      </div>
+    </header>
+    <section class="workspace">
+      <div class="metrics" id="metrics"></div>
+      <div id="panels"></div>
+    </section>
+  </main>
+</div>
+
+<aside class="detail" id="detail">
+  <div class="detail-head"><button class="iconbtn" id="closeDetail">×</button><div class="detail-head-main"><h3 id="detailTitle"></h3><div class="muted mono" id="detailMeta"></div><div class="detail-metrics" id="detailMetrics"></div><div class="detail-ticker ops mono" id="detailOpsTicker"></div></div></div>
+  <div class="detail-body">
+    <div class="box"><div class="box-head"><h3 data-i18n="requestBody">Request body</h3></div><div class="box-body"><pre class="codebox" id="requestBody"></pre></div></div>
+    <div class="box"><div class="box-head"><h3 data-i18n="responseBody">Response body</h3></div><div class="box-body"><pre class="codebox" id="responseBody"></pre></div></div>
+    <div class="box"><div class="box-head"><h3 data-i18n="traceBody">Trace</h3></div><div class="box-body"><pre class="codebox" id="traceBody"></pre></div></div>
+  </div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+const API = location.protocol === "file:" ? "http://127.0.0.1:8081" : "";
+const DASH_API_KEY = "__DASH_API_KEY__";
+if(DASH_API_KEY){const _of=window.fetch;window.fetch=function(url,opts){opts=opts||{};opts.headers=opts.headers||{};if(opts.headers instanceof Headers){if(!opts.headers.has("Authorization"))opts.headers.set("Authorization","Bearer "+DASH_API_KEY)}else{opts.headers["Authorization"]="Bearer "+DASH_API_KEY}return _of.call(this,url,opts)}}
+const REFRESH_MS = 1000;
+const FETCH_TIMEOUT_MS = 850;
+const state = {
+  lang: localStorage.getItem("lang") || "en",
+  panel: localStorage.getItem("panel") || "overview",
+  visualImage: localStorage.getItem("visualImage") || "",
+  visualOpacity: Number(localStorage.getItem("visualOpacity") || 12),
+  data:null, cookie:null, proxy:null, config:null, loading:false, lastSync:0, configTick:0,
+  refreshAbort:null, renderFrame:0, renderHashes:Object.create(null), detail:null
+};
+const I18N = {
+  en: {
+    brandSub:"Operations console", liveStatus:"Live status", lastSync:"Last sync", cadence:"Cadence",
+    overview:"Command Center", overviewSub:"Service health, usage totals, and live activity",
+    requests:"Requests", requestsSub:"Real request and response bodies",
+    tokens:"Tokens & Trends", tokensSub:"Operational totals and demand shape",
+    cookies:"Cookies", cookiesSub:"Manual import, Edge extension, internal browser",
+    proxy:"Proxy", proxySub:"Pool status, routing, and health",
+    settings:"Settings", settingsSub:"Runtime and API controls",
+    totalRequests:"Total requests", successRate:"Success rate", totalTokens:"Total tokens", errors:"Errors", avgLatency:"Avg latency", rpm:"Req/min",
+    peak:"Peak", latest:"Latest", change:"Change", rangeTotal:"Range total", requestVolume:"Request volume", avgPerReq:"Avg/req", usageTrend:"Usage trend", quota:"Quota", tpm:"Tok/min", topBuckets:"Top buckets",
+    prompt:"Input", completion:"Output", modelCategory:"Category", uptime:"Uptime", status:"Status", model:"Model", time:"Time", endpoint:"Endpoint", duration:"Duration", stream:"Stream", protocol:"Protocol", method:"Method",
+    recentRequests:"Recent requests", recentLogs:"Recent logs", modelUsage:"Model usage", hourly:"Hourly tokens", daily:"Daily tokens",
+    operationTotals:"Operation totals", requestBody:"Request body", responseBody:"Response body", traceBody:"Trace / tools", noData:"No data yet", open:"Open", ok:"OK", error:"Error", running:"Running", offline:"Offline", refresh:"Refresh",
+    all:"All", bodies:"Bodies", failures:"Failures", importCookie:"Import cookie", importFile:"Import file", rawCookie:"Cookie header, HAR, Netscape, or JSON export",
+    import:"Import", edgeExtension:"Edge extension", pushEndpoint:"Push endpoint", internalBrowser:"Internal browser", openBrowser:"Open browser", browserStatus:"Browser status",
+    cookiePool:"Cookie pool", cookieStatus:"Cookie status", valid:"Valid", invalid:"Invalid", source:"Source", length:"Length",
+    proxyStatus:"Proxy status", proxyNodes:"Proxy nodes", proxyGroups:"Service route groups", proxyEnabled:"Proxy master switch", type:"Type", configured:"Configured", healthy:"Healthy", available:"Available", checking:"Checking", cooldown:"Cooldown", providers:"Providers", strategy:"Strategy", rotation:"Rotation", subscriptions:"Subscriptions", importSources:"Import sources", proxyLinks:"Proxy links", checkStale:"Check stale", checkAll:"Check all", accountBindings:"Account bindings", saveBindings:"Save bindings", selected:"Selected", inflight:"In-flight", fallbackGroup:"Fallback group", boundProxy:"Bound proxy", routePolicy:"Route policy", accountId:"Account", enabled:"Enabled",
+    saveProxy:"Save proxy", serverSettings:"Server settings", saveSettings:"Save settings", host:"Host", port:"Port", defaultModel:"Default model", apiKeys:"API keys", rateLimit:"Rate limit/min", timeout:"Timeout", retries:"Retries", retryDelay:"Retry delay", uploadRetries:"Upload retries", rateDelay:"Rate delay", streamMode:"Stream mode", fakeStreamDelay:"Fake stream delay", streamChunk:"Stream chunk chars", logging:"Logging", logRequests:"Log requests", captureReq:"Capture request bodies", captureResp:"Capture response bodies", bodyLimit:"Body log limit", upstreamRaw:"Upstream raw", localDashboard:"Local dashboard bypass", exposeExperimental:"Experimental models", exposeWebTools:"Web tool models", geminiBl:"Gemini BL", authUser:"Auth user",
+    saved:"Saved", imported:"Imported", started:"Started", failed:"Failed", secondsAgo:"s ago", justNow:"now",
+    ok_full_web:"Full Web ready", ok_api:"API ready", partial_cookie:"Partial cookie", manualSource:"Manual/file",
+    profile:"Profile", next:"Next", on:"On", off:"Off", idle:"Idle", opening_browser:"Opening browser", savedStatus:"Saved", chooseFile:"Choose file", noFile:"No file selected",
+    unhealthy:"Unhealthy", stale:"Stale", disabled:"Disabled",
+    visualLayer:"Visual layer", visualLayerSub:"Local photo layer for this browser only", choosePhoto:"Choose photo", clear:"Clear", close:"Close", opacity:"Opacity", active:"Active"
+  },
+  zh: {
+    brandSub:"运维控制台", liveStatus:"实时状态", lastSync:"上次同步", cadence:"刷新周期",
+    overview:"指挥中心", overviewSub:"服务健康、用量总量与实时活动",
+    requests:"请求明细", requestsSub:"真实请求体与返回体",
+    tokens:"Token 与趋势", tokensSub:"运维总量与流量走势",
+    cookies:"Cookie 管理", cookiesSub:"手动导入、Edge 插件、内部浏览器",
+    proxy:"代理", proxySub:"代理池状态、路由与健康度",
+    settings:"设置", settingsSub:"运行时与 API 控制",
+    totalRequests:"请求总量", successRate:"成功率", totalTokens:"Token 总量", errors:"错误数", avgLatency:"平均耗时", rpm:"每分钟请求",
+    peak:"峰值", latest:"最新", change:"变化", rangeTotal:"区间总量", requestVolume:"请求量", avgPerReq:"单次均值", usageTrend:"用量趋势", quota:"额度", tpm:"每分钟 Token", topBuckets:"高峰时段",
+    prompt:"输入", completion:"输出", modelCategory:"分类", uptime:"运行时间", status:"状态", model:"模型", time:"时间", endpoint:"端点", duration:"耗时", stream:"流式", protocol:"协议", method:"方法",
+    recentRequests:"最近请求", recentLogs:"最近日志", modelUsage:"模型用量", hourly:"小时 Token", daily:"每日 Token",
+    operationTotals:"运维总量", requestBody:"请求体", responseBody:"返回体", traceBody:"Trace / 工具链", noData:"暂无数据", open:"打开", ok:"正常", error:"错误", running:"运行中", offline:"离线", refresh:"刷新",
+    all:"全部", bodies:"正文", failures:"失败", importCookie:"导入 Cookie", importFile:"导入文件", rawCookie:"Cookie 请求头、HAR、Netscape 或 JSON 导出",
+    import:"导入", edgeExtension:"Edge 插件", pushEndpoint:"推送端点", internalBrowser:"内部浏览器", openBrowser:"打开浏览器", browserStatus:"浏览器状态",
+    cookiePool:"Cookie 池", cookieStatus:"Cookie 状态", valid:"有效", invalid:"无效", source:"来源", length:"长度",
+    proxyStatus:"代理状态", proxyNodes:"代理节点", proxyGroups:"服务路由组", proxyEnabled:"代理总开关", type:"类型", configured:"已配置", healthy:"健康", available:"可用", checking:"检查中", cooldown:"冷却中", providers:"服务商", strategy:"策略", rotation:"轮换", subscriptions:"订阅", importSources:"导入来源", proxyLinks:"代理链接", checkStale:"检查过期", checkAll:"检查全部", accountBindings:"账号绑定", saveBindings:"保存绑定", selected:"当前选择", inflight:"请求中", fallbackGroup:"回退组", boundProxy:"绑定代理", routePolicy:"路由策略", accountId:"账号", enabled:"启用",
+    saveProxy:"保存代理", serverSettings:"服务设置", saveSettings:"保存设置", host:"主机", port:"端口", defaultModel:"默认模型", apiKeys:"API 密钥", rateLimit:"每分钟限速", timeout:"超时", retries:"重试", retryDelay:"重试延迟", uploadRetries:"上传重试", rateDelay:"限速延迟", streamMode:"流式模式", fakeStreamDelay:"假流式延迟", streamChunk:"流式块字符数", logging:"日志", logRequests:"记录请求", captureReq:"保存请求体", captureResp:"保存返回体", bodyLimit:"正文日志上限", upstreamRaw:"上游原始返回", localDashboard:"本机面板免密", exposeExperimental:"实验模型", exposeWebTools:"网页工具模型", geminiBl:"Gemini BL", authUser:"账号序号",
+    saved:"已保存", imported:"已导入", started:"已启动", failed:"失败", secondsAgo:"秒前", justNow:"刚刚",
+    ok_full_web:"网页端完整可用", ok_api:"API 可用", partial_cookie:"Cookie 不完整", manualSource:"手动/文件",
+    profile:"配置目录", next:"下次刷新", on:"开启", off:"关闭", idle:"空闲", opening_browser:"正在打开浏览器", savedStatus:"已保存", chooseFile:"选择文件", noFile:"未选择文件",
+    unhealthy:"异常", stale:"已过期", disabled:"已禁用",
+    visualLayer:"视觉层", visualLayerSub:"仅保存在当前浏览器的本地照片层", choosePhoto:"选择照片", clear:"清除", close:"关闭", opacity:"透明度", active:"已启用"
+  }
+};
+const NAV = [
+  ["overview","⌁"],["requests","▦"],["tokens","◫"],["cookies","◍"],["proxy","⇄"],["settings","⚙"]
+];
+const $ = id => document.getElementById(id);
+const t = key => (I18N[state.lang] && I18N[state.lang][key]) || I18N.en[key] || key;
+const esc = value => String(value ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const num = value => { const n = Number(value || 0); return n >= 1e9 ? (n/1e9).toFixed(1)+"B" : n >= 1e6 ? (n/1e6).toFixed(1)+"M" : n >= 1e3 ? (n/1e3).toFixed(1)+"K" : String(Math.round(n*10)/10); };
+const json = value => JSON.stringify(value ?? null, null, 2);
+const stable = value => JSON.stringify(value ?? null);
+function setHTML(id, html){ const el=$(id); if(!el) return; if(state.renderHashes[id]===html) return; state.renderHashes[id]=html; el.innerHTML=html; }
+function setText(id, value){ const el=$(id); if(!el) return; const text=String(value ?? ""); if(el.textContent!==text) el.textContent=text; }
+function fetchJson(path, signal){ return fetch(API+path,{signal,cache:"no-store"}).then(async r=>({ok:r.ok,status:r.status,data:r.ok?await r.json():{}})); }
+function scheduleRender(){ if(state.renderFrame) return; state.renderFrame=requestAnimationFrame(()=>{ state.renderFrame=0; renderAll(); }); }
+function labelStatus(s){ return s === "ok" ? t("ok") : t("error"); }
+function displayState(s){ return t(String(s||"idle")) || s || "--"; }
+function age(){ if(!state.lastSync) return "--"; const d=Math.max(0, Math.floor((Date.now()-state.lastSync)/1000)); return d <= 0 ? t("justNow") : `${d}${t("secondsAgo")}`; }
+function toast(message){ $("toast").textContent=message; $("toast").classList.add("show"); setTimeout(()=>$("toast").classList.remove("show"),1800); }
+
+function boot(){
+  applyVisualLayer();
+  renderNav(); renderPanels(); setLang(state.lang); setPanel(state.panel);
+  $("refreshBtn").onclick = () => loadAll(true);
+  $("closeDetail").onclick = () => $("detail").classList.remove("open");
+  document.querySelectorAll("[data-lang]").forEach(b => b.onclick = () => setLang(b.dataset.lang));
+  loadAll(true); setInterval(() => loadAll(false), REFRESH_MS); setInterval(() => setText("syncAge", age()), 1000);
+}
+function setLang(lang){ state.lang=lang; localStorage.setItem("lang",lang); document.documentElement.lang = lang === "zh" ? "zh-CN" : "en"; document.querySelectorAll("[data-lang]").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang)); document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n)); $("refreshBtn").title=t("refresh"); $("refreshBtn").setAttribute("aria-label",t("refresh")); $("closeDetail").title=t("close"); $("closeDetail").setAttribute("aria-label",t("close")); state.renderHashes=Object.create(null); renderNav(); renderPanels(); setPanel(state.panel); renderAll(); if($("detail").classList.contains("open")&&state.detail) renderDetailView(state.detail); }
+function renderNav(){ $("nav").innerHTML = NAV.map(([key,ico]) => `<button data-panel="${key}" class="${state.panel===key?"active":""}"><span class="ico">${ico}</span><span class="label">${t(key)}</span></button>`).join(""); document.querySelectorAll("[data-panel]").forEach(b => b.onclick = () => setPanel(b.dataset.panel)); }
+function setPanel(panel){ state.panel=panel; localStorage.setItem("panel",panel); document.querySelectorAll("[data-panel]").forEach(b=>b.classList.toggle("active",b.dataset.panel===panel)); document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id===`panel-${panel}`)); setText("pageTitle",t(panel)); setText("pageSub",t(panel+"Sub")); renderCurrentPanel(true); }
+function renderPanels(){
+  $("panels").innerHTML = `
+  <section class="panel" id="panel-overview">
+    <div class="grid2"><div class="box"><div class="box-head"><h3>${t("recentRequests")}</h3><span class="sub" id="requestCountSub"></span></div><div class="box-body">${requestTable("overviewRequests")}</div></div><div class="box"><div class="box-head"><h3>${t("recentLogs")}</h3></div><div class="box-body" id="logsBox"></div></div></div>
+    <div class="grid2"><div class="box"><div class="box-head"><h3>${t("hourly")}</h3></div><div class="box-body"><div class="chart" id="hourlyChart"></div></div></div><div class="box"><div class="box-head"><h3>${t("modelUsage")}</h3></div><div class="box-body"><table class="model-mini-table"><thead><tr><th>${t("model")}</th><th class="num">${t("totalRequests")}</th><th class="num">${t("prompt")}</th><th class="num">${t("completion")}</th><th class="num">${t("totalTokens")}</th></tr></thead><tbody id="modelMini"></tbody></table></div></div></div>
+  </section>
+  <section class="panel" id="panel-requests">
+    <div class="box"><div class="box-head"><h3>${t("recentRequests")}</h3><span class="sub">${t("requestsSub")}</span></div><div class="box-body"><div class="modebar" id="requestModes"><button data-filter="all" class="active">${t("all")}</button><button data-filter="bodies">${t("bodies")}</button><button data-filter="failures">${t("failures")}</button></div>${requestTable("requestsTable")}</div></div>
+  </section>
+  <section class="panel" id="panel-tokens">
+    <div class="grid2"><div class="box"><div class="box-head"><h3>${t("hourly")}</h3></div><div class="box-body"><div class="chart" id="hourlyChart2"></div></div></div><div class="box"><div class="box-head"><h3>${t("daily")}</h3></div><div class="box-body"><div class="chart" id="dailyChart"></div></div></div></div>
+    <div class="box"><div class="box-head"><h3>${t("modelUsage")}</h3></div><div class="box-body"><table class="model-table"><thead><tr><th>${t("model")}</th><th>${t("modelCategory")}</th><th class="num">${t("totalRequests")}</th><th class="num">${t("prompt")}</th><th class="num">${t("completion")}</th><th class="num">${t("totalTokens")}</th><th class="num">${t("errors")}</th></tr></thead><tbody id="modelTable"></tbody></table></div></div>
+  </section>
+  <section class="panel" id="panel-cookies">
+    <div class="grid3"><div class="box"><div class="box-head"><h3>${t("importCookie")}</h3></div><div class="box-body"><div class="form"><div class="field"><label>${t("rawCookie")}</label><textarea id="cookieRaw"></textarea></div><div class="actions"><input class="hidden-file" type="file" id="cookieFile" accept=".har,.json,.txt,.cookies"><button class="btn" id="chooseCookieFileBtn">${t("chooseFile")}</button><span class="file-name" id="cookieFileName">${t("noFile")}</span><button class="btn primary" id="importCookieBtn">${t("import")}</button></div></div></div></div>
+    <div class="box"><div class="box-head"><h3>${t("edgeExtension")}</h3></div><div class="box-body"><div class="form" id="edgeBox"></div><div class="actions"><button class="btn" id="copyEndpointBtn">${t("pushEndpoint")}</button></div></div></div>
+    <div class="box"><div class="box-head"><h3>${t("internalBrowser")}</h3></div><div class="box-body"><div class="form" id="browserBox"></div><button class="btn primary" id="browserLoginBtn">${t("openBrowser")}</button></div></div></div>
+    <div class="box"><div class="box-head"><h3>${t("cookieStatus")}</h3></div><div class="box-body" id="cookieStatusBox"></div></div>
+  </section>
+  <section class="panel" id="panel-proxy">
+    <div class="grid2"><div class="box"><div class="box-head"><h3>${t("proxyStatus")}</h3></div><div class="box-body" id="proxyStatusBox"></div></div><div class="box"><div class="box-head"><h3>${t("proxyNodes")}</h3></div><div class="box-body"><table><thead><tr><th>${t("providers")}</th><th>${t("source")}</th><th>${t("status")}</th><th class="num">${t("avgLatency")}</th><th class="num">${t("errors")}</th></tr></thead><tbody id="proxyNodes"></tbody></table></div></div></div>
+    <div class="box"><div class="box-head"><h3>${t("proxyGroups")}</h3></div><div class="box-body"><table><thead><tr><th>${t("proxyGroups")}</th><th>${t("type")}</th><th class="num">${t("available")}</th><th>${t("selected")}</th><th class="num">${t("inflight")}</th></tr></thead><tbody id="proxyGroups"></tbody></table></div></div>
+    <div class="grid2"><div class="box"><div class="box-head"><h3>${t("importSources")}</h3></div><div class="box-body"><div class="form"><div class="field"><label>${t("providers")}</label><input id="proxyImportProvider" placeholder="vendor-a"></div><div class="field"><label>${t("subscriptions")}</label><textarea id="proxyImportSubs"></textarea></div><div class="field"><label>${t("proxyLinks")}</label><textarea id="proxyImportLinks"></textarea></div><div class="actions"><button class="btn primary" id="importProxyBtn">${t("importSources")}</button><button class="btn" id="checkProxyBtn">${t("checkStale")}</button><button class="btn" id="checkProxyAllBtn">${t("checkAll")}</button></div></div></div></div><div class="box"><div class="box-head"><h3>${t("proxy")}</h3></div><div class="box-body"><div class="form"><div class="split"><div class="field"><label>${t("proxyEnabled")}</label><select id="cfgProxyEnabled"><option value="false">${t("off")}</option><option value="true">${t("on")}</option></select></div><div class="field"><label>${t("strategy")}</label><select id="cfgProxyStrategy"><option>round_robin</option><option>random</option><option>fastest</option><option>least_used</option></select></div></div><div class="split"><div class="field"><label>${t("configured")}</label><input id="cfgProxy"></div><div class="field"><label>${t("rotation")}</label><select id="cfgProxyRotation"><option value="false">${t("off")}</option><option value="true">${t("on")}</option></select></div></div><div class="field"><label>${t("subscriptions")}</label><input id="cfgProxySubs"></div><div class="field"><label>${t("proxyNodes")}</label><textarea id="cfgProxyList"></textarea></div><button class="btn primary" id="saveProxyBtn">${t("saveProxy")}</button></div></div></div></div>
+    <div class="box"><div class="box-head"><h3>${t("accountBindings")}</h3><span class="sub">${t("routePolicy")}</span></div><div class="box-body"><div id="accountRouteSummary"></div><table class="binding-table"><thead><tr><th>${t("accountId")}</th><th>${t("boundProxy")}</th><th>${t("fallbackGroup")}</th><th>${t("enabled")}</th></tr></thead><tbody id="accountBindingsTable"></tbody></table><div class="form"><div class="field"><label>${t("saveBindings")}</label><textarea id="cfgAccountBindings" placeholder="u/1=node-id"></textarea></div><button class="btn primary" id="saveBindingsBtn">${t("saveBindings")}</button></div></div></div>
+  </section>
+  <section class="panel" id="panel-settings">
+    <div class="box"><div class="box-head"><h3>${t("serverSettings")}</h3></div><div class="box-body"><div class="form"><div class="split"><div class="field"><label>${t("host")}</label><input id="cfgHost"></div><div class="field"><label>${t("port")}</label><input id="cfgPort" type="number"></div></div><div class="split"><div class="field"><label>${t("defaultModel")}</label><input id="cfgDefaultModel"></div><div class="field"><label>${t("apiKeys")}</label><input id="cfgApiKeys"></div></div><div class="split"><div class="field"><label>${t("rateLimit")}</label><input id="cfgRateLimit" type="number"></div><div class="field"><label>${t("rateDelay")}</label><input id="cfgRateDelay" type="number" step="0.1"></div></div><div class="split"><div class="field"><label>${t("timeout")}</label><input id="cfgTimeout" type="number"></div><div class="field"><label>${t("retries")}</label><input id="cfgRetry" type="number"></div></div><div class="split"><div class="field"><label>${t("retryDelay")}</label><input id="cfgRetryDelay" type="number" step="0.1"></div><div class="field"><label>${t("uploadRetries")}</label><input id="cfgUploadRetry" type="number"></div></div><div class="field"><label>${t("authUser")}</label><input id="cfgAuthUser" placeholder="0, 1, 2"></div><div class="field"><label>${t("geminiBl")}</label><input id="cfgGeminiBl"></div><div class="split"><div class="field"><label>${t("streamMode")}</label><select id="cfgStreamMode"><option value="auto">auto</option><option value="true">true</option><option value="fake">fake</option></select></div><div class="field"><label>${t("fakeStreamDelay")}</label><input id="cfgFakeDelay" type="number"></div></div><div class="split"><div class="field"><label>${t("streamChunk")}</label><input id="cfgStreamChunk" type="number"></div><div class="field"><label>${t("bodyLimit")}</label><input id="cfgBodyLimit" type="number"></div></div><div class="split"><div class="field"><label>${t("logRequests")}</label><select id="cfgLogRequests"><option value="true">${t("on")}</option><option value="false">${t("off")}</option></select></div><div class="field"><label>${t("captureReq")}</label><select id="cfgCaptureReq"><option value="true">${t("on")}</option><option value="false">${t("off")}</option></select></div></div><div class="split"><div class="field"><label>${t("captureResp")}</label><select id="cfgCaptureResp"><option value="true">${t("on")}</option><option value="false">${t("off")}</option></select></div><div class="field"><label>${t("upstreamRaw")}</label><select id="cfgUpstreamRaw"><option value="false">${t("off")}</option><option value="true">${t("on")}</option></select></div></div><div class="split"><div class="field"><label>${t("localDashboard")}</label><select id="cfgDashboardBypass"><option value="true">${t("on")}</option><option value="false">${t("off")}</option></select></div><div class="field"><label>${t("exposeExperimental")}</label><select id="cfgExposeExperimental"><option value="false">${t("off")}</option><option value="true">${t("on")}</option></select></div></div><div class="field"><label>${t("exposeWebTools")}</label><select id="cfgExposeWebTools"><option value="false">${t("off")}</option><option value="true">${t("on")}</option></select></div><button class="btn primary" id="saveSettingsBtn">${t("saveSettings")}</button></div></div></div>
+    <div class="box"><div class="box-head"><h3>${t("visualLayer")}</h3><span class="sub">${t("visualLayerSub")}</span></div><div class="box-body"><div class="form"><div class="actions"><input class="hidden-file" type="file" id="visualFile" accept="image/*"><button class="btn" id="chooseVisualBtn">${t("choosePhoto")}</button><button class="btn danger" id="clearVisualBtn">${t("clear")}</button><span class="file-name" id="visualState"></span></div><div class="field"><label>${t("opacity")}</label><input id="visualOpacity" type="range" min="0" max="24" step="1"></div></div></div></div>
+  </section>`;
+  wirePanelActions();
+}
+function requestTable(id){ return `<table class="request-table"><thead><tr><th>${t("time")}</th><th>${t("endpoint")}</th><th>${t("protocol")}</th><th>${t("model")}</th><th>${t("modelCategory")}</th><th class="num">${t("duration")}</th><th class="num">${t("prompt")}</th><th class="num">${t("completion")}</th><th class="num">${t("totalTokens")}</th><th>${t("status")}</th></tr></thead><tbody id="${id}"></tbody></table>`; }
+function wirePanelActions(){
+  const importBtn=$("importCookieBtn"); if(importBtn) importBtn.onclick=importCookie;
+  const chooseFile=$("chooseCookieFileBtn"); if(chooseFile) chooseFile.onclick=()=>$("cookieFile").click();
+  const cookieFile=$("cookieFile"); if(cookieFile) cookieFile.onchange=()=>{$("cookieFileName").textContent=cookieFile.files[0]?.name||t("noFile");};
+  const copyBtn=$("copyEndpointBtn"); if(copyBtn) copyBtn.onclick=()=>{navigator.clipboard?.writeText(`${location.origin || "http://127.0.0.1:8081"}/api/cookie/push`);toast(t("saved"));};
+  const browserBtn=$("browserLoginBtn"); if(browserBtn) browserBtn.onclick=startBrowserLogin;
+  const saveProxy=$("saveProxyBtn"); if(saveProxy) saveProxy.onclick=saveProxyConfig;
+  const saveBindings=$("saveBindingsBtn"); if(saveBindings) saveBindings.onclick=saveAccountBindings;
+  const importProxy=$("importProxyBtn"); if(importProxy) importProxy.onclick=importProxySources;
+  const checkProxy=$("checkProxyBtn"); if(checkProxy) checkProxy.onclick=()=>checkProxyHealth(true);
+  const checkProxyAll=$("checkProxyAllBtn"); if(checkProxyAll) checkProxyAll.onclick=()=>checkProxyHealth(false);
+  const saveSettings=$("saveSettingsBtn"); if(saveSettings) saveSettings.onclick=saveServerConfig;
+  const chooseVisual=$("chooseVisualBtn"); if(chooseVisual) chooseVisual.onclick=()=>$("visualFile").click();
+  const visualFile=$("visualFile"); if(visualFile) visualFile.onchange=importVisualLayer;
+  const clearVisual=$("clearVisualBtn"); if(clearVisual) clearVisual.onclick=clearVisualLayer;
+  const visualOpacity=$("visualOpacity"); if(visualOpacity){visualOpacity.value=String(state.visualOpacity); visualOpacity.oninput=()=>{state.visualOpacity=Number(visualOpacity.value); localStorage.setItem("visualOpacity",String(state.visualOpacity)); applyVisualLayer(); renderVisualState();};}
+  renderVisualState();
+  document.querySelectorAll("#requestModes button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#requestModes button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderRequests();});
+}
+function renderAll(){ if(!state.data) return; renderMetrics(); renderCurrentPanel(false); }
+function renderCurrentPanel(force){ if(!state.data) return; if(force) state.renderHashes=Object.create(null); if(state.panel==="overview"){ renderRequests(); renderLogs(); renderCharts(); renderModels(); return; } if(state.panel==="requests"){ renderRequests(); return; } if(state.panel==="tokens"){ renderCharts(); renderModels(); return; } if(state.panel==="cookies"){ renderCookies(); return; } if(state.panel==="proxy"){ renderProxy(); fillConfig(); return; } if(state.panel==="settings"){ fillConfig(); renderVisualState(); } }
+function renderMetrics(){ const s=state.data.summary||{}; const items=[[t("totalRequests"),s.total_requests,"cyan",t("uptime")+": "+(state.data.uptime||"--")],[t("successRate"),(s.success_rate||0)+"%","green",t("errors")+": "+num(s.total_errors)],[t("totalTokens"),num(s.total_tokens),"",t("prompt")+": "+num(s.total_prompt_tokens)],[t("completion"),num(s.total_completion_tokens),"",t("avgLatency")+": "+num(s.avg_latency_ms)+"ms"],[t("rpm"),num(s.requests_per_minute),"amber",t("lastSync")+": "+age()],[t("errors"),num(s.total_errors),s.total_errors?"red":"green",s.last_request_at||"--"]]; setHTML("metrics",items.map(i=>`<div class="metric ${i[2]}"><div class="k">${esc(i[0])}</div><div class="v">${esc(i[1])}</div><div class="s">${esc(i[3])}</div></div>`).join("")); }
+function currentRequestFilter(){ return document.querySelector("#requestModes button.active")?.dataset.filter || "all"; }
+function requestRows(){ let rows=state.data?.recent_requests||[]; const f=currentRequestFilter(); if(f==="failures") rows=rows.filter(r=>r.status!=="ok"); if(f==="bodies") rows=rows.filter(r=>r.request_body||r.response_body); return rows; }
+function renderRequests(){ const rows=requestRows(); const html=rows.length?rows.map(r=>`<tr class="clickable" data-rid="${esc(r.id)}"><td class="mono">${esc((r.time_str||"").split(" ")[1]||"")}</td><td class="endpoint-cell"><span class="cell-main mono">${esc(r.endpoint||"--")}</span><span class="cell-sub">${esc(r.method||"POST")} · ${esc(r.protocol||"--")}</span></td><td>${esc(r.protocol||"--")}</td><td><span class="cell-main">${esc(r.model||"--")}</span><span class="cell-sub">${esc(r.model_category||"--")}</span></td><td><span class="badge info">${esc(r.model_category||"--")}</span></td><td class="num">${r.duration_ms==null?"--":num(r.duration_ms)+"ms"}</td><td class="num">${num(r.prompt_tokens)}</td><td class="num">${num(r.completion_tokens)}</td><td class="num"><span class="token-stack"><strong>${num(r.total_tokens)}</strong><span>${num(r.prompt_tokens)} / ${num(r.completion_tokens)}</span></span></td><td><span class="badge ${r.status==="ok"?"ok":"err"}">${labelStatus(r.status)}</span></td></tr>`).join(""):`<tr><td colspan="10"><div class="empty">${t("noData")}</div></td></tr>`; ["overviewRequests","requestsTable"].forEach(id=>setHTML(id,html)); document.querySelectorAll("[data-rid]").forEach(row=>row.onclick=()=>openDetail(row.dataset.rid)); setText("requestCountSub",String(rows.length)); }
+function renderLogs(){ const logs=state.data?.recent_logs||[]; setHTML("logsBox",logs.length?logs.slice(0,12).map(l=>`<div class="sync-line" style="height:28px;border-bottom:1px solid rgba(42,51,58,.55)"><span class="mono muted">${esc((l.time_str||"").split(" ")[1]||"")}</span><span class="badge ${l.level==="error"?"err":l.level==="warning"?"warn":"info"}">${esc(l.level)}</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(l.message)}</span></div>`).join(""):`<div class="empty">${t("noData")}</div>`); }
+function renderCharts(){ drawChart("hourlyChart",state.data?.hourly_stats||[],false); drawChart("hourlyChart2",state.data?.hourly_stats||[],false); drawChart("dailyChart",state.data?.daily_stats||[],true); }
+function drawChart(id,items,alt){
+  const el=$(id); if(!el) return;
+  const rows=(items||[]).filter(Boolean);
+  if(!rows.length){ setHTML(id,`<div class="empty">${t("noData")}</div>`); return; }
+  const values=rows.map(i=>Number(i.tokens||0));
+  const volumes=rows.map(i=>Number(i.requests||0));
+  const total=values.reduce((a,b)=>a+b,0);
+  const last=values[values.length-1]||0;
+  const hasPrevious=rows.length>1;
+  const previous=hasPrevious?values[values.length-2]:last;
+  const delta=hasPrevious?last-previous:0;
+  const deltaClass=delta>0?"up":delta<0?"down":"flat";
+  const deltaPct=previous?` ${(delta/previous*100).toFixed(1)}%`:"";
+  const deltaText=hasPrevious?`${delta>0?"+":delta<0?"-":""}${num(Math.abs(delta))}${deltaPct}`:"--";
+  const labelOf=i=>String(i.hour||i.day||"--");
+  const requestTotal=volumes.reduce((a,b)=>a+b,0);
+  const avgPerRequest=requestTotal?total/requestTotal:0;
+  const max=Math.max(1,...values);
+  const tableRows=rows.map((item,i)=>{
+    const share=Math.max(2,(values[i]/max)*100);
+    const active=i===rows.length-1?" active":"";
+    return `<tr><td class="mono">${esc(labelOf(item))}</td><td class="num">${esc(num(volumes[i]))}</td><td class="num">${esc(num(values[i]))}</td><td><span class="quota-share"><span class="quota-bars"><i class="quota-bar${active}" style="width:${share.toFixed(2)}%"></i></span><span class="mono muted">${share.toFixed(0)}%</span></span></td></tr>`;
+  }).join("");
+  const periodName=alt?t("daily"):t("hourly");
+  const leaders=rows.map((item,i)=>({label:labelOf(item),tokens:values[i],requests:volumes[i]})).sort((a,b)=>b.tokens-a.tokens).slice(0,3);
+  const leadersHtml=leaders.map(item=>`<div class="quota-leader"><span>${esc(item.label)}</span><strong class="mono">${esc(num(item.tokens))}</strong><span class="quota-meter"><i style="width:${Math.max(4,(item.tokens/max)*100).toFixed(2)}%"></i></span></div>`).join("");
+  const rateLabel=alt?t("peak"):t("tpm");
+  const rateValue=alt?max:last/60;
+  setHTML(id,`
+    <div class="quota-head">
+      <div class="quota-cards">
+        <div class="quota-mini primary"><span>${esc(t("latest"))}</span><strong>${esc(num(last))}</strong></div>
+        <div class="quota-mini"><span>${esc(t("rangeTotal"))}</span><strong>${esc(num(total))}</strong></div>
+        <div class="quota-mini"><span>${esc(rateLabel)}</span><strong>${esc(num(rateValue))}</strong></div>
+        <div class="quota-mini"><span>${esc(t("requestVolume"))}</span><strong>${esc(num(requestTotal))}</strong></div>
+        <div class="quota-mini"><span>${esc(t("avgPerReq"))}</span><strong>${esc(num(avgPerRequest))}</strong></div>
+        <div class="quota-mini delta ${deltaClass}"><span>${esc(t("change"))}</span><strong>${esc(deltaText)}</strong></div>
+      </div>
+    </div>
+    <div class="quota-tabs"><span class="active">${esc(t("usageTrend"))}</span><span>${esc(t("requestVolume"))}</span><span>${esc(t("topBuckets"))}</span></div>
+    <div class="quota-body">
+      <div class="quota-table-card">
+        <table class="quota-table" aria-label="${esc(periodName)}">
+          <thead><tr><th>${esc(t("time"))}</th><th class="num">${esc(t("requestVolume"))}</th><th class="num">${esc(t("totalTokens"))}</th><th>${esc(t("quota"))}</th></tr></thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      </div>
+      <div class="quota-leaders"><div class="quota-leaders-title">${esc(t("topBuckets"))}</div>${leadersHtml}</div>
+    </div>`);
+}
+function renderModels(){ const entries=Object.entries(state.data?.model_stats||{}); const mini=entries.slice(0,8).map(([m,s])=>`<tr><td><span class="model-cell"><strong>${esc(m)}</strong><span>${esc(modelCategoryOf(m))}</span></span></td><td class="num">${num(s.requests)}</td><td class="num">${num(s.prompt_tokens)}</td><td class="num">${num(s.completion_tokens)}</td><td class="num"><span class="token-stack"><strong>${num(s.total_tokens)}</strong><span>${num(s.errors)} ${t("errors")}</span></span></td></tr>`).join(""); const full=entries.map(([m,s])=>`<tr><td><span class="model-cell"><strong>${esc(m)}</strong><span>${esc(modelCategoryOf(m))}</span></span></td><td><span class="badge info">${esc(modelCategoryOf(m))}</span></td><td class="num">${num(s.requests)}</td><td class="num">${num(s.prompt_tokens)}</td><td class="num">${num(s.completion_tokens)}</td><td class="num"><span class="token-stack"><strong>${num(s.total_tokens)}</strong><span>${num(s.prompt_tokens)} / ${num(s.completion_tokens)}</span></span></td><td class="num">${num(s.errors)}</td></tr>`).join(""); setHTML("modelMini",mini||`<tr><td colspan="5"><div class="empty">${t("noData")}</div></td></tr>`); setHTML("modelTable",full||`<tr><td colspan="7"><div class="empty">${t("noData")}</div></td></tr>`); }
+function renderCookies(){ const c=state.cookie||{}; const sources=c.sources||{}; const manual=sources.manual_import||{}; const edge=sources.edge_extension||{}; const internal=sources.internal_browser||{}; const ib=c.internal_browser||{}; setHTML("edgeBox",kv([[t("status"),displayState(edge.status||c.status)],[t("lastSync"),edge.last_sync_str||"--"],[t("length"),edge.cookie_length||c.cookie_length||0],[t("valid"),(edge.diagnostics||c.diagnostics||{}).web_ui_likely_complete?t("valid"):t("invalid")],[t("source"),edge.source||"edge-extension"]])); setHTML("browserBox",kv([[t("browserStatus"),displayState(ib.status)],[t("status"),internal.status?displayState(internal.status):(ib.available===false?t("failed"):ib.running?t("running"):t("ok"))],[t("lastSync"),internal.last_sync_str||"--"],[t("length"),internal.cookie_length||ib.cookie_length||0],[t("profile"),ib.profile_dir||"--"]])); setHTML("cookieStatusBox",kv([[t("status"),displayState(c.status)],[t("manualSource"),manual.status?displayState(manual.status):"--"],[t("edgeExtension"),edge.status?displayState(edge.status):"--"],[t("internalBrowser"),internal.status?displayState(internal.status):"--"],[t("lastSync"),c.last_push_str||"--"],[t("next"),c.next_refresh_str||"--"],[t("valid"),c.cookie_valid?t("valid"):t("invalid")]])); }
+function renderProxy(){ const p=state.proxy||{}; const runtime=p.runtime||{}; const health=runtime.health||{}; const statuses=health.statuses||{}; const groups=runtime.groups||p.groups||[]; setHTML("proxyStatusBox",kv([[t("proxyEnabled"),p.proxy_enabled?t("on"):t("off")],[t("status"),p.enabled?t("running"):t("off")],[t("configured"),maskProxy(p.configured_proxy||"")],[t("strategy"),p.strategy||"--"],[t("proxyNodes"),health.total_nodes??runtime.total_nodes??p.configured_nodes??0],[t("available"),health.available_nodes??runtime.available_nodes??0],[t("healthy"),runtime.healthy_nodes||0],[t("checking"),statuses.checking||0],[t("cooldown"),statuses.cooldown||0],[t("providers"),(runtime.providers||[]).length],[t("proxyGroups"),groups.length],[t("subscriptions"),p.subscriptions||0]])); const nodes=runtime.nodes||[]; setHTML("proxyNodes",nodes.length?nodes.map(n=>{const status=n.health_status||(n.is_healthy?"healthy":"unhealthy"); const cls=status==="healthy"?"ok":status==="checking"?"info":(status==="stale"||status==="cooldown")?"warn":"err"; return `<tr><td>${esc(n.provider||"manual")}</td><td>${esc(n.name||n.host||"--")}</td><td><span class="badge ${cls}">${displayState(status)}</span></td><td class="num">${num(n.latency_ms||0)}ms</td><td class="num">${num(n.failure_count||0)}</td></tr>`}).join(""):`<tr><td colspan="5"><div class="empty">${t("noData")}</div></td></tr>`); setHTML("proxyGroups",groups.length?groups.map(g=>`<tr><td>${esc(g.name||"--")}</td><td><span class="badge info">${esc(g.type||"--")}</span></td><td class="num">${num(g.available||g.available_count||0)}/${num(g.nodes||0)}</td><td>${esc(g.selected_name||g.selected||"--")}</td><td class="num">${num(g.inflight||0)}</td></tr>`).join(""):`<tr><td colspan="5"><div class="empty">${t("noData")}</div></td></tr>`); renderAccountRoutes(p,runtime,groups); }
+function kv(rows){ return rows.map(([k,v])=>`<div class="sync-line" style="min-height:28px;border-bottom:1px solid rgba(42,51,58,.5)"><span class="muted">${esc(k)}</span><span class="mono" style="text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%">${esc(v)}</span></div>`).join(""); }
+function maskProxy(value){ const text=String(value||""); return text.replace(/:\/\/([^@/:]+)(:[^@]*)?@/,"://***@") || "--"; }
+function proxyEditable(value){ const text=String(value||"").trim(); return text && !text.includes("***") ? text : ""; }
+function accountBindings(){
+  const c=state.config||{};
+  const rows=new Map();
+  const add=(raw={})=>{
+    const id=String(raw.id||raw.account_id||raw.account||"").trim();
+    if(!id) return;
+    const prev=rows.get(id)||{};
+    rows.set(id,{...prev,...raw,id,account_id:id});
+  };
+  (c.accounts||[]).forEach(add);
+  (c.proxy_account_bindings||[]).forEach(add);
+  (state.proxy?.accounts||[]).forEach(add);
+  return Array.from(rows.values()).sort((a,b)=>String(a.id).localeCompare(String(b.id)));
+}
+function renderAccountRoutes(p,runtime,groups){
+  const bindings=accountBindings();
+  const health=runtime.health||{};
+  setHTML("accountRouteSummary",`<div class="route-strip">
+    <div class="route-card"><span>${esc(t("routePolicy"))}</span><strong>${esc((state.config||{}).account_route_policy||(state.config||{}).anonymous_route_policy||p.strategy||"--")}</strong></div>
+    <div class="route-card"><span>${esc(t("proxyNodes"))}</span><strong>${esc(num(health.available_nodes??runtime.available_nodes??0))} / ${esc(num(health.total_nodes??runtime.total_nodes??p.configured_nodes??0))}</strong></div>
+    <div class="route-card"><span>${esc(t("proxyGroups"))}</span><strong>${esc(num(groups.length))}</strong></div>
+    <div class="route-card"><span>${esc(t("accountBindings"))}</span><strong>${esc(num(bindings.length))}</strong></div>
+  </div>`);
+  setHTML("accountBindingsTable",bindings.length?bindings.map(item=>{
+    const proxy=item.primary_proxy||item.proxy||"";
+    const enabled=item.enabled===false?false:true;
+    return `<tr><td><span class="model-cell"><strong>${esc(item.id||item.account_id)}</strong><span>${esc(item.label||item.name||"--")}</span></span></td><td class="mono">${esc(maskProxy(proxy))}</td><td>${esc(item.fallback_group||item.group||"--")}</td><td><span class="badge ${enabled?"ok":"warn"}">${esc(enabled?t("on"):t("off"))}</span></td></tr>`;
+  }).join(""):`<tr><td colspan="4"><div class="empty">${t("noData")}</div></td></tr>`);
+}
+function modelCategoryOf(model){ const m=String(model||"").toLowerCase(); if(/nano-banana|imagen|image/.test(m)) return "image"; if(/veo|omni|video/.test(m)) return "video"; if(/lyria|music/.test(m)) return "music"; if(/tts|speech|audio/.test(m)) return "audio"; if(/research/.test(m)) return "research"; if(/canvas/.test(m)) return "canvas"; if(/pro|advanced/.test(m)) return "pro"; if(/thinking/.test(m)) return "thinking"; if(/flash/.test(m)) return "flash"; if(/auto/.test(m)) return "auto"; return "other"; }
+function renderDetailView(detail){
+  state.detail=detail;
+  const summary=state.data?.summary||{};
+  $("detailTitle").textContent=detail.id||"--";
+  const category=detail.model_category||modelCategoryOf(detail.model);
+  $("detailMeta").textContent=[detail.protocol,detail.model,detail.duration_ms!=null?num(detail.duration_ms)+"ms":"",detail.stream?t("stream"):""].filter(Boolean).join(" · ");
+  $("detailMetrics").innerHTML=[
+    [t("prompt"),num(detail.prompt_tokens)],
+    [t("completion"),num(detail.completion_tokens)],
+    [t("totalTokens"),num(detail.total_tokens)],
+    [t("modelCategory"),category],
+  ].map(([k,v])=>`<div class="detail-chip"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join("");
+  $("detailOpsTicker").textContent=`${t("operationTotals")} · ${t("totalRequests")} ${num(summary.total_requests)} · ${t("totalTokens")} ${num(summary.total_tokens)} · ${t("successRate")} ${num(summary.success_rate)}% · ${t("rpm")} ${num(summary.requests_per_minute)} · ${t("proxy")} ${maskProxy(detail.proxy)}`;
+  $("requestBody").textContent=json(detail.request_body);
+  $("responseBody").textContent=json(detail.response_body);
+  $("traceBody").textContent=json(detail.trace);
+  $("detail").classList.add("open");
+}
+function fillConfig(){ const c=state.config||{}; const set=(id,v)=>{const el=$(id); if(el && document.activeElement!==el && v!=="***") el.value=v??"";}; const setBool=(id,v,d=false)=>set(id,String(v??d)); set("cfgHost",c.host||"0.0.0.0"); set("cfgPort",c.port||8081); set("cfgDefaultModel",c.default_model||""); set("cfgRateLimit",c.rate_limit_per_minute||30); set("cfgRateDelay",c.rate_limit_delay??2); set("cfgTimeout",c.request_timeout_sec||180); set("cfgRetry",c.retry_attempts||3); set("cfgRetryDelay",c.retry_delay_sec??2); set("cfgUploadRetry",c.upload_retry_attempts??3); set("cfgAuthUser",c.auth_user??""); set("cfgGeminiBl",c.gemini_bl||""); set("cfgStreamMode",c.stream_mode||"auto"); set("cfgFakeDelay",c.fake_stream_delay_ms??10); set("cfgStreamChunk",c.stream_chunk_chars??1); set("cfgBodyLimit",c.log_body_limit_chars??65536); setBool("cfgLogRequests",c.log_requests,true); setBool("cfgCaptureReq",c.capture_request_bodies,true); setBool("cfgCaptureResp",c.capture_response_bodies,true); setBool("cfgUpstreamRaw",c.log_upstream_raw,false); setBool("cfgDashboardBypass",c.dashboard_local_bypass,true); setBool("cfgExposeExperimental",c.expose_experimental_models,false); setBool("cfgExposeWebTools",c.expose_web_feature_models,true); set("cfgProxy",proxyEditable(c.proxy)); setBool("cfgProxyEnabled",c.proxy_enabled,false); set("cfgProxyStrategy",c.proxy_pool_strategy||"round_robin"); set("cfgProxyRotation",String(!!c.proxy_rotation)); set("cfgProxyList",(c.proxies||[]).map(proxyEditable).filter(Boolean).join("\n")); set("cfgProxySubs",(c.proxy_subscriptions||[]).map(proxyEditable).filter(Boolean).join(",")); set("cfgAccountBindings",accountBindings().map(a=>{const proxy=proxyEditable(a.primary_proxy||a.proxy); return a.id&&proxy?`${a.id}=${proxy}`:"";}).filter(Boolean).join("\n")); }
+function applyVisualLayer(){ const has=!!state.visualImage; document.body.classList.toggle("has-visual",has); document.body.style.setProperty("--visual-image",has?`url("${state.visualImage}")`:"none"); document.body.style.setProperty("--visual-opacity",String(Math.max(0,Math.min(24,state.visualOpacity))/100)); }
+function renderVisualState(){ const el=$("visualState"); if(el) el.textContent=state.visualImage?t("active"):t("noFile"); const slider=$("visualOpacity"); if(slider && document.activeElement!==slider) slider.value=String(state.visualOpacity); }
+function importVisualLayer(){ const file=$("visualFile").files[0]; if(!file) return; const reader=new FileReader(); reader.onload=()=>{state.visualImage=String(reader.result||""); localStorage.setItem("visualImage",state.visualImage); applyVisualLayer(); renderVisualState(); toast(t("saved"));}; reader.readAsDataURL(file); }
+function clearVisualLayer(){ state.visualImage=""; localStorage.removeItem("visualImage"); applyVisualLayer(); renderVisualState(); toast(t("saved")); }
+async function openDetail(id){ let detail=(state.data?.recent_requests||[]).find(r=>r.id===id); const controller=new AbortController(); const timeout=setTimeout(()=>controller.abort(),FETCH_TIMEOUT_MS); try{const r=await fetchJson("/api/request/"+encodeURIComponent(id),controller.signal); if(r.ok) detail=r.data.request||detail;}catch{} finally{clearTimeout(timeout);} if(!detail) return; renderDetailView(detail); }
+async function loadAll(force){ if(state.loading&&!force) return; if(force&&state.refreshAbort) state.refreshAbort.abort(); const controller=new AbortController(); state.refreshAbort=controller; state.loading=true; const timeout=setTimeout(()=>controller.abort(),FETCH_TIMEOUT_MS); try{ const fetches=[fetchJson("/api/dashboard",controller.signal),fetchJson("/api/cookie/status",controller.signal),fetchJson("/api/proxy/status",controller.signal)]; state.configTick++; if(force||state.configTick%5===0) fetches.push(fetchJson("/api/config",controller.signal)); const [d,c,p,cfg]=await Promise.all(fetches); if(controller.signal.aborted) return; if(!d.ok) throw new Error("dashboard "+d.status); state.data=d.data; state.cookie=c.ok?c.data:{}; state.proxy=p.ok?p.data:{}; if(cfg&&cfg.ok) state.config=cfg.data; state.lastSync=Date.now(); $("pulse").classList.add("ok"); scheduleRender(); }catch(err){ if(err?.name!=="AbortError") console.error(err); if(state.refreshAbort===controller) $("pulse").classList.remove("ok"); }finally{ clearTimeout(timeout); if(state.refreshAbort===controller){ state.refreshAbort=null; state.loading=false; setText("syncAge",age()); } } }
+async function importCookie(){ let raw=$("cookieRaw").value; const file=$("cookieFile").files[0]; if(file) raw=await file.text(); const r=await fetch(API+"/api/cookie/import",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({raw,source:file?"network-file":"manual-import"})}); const data=await r.json().catch(()=>({})); toast(data.success?t("imported"):(data.message||t("failed"))); loadAll(true); }
+async function startBrowserLogin(){ const r=await fetch(API+"/api/cookie/browser-login",{method:"POST"}); const data=await r.json().catch(()=>({})); toast(data.success?t("started"):(data.error||t("failed"))); loadAll(true); }
+async function postConfig(body){ const r=await fetch(API+"/api/config",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}); const data=await r.json().catch(()=>({})); toast(data.success?t("saved"):(data.error||t("failed"))); loadAll(true); }
+function lines(id){ return ($(id).value||"").split(/\n|,/).map(s=>s.trim()).filter(Boolean); }
+async function importProxySources(){ const body={provider:$("proxyImportProvider").value||"manual",subscriptions:lines("proxyImportSubs"),direct_links:lines("proxyImportLinks")}; const r=await fetch(API+"/admin/proxy/import",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}); const data=await r.json().catch(()=>({})); toast(data.success?t("imported"):(data.error||t("failed"))); loadAll(true); }
+async function checkProxyHealth(onlyStale){ const r=await fetch(API+"/admin/proxy/test-all",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({only_stale:onlyStale})}); const data=await r.json().catch(()=>({})); toast(data.success?t("saved"):(data.error||t("failed"))); loadAll(true); }
+async function saveAccountBindings(){ const entries=($("cfgAccountBindings").value||"").split(/\n/).map(s=>s.trim()).filter(Boolean).map(line=>{const eq=line.indexOf("="); if(eq>=0) return [line.slice(0,eq).trim(),line.slice(eq+1).trim()]; const parts=line.split(/\s+/); return [parts[0],parts.slice(1).join(" ")];}).filter(([id,proxy])=>id&&proxy); for(const [id,proxy] of entries){ const r=await fetch(API+"/admin/accounts/"+encodeURIComponent(id)+"/bind-proxy",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({primary_proxy:proxy})}); if(!r.ok){ const data=await r.json().catch(()=>({})); toast(data.error||t("failed")); return; }} toast(t("saved")); loadAll(true); }
+function saveProxyConfig(){ postConfig({proxy_enabled:boolVal("cfgProxyEnabled"),proxy:$("cfgProxy").value||null,proxy_pool_enabled:boolVal("cfgProxyEnabled")&&lines("cfgProxyList").length>0,proxy_pool_strategy:$("cfgProxyStrategy").value,proxy_rotation:boolVal("cfgProxyEnabled")&&$("cfgProxyRotation").value==="true",proxies:lines("cfgProxyList"),proxy_subscriptions:lines("cfgProxySubs")}); }
+function boolVal(id){ return $(id).value==="true"; }
+function saveServerConfig(){ const keys=($("cfgApiKeys").value||"").split(",").map(s=>s.trim()).filter(Boolean); const authUser=($("cfgAuthUser").value||"").trim(); const body={host:$("cfgHost").value||"0.0.0.0",port:+$("cfgPort").value||8081,default_model:$("cfgDefaultModel").value,rate_limit_per_minute:+$("cfgRateLimit").value||30,rate_limit_delay:+$("cfgRateDelay").value||0,request_timeout_sec:+$("cfgTimeout").value||180,retry_attempts:+$("cfgRetry").value||3,retry_delay_sec:+$("cfgRetryDelay").value||0,upload_retry_attempts:+$("cfgUploadRetry").value||3,auth_user:authUser===""?null:authUser,gemini_bl:$("cfgGeminiBl").value,stream_mode:$("cfgStreamMode").value,fake_stream_delay_ms:+$("cfgFakeDelay").value||0,stream_chunk_chars:+$("cfgStreamChunk").value||1,log_requests:boolVal("cfgLogRequests"),capture_request_bodies:boolVal("cfgCaptureReq"),capture_response_bodies:boolVal("cfgCaptureResp"),log_body_limit_chars:+$("cfgBodyLimit").value||65536,log_upstream_raw:boolVal("cfgUpstreamRaw"),dashboard_local_bypass:boolVal("cfgDashboardBypass"),expose_experimental_models:boolVal("cfgExposeExperimental"),expose_web_feature_models:boolVal("cfgExposeWebTools")}; if(keys.length) body.api_keys=keys; postConfig(body); }
+boot();
+</script>
+</body>
+</html>

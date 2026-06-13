@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-06-13T14:20:09",
+  "root_browser_html": {
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "length": 68409,
+    "has_gemini2api": true,
+    "has_dashboard_api": true,
+    "starts": "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initia"
+  },
+  "dashboard_html": {
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "length": 68409,
+    "has_gemini2api": true,
+    "has_proxy_panel": true,
+    "starts": "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initia"
+  },
+  "root_api_json": {
+    "status": 200,
+    "content_type": "application/json",
+    "starts": "{\"status\": \"ok\", \"version\": \"1.2.0\", \"models\": [\"gemini-3.5-flash\", \"3.5-flash\", \"flash\", \"gemini-3.1-flash\", \"gemini-3.0-flash\", \"gemini-2.5-flash\", \"gemini-2.5-flash-preview-04-17\", \"gemini-2.5-flash-preview-05-20\", \"gemini-2.5-flash-prev"
+  },
+  "screenshot": "handoff/evidence/dashboard-8081-20260613.png"
+}
