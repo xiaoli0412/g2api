@@ -1069,7 +1069,11 @@ class GeminiHandler(BaseHTTPRequestHandler):
         dashboard_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dashboard.html")
         try:
             with open(dashboard_path, "r", encoding="utf-8") as f:
-                body = f.read().encode("utf-8")
+                html = f.read()
+            keys = CONFIG.get("api_keys") or []
+            api_key = keys[0] if keys else ""
+            html = html.replace("__DASH_API_KEY__", api_key)
+            body = html.encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Cache-Control", "no-cache")

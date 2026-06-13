@@ -132,6 +132,8 @@ table{width:100%;border-collapse:collapse}th{height:34px;color:var(--muted);font
 
 <script>
 const API = location.protocol === "file:" ? "http://127.0.0.1:8081" : "";
+const DASH_API_KEY = "__DASH_API_KEY__";
+if(DASH_API_KEY){const _of=window.fetch;window.fetch=function(url,opts){opts=opts||{};opts.headers=opts.headers||{};if(opts.headers instanceof Headers){if(!opts.headers.has("Authorization"))opts.headers.set("Authorization","Bearer "+DASH_API_KEY)}else{opts.headers["Authorization"]="Bearer "+DASH_API_KEY}return _of.call(this,url,opts)}}
 const REFRESH_MS = 1000;
 const FETCH_TIMEOUT_MS = 850;
 const state = {
