@@ -5,6 +5,7 @@ __pycache__/
 *.so
 *.egg-info/
 *.egg
+**/__pycache__/
 build/
 dist/
 output/native-visual/
