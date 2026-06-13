@@ -1792,7 +1792,17 @@ class GeminiHandler(BaseHTTPRequestHandler):
                     response_body={"error": {"message": str(e)}},
                     duration_ms=_elapsed_ms(started), proxy=_last_proxy_url(),
                     request_id=cid, protocol="openai.chat", stream=True)
-                self.send_json({"error": {"message": f"upstream error: {e}"}}, 502)
+                # After _start_sse() headers are sent — must use SSE error event, not HTTP 502
+                try:
+                    err_chunk = {"id": cid, "object": "chat.completion.chunk",
+                                 "created": int(time.time()), "model": model_name,
+                                 "choices": [{"index": 0, "delta": {"content": f"[error] {e}"},
+                                               "finish_reason": "stop"}]}
+                    self.wfile.write(f"data: {json.dumps(err_chunk, ensure_ascii=False)}\n\n".encode())
+                    self.wfile.write(b"data: [DONE]\n\n")
+                    self.wfile.flush()
+                except Exception:
+                    pass
             return
 
         if stream and (not tools or tool_choice == "none"):
@@ -1868,7 +1878,17 @@ class GeminiHandler(BaseHTTPRequestHandler):
                     response_body={"error": {"message": str(e)}},
                     duration_ms=_elapsed_ms(started), proxy=_last_proxy_url(),
                     request_id=cid, protocol="openai.chat", stream=True)
-                raise
+                # SSE headers already sent — emit error as SSE event, not HTTP 502
+                try:
+                    err_chunk = {"id": cid, "object": "chat.completion.chunk",
+                                 "created": int(time.time()), "model": model_name,
+                                 "choices": [{"index": 0, "delta": {"content": f"[error] {e}"},
+                                               "finish_reason": "stop"}]}
+                    self.wfile.write(f"data: {json.dumps(err_chunk, ensure_ascii=False)}\n\n".encode())
+                    self.wfile.write(b"data: [DONE]\n\n")
+                    self.wfile.flush()
+                except Exception:
+                    pass
             return
 
         try:
@@ -2092,7 +2112,11 @@ class GeminiHandler(BaseHTTPRequestHandler):
                     response_body={"error": {"message": str(e)}},
                     duration_ms=_elapsed_ms(started), proxy=_last_proxy_url(),
                     request_id=message_id, protocol="claude.messages", stream=True)
-                raise
+                # SSE headers already sent — emit error event, not HTTP 502
+                try:
+                    write_claude_event({"type": "error", "error": {"type": "api_error", "message": str(e)}})
+                except Exception:
+                    pass
             return
 
         if openai_req.get("stream") and (not tools or tool_choice == "none"):
@@ -2142,7 +2166,10 @@ class GeminiHandler(BaseHTTPRequestHandler):
                     response_body={"error": {"message": str(e)}},
                     duration_ms=_elapsed_ms(started), proxy=_last_proxy_url(),
                     request_id=message_id, protocol="claude.messages", stream=True)
-                raise
+                try:
+                    write_claude_event({"type": "error", "error": {"type": "api_error", "message": str(e)}})
+                except Exception:
+                    pass
             return
 
         try:
@@ -2557,7 +2584,12 @@ class GeminiHandler(BaseHTTPRequestHandler):
                     duration_ms=_elapsed_ms(started), proxy=_last_proxy_url(),
                     request_id=f"google_{uuid.uuid4().hex[:16]}",
                     protocol="google.generate", stream=True)
-                self.send_json({"error": {"message": f"upstream error: {e}"}}, 502)
+                try:
+                    err_data = json.dumps({"error": {"code": 502, "message": f"upstream error: {e}", "status": "UNAVAILABLE"}})
+                    self.wfile.write(f"data: {err_data}\n\n".encode())
+                    self.wfile.flush()
+                except Exception:
+                    pass
             return
 
         if stream and not has_tools:
@@ -2626,7 +2658,12 @@ class GeminiHandler(BaseHTTPRequestHandler):
                     duration_ms=_elapsed_ms(started), proxy=_last_proxy_url(),
                     request_id=f"google_{uuid.uuid4().hex[:16]}",
                     protocol="google.generate", stream=True)
-                raise
+                try:
+                    err_data = json.dumps({"error": {"code": 502, "message": f"upstream error: {e}", "status": "UNAVAILABLE"}})
+                    self.wfile.write(f"data: {err_data}\n\n".encode())
+                    self.wfile.flush()
+                except Exception:
+                    pass
             return
 
         try:

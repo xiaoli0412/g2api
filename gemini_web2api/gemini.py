@@ -29,7 +29,10 @@ _httpx_client = None
 _bl_cache = {"bl": None, "ts": 0}
 _xsrf_cache = {"token": None, "ts": 0, "cookie_sig": ""}
 _request_context = threading.local()
-NON_RETRYABLE_BARD_ERROR_CODES = {"1003", "1155"}
+NON_RETRYABLE_BARD_ERROR_CODES = {"1003", "1152", "1155"}
+# Any BardErrorInfo code not explicitly listed as retryable will also skip retry
+# after the first failed attempt (avoids wasting 30+ s on upstream rejections).
+_RETRYABLE_BARD_ERROR_CODES = set()  # empty = all unknown bard codes are non-retryable
 
 
 def is_proxy_enabled() -> bool:
@@ -59,7 +62,16 @@ def _bard_error_code_from_exception(exc: Exception) -> str:
 
 
 def _is_non_retryable_bard_error(exc: Exception) -> bool:
-    return _bard_error_code_from_exception(exc) in NON_RETRYABLE_BARD_ERROR_CODES
+    code = _bard_error_code_from_exception(exc)
+    if not code:
+        return False  # not a bard error at all → let normal retry happen
+    if code in NON_RETRYABLE_BARD_ERROR_CODES:
+        return True
+    # Unknown bard code: treat as non-retryable unless explicitly retryable
+    if code not in _RETRYABLE_BARD_ERROR_CODES:
+        log(f"BardErrorInfo [{code}] not in retryable set; skipping retry")
+        return True
+    return False
 
 
 def log(msg: str):
@@ -323,14 +335,21 @@ def _discover_xsrf_token(cookie_str: str = None, sapisid: str = None) -> str:
 
 
 def _resolve_xsrf_token() -> str:
+    """Resolve XSRF token.  Original behaviour: only send if explicitly configured.
+    Auto-discovery makes an extra page request that can trigger rate-limiting and
+    may return an invalid token, both causing BardErrorInfo upstream rejections."""
     configured = CONFIG.get("xsrf_token")
     if configured:
         return configured
-    cookie_str = getattr(_request_context, "cookie_str", "")
-    sapisid = getattr(_request_context, "sapisid", None)
-    if not cookie_str:
-        cookie_str, sapisid = get_request_cookie()
-    return _discover_xsrf_token(cookie_str, sapisid)
+    # Auto-discovery is OFF by default to match original behaviour.
+    # Set CONFIG["xsrf_auto_discover"] = True to enable it.
+    if CONFIG.get("xsrf_auto_discover"):
+        cookie_str = getattr(_request_context, "cookie_str", "")
+        sapisid = getattr(_request_context, "sapisid", None)
+        if not cookie_str:
+            cookie_str, sapisid = get_request_cookie()
+        return _discover_xsrf_token(cookie_str, sapisid)
+    return ""
 
 
 def _build_payload(prompt: str, model_id: int, think_mode: int, file_refs: list = None, extra_fields: dict = None) -> str:
@@ -413,13 +432,23 @@ def _discover_bl() -> str:
 
 
 def _resolve_bl() -> str:
-    """Resolve BL token: try cache, then discovery, then config."""
+    """Resolve BL token: config first (matches original behaviour), cache second,
+    discovery last.  Discovery makes an extra HTTP request and may return a token
+    that doesn't match the StreamGenerate RPC version, causing BardErrorInfo."""
+    # 1. Cached value (already validated by a successful request or prior discovery)
     if _bl_cache["bl"]:
         return _bl_cache["bl"]
+    # 2. Config value (static, known-good — original behaviour)
+    config_bl = CONFIG.get("gemini_bl", "")
+    if config_bl:
+        _bl_cache["bl"] = config_bl
+        _bl_cache["ts"] = time.time()
+        return config_bl
+    # 3. Dynamic discovery (last resort — may cause BardErrorInfo on version mismatch)
     discovered = _discover_bl()
     if discovered:
         return discovered
-    return CONFIG.get("gemini_bl", "")
+    return ""
 
 
 def _get_url() -> str:
@@ -1400,9 +1429,17 @@ def generate_stream(prompt: str, model_id: int, think_mode: int, file_refs: list
             proxy = _get_proxy_for_request()
             body = _build_payload(prompt, model_id, think_mode, file_refs, extra_fields)
             url = _get_url()
-            transport = httpx.HTTPTransport(proxy=proxy) if proxy else None
+            # Reuse shared client when no specific proxy is needed (matches original
+            # behaviour and preserves HTTP connection pooling).
             prev_text = ""
-            with httpx.Client(transport=transport, timeout=CONFIG["request_timeout_sec"], verify=True) as client:
+            if proxy:
+                transport = httpx.HTTPTransport(proxy=proxy)
+                client = httpx.Client(transport=transport, timeout=CONFIG["request_timeout_sec"], verify=True)
+                _own_client = True
+            else:
+                client = _get_httpx_client()
+                _own_client = False
+            try:
                 with client.stream("POST", url, content=body, headers=headers) as resp:
                     if resp.status_code >= 400:
                         raise UpstreamError(f"Upstream HTTP {resp.status_code}", status_code=resp.status_code)
@@ -1421,6 +1458,12 @@ def generate_stream(prompt: str, model_id: int, think_mode: int, file_refs: list
                                     if delta:
                                         yield delta
                                     prev_text = t
+            finally:
+                if _own_client:
+                    try:
+                        client.close()
+                    except Exception:
+                        pass
 
             # 成功，标记代理
             if is_proxy_enabled() and CONFIG.get("proxy_pool_enabled") and proxy:
